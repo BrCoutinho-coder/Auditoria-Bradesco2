@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Auditoria Bradesco | Auditoria & Tech</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap');
+        
+        :root { --primary: #1e293b; --bradesco: #cc092f; --bradesco-dark: #8a051e; --secondary: #f1f5f9; --accent: #2563eb; --danger: #cc092f; --warning: #d97706; --success: #059669; --bg: #f8fafc; }
+        
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: #334155; margin: 0; padding: 25px 25px 90px 25px; }
+        
+        /* HEADER DISCRETO E CANTO */
+        header { position: relative; background: linear-gradient(135deg, var(--bradesco) 0%, var(--bradesco-dark) 100%); color: white; padding: 30px 25px 35px 25px; border-radius: 8px; margin-bottom: 25px; display: flex; flex-direction: column; gap: 25px; box-shadow: 0 4px 10px rgba(204, 9, 47, 0.2);}
+        
+        /* ASSINATURA COM ESCUDO MAIOR E TEXTO ABAIXO */
+        .signature-top-left { position: absolute; top: 15px; left: 25px; display: flex; flex-direction: column; align-items: center; gap: 5px; opacity: 0.95;}
+        .signature-top-left p { margin: 0; color: #f8dbdf; font-weight: 600; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px;}
+        .img-escudo { height: 78px; width: auto; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3)); }
+
+        /* ÍCONE DE CONFIGURAÇÃO DISCRETO NO CANTO SUPERIOR DIREITO */
+        .btn-icon { position: absolute; top: 18px; right: 25px; background: transparent; border: none; color: white; font-size: 1.5em; cursor: pointer; opacity: 0.6; transition: 0.3s; padding: 0; }
+        .btn-icon:hover { opacity: 1; transform: rotate(90deg); }
+
+        /* TÍTULOS E BOTÕES CENTRALIZADOS */
+        .header-content-center { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;}
+        .header-titles h1 { margin: 0; font-size: 1.6em; font-weight: 800; letter-spacing: -0.5px; }
+        .header-titles p { margin: 5px 0 0 0; color: #f8dbdf; font-weight: 600; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .header-buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;}
+        .btn { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600; font-family: inherit; transition: all 0.2s ease; font-size: 0.9em;}
+        .btn:hover { background: rgba(255,255,255,0.25); }
+        .btn-primary { background: white; color: var(--bradesco-dark); border-color: white; }
+        .btn-primary:hover { background: #f1f5f9; }
+        .btn-warning { background: #f59e0b; color: white; border-color: #f59e0b; }
+        .btn-warning:hover { background: #d97706; }
+
+        /* MODAIS */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal-content { background: white; width: 90%; max-width: 600px; border-radius: 12px; padding: 30px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; gap: 20px; max-height: 85vh; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
+        .modal-header h2 { margin: 0; color: var(--primary); font-weight: 800; font-size: 1.4em;}
+        .close-btn { background: none; border: none; font-size: 1.5em; cursor: pointer; color: #94a3b8; transition: 0.2s;}
+        .close-btn:hover { color: var(--danger); }
+        .depara-list-container { flex: 1; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; background: #f8fafc; }
+        .depara-item { display: flex; justify-content: space-between; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 0.85em; }
+        .depara-key { font-weight: 600; color: #475569; }
+        .depara-val { font-weight: 800; color: var(--accent); }
+
+        /* NOTAS DE ATUALIZAÇÃO ESTILO LISTA */
+        .release-list { padding: 0; margin: 0; list-style: none; }
+        .release-item { margin-bottom: 15px; border-left: 3px solid var(--accent); padding-left: 15px; }
+        .release-item h4 { margin: 0 0 5px 0; color: var(--primary); font-weight: 800; }
+        .release-item p { margin: 0; font-size: 0.9em; color: #64748b; }
+
+        /* BARRA DE PROGRESSO */
+        #barra-progresso-container {
+            display: none; position: fixed; bottom: 0; left: 0; width: 100%;
+            background: white; border-top: 1px solid #e2e8f0; padding: 15px 25px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05); z-index: 9999;
+            box-sizing: border-box; align-items: center; justify-content: space-between; gap: 20px;
+        }
+        .progresso-texto { font-weight: 800; color: var(--primary); font-size: 0.9em; min-width: 250px; }
+        .progresso-track { flex: 1; background: #e2e8f0; height: 12px; border-radius: 10px; overflow: hidden; position: relative; }
+        .progresso-fill { background: var(--accent); width: 0%; height: 100%; transition: width 0.3s ease; }
+
+        /* CONTROLES DE ARQUIVO */
+        .controls { background: white; padding: 20px 25px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 25px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;}
+        .file-group { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 250px; max-width: 400px;}
+        .file-group-title { font-weight: 800; font-size: 0.85em; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; text-align: center;}
+        
+        .custom-file-input { display: none; }
+        .custom-file-label { display: block; padding: 12px 15px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 4px; color: #475569; font-weight: 600; font-size: 0.9em; cursor: pointer; transition: all 0.2s ease; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+        .custom-file-label:hover { background: #f1f5f9; border-color: var(--bradesco); color: var(--bradesco-dark);}
+        .custom-file-label.has-file { background: #fee2e2; color: var(--bradesco-dark); border-color: #fca5a5; border-style: solid; }
+        .btn-plus { background: var(--secondary); border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer; font-weight: 800; font-size: 1.2em; color: #475569; padding: 0 15px; transition: 0.2s;}
+        .btn-plus:hover { background: #e2e8f0; color: var(--bradesco-dark); border-color: var(--bradesco);}
+
+        /* DASHBOARD & GRÁFICO */
+        .dashboard-wrapper { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; align-items: stretch; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; flex: 2; min-width: 320px; }
+        .card { background: white; padding: 20px 15px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: center; display: flex; flex-direction: column; justify-content: center; border-top: 3px solid var(--primary); }
+        .card.incorreto { border-top-color: var(--danger); }
+        .card.financeiro { border-top-color: var(--success); }
+        .card h3 { margin: 0 0 8px 0; font-size: 0.85em; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card .value { font-size: 1.8em; font-weight: 800; color: var(--primary); line-height: 1.2; }
+        .card.incorreto .value { color: var(--danger); }
+        .card.financeiro .value { color: var(--success); }
+        
+        .chart-container { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; flex: 1.5; min-width: 350px; display: flex; flex-direction: column; }
+        .chart-title { margin: 0 0 15px 0; color: #475569; text-align: center; font-size: 0.95em; font-weight: 800; text-transform: uppercase;}
+        
+        /* GESTÃO DE STATUS (DESIGN PREMIUM PÍLULA) & LEGENDA */
+        .legenda-status { display: flex; gap: 15px; background: white; padding: 12px 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px; align-items: center; justify-content: center; font-size: 0.85em; font-weight: 600; color: #475569; flex-wrap: wrap;}
+        .legenda-item { display: flex; align-items: center; gap: 6px; }
+        .legenda-cor { width: 14px; height: 14px; border-radius: 14px; }
+        
+        .status-badge {
+            appearance: none;
+            -webkit-appearance: none;
+            padding: 6px 30px 6px 14px;
+            border-radius: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8em;
+            font-weight: 800;
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 1em;
+            margin-right: 12px;
+        }
+        .status-badge:hover { filter: brightness(0.95); transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
+        
+        .status-DEFAULT { 
+            background-color: #f1f5f9; color: #475569; border-color: #cbd5e1;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+        .status-AUSENTE { 
+            background-color: #3b82f6; color: white;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+        .status-PENDENTE { 
+            background-color: #f59e0b; color: white;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+        .status-CORRIGIDA { 
+            background-color: #10b981; color: white;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+
+        /* FILTROS E LUPA */
+        .filters-container { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .filter-input { padding: 10px 12px; border-radius: 4px; border: 1px solid #cbd5e1; font-weight: 600; color: #334155; font-size: 0.85em; flex: 1; min-width: 140px; outline: none; font-family: inherit; transition: 0.2s;}
+        .filter-input:focus { border-color: var(--bradesco); }
+        
+        .search-wrapper { display: flex; flex: 2; min-width: 200px; }
+        .search-bar { flex: 1; padding: 10px 12px; border-radius: 4px 0 0 4px; border: 1px solid #cbd5e1; border-right: none; font-size: 0.9em; outline: none; font-family: inherit;}
+        .search-bar:focus { border-color: var(--bradesco); }
+        .btn-search { background: var(--primary); color: white; border: none; padding: 0 18px; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 1.1em; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .btn-search:hover { background: #0f172a; }
+        
+        /* RESULTADOS */
+        details { background: white; margin-bottom: 10px; border-radius: 6px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        summary { padding: 12px 20px; cursor: pointer; background: #fff; border-left: 4px solid var(--danger); display: flex; justify-content: space-between; align-items: center; list-style: none; transition: background 0.2s; }
+        summary::-webkit-details-marker { display: none; }
+        summary:hover { background: #f8fafc; }
+        .summary-title { font-size: 0.95em; font-weight: 600; color: var(--primary); display: flex; align-items: center; }
+        
+        .details-content { padding: 0; background: white; border-top: 1px solid #e2e8f0; overflow-x: auto;}
+        .info-row { padding: 12px 20px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-size: 0.85em; color: #475569; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        
+        table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+        th, td { padding: 10px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: white; color: #64748b; font-weight: 800; text-transform: uppercase; font-size: 0.85em;}
+        tr:hover td { background: #f8fafc; }
+        
+        .tag { padding: 5px 10px; border-radius: 4px; font-size: 0.85em; font-weight: 800; color: white; display: inline-block; text-transform: uppercase; text-align: center; }
+        .tag-danger { background: var(--danger); }
+        .tag-warning { background: var(--warning); }
+        .tag-success { background: var(--success); }
+        .desc-texto { font-size: 0.85em; color: #64748b; font-weight: 600; font-style: italic; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        
+        footer { text-align: center; margin-top: 40px; padding: 20px; color: #94a3b8; font-size: 0.8em; font-weight: 600;}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="signature-top-left">
+            <img src="escudo.png" alt="Escudo Auditoria" class="img-escudo">
+            <p>Auditoria & Tech</p>
+        </div>
+
+        <button class="btn-icon" onclick="abrirConfig()" title="Configurações (DEPARA)">⚙️</button>
+        
+        <div class="header-content-center">
+            <div class="header-titles">
+                <h1>Auditoria de Retornos Bradesco</h1>
+                <p>Motor de Inteligência Financeira e Conciliação</p>
+            </div>
+            <div class="header-buttons">
+                <button class="btn" onclick="location.reload()">Limpar Painel</button>
+                <button class="btn btn-primary" onclick="iniciarVarredura()">▶ Iniciar Varredura</button>
+                <button class="btn btn-warning" onclick="exportarCSVIncorretos()">Exportar Apenas Incorretos</button>
+                <button class="btn" onclick="exportarCSVCompleto()">Exportar Tudo</button>
+            </div>
+        </div>
+    </header>
+
+    <div id="modalUpdate" class="modal-overlay">
+        <div class="modal-content" style="border-top: 5px solid var(--accent);">
+            <div class="modal-header">
+                <h2>🚀 Novidades da Versão 2.1</h2>
+                <button class="close-btn" onclick="fecharUpdate()">×</button>
+            </div>
+            <div class="release-list">
+                <div class="release-item">
+                    <h4>Auto-Load da Base GitHub</h4>
+                    <p>O sistema agora tenta carregar a base de dados padrão ("depara_padrao.csv") automaticamente no primeiro acesso se estiver na mesma pasta.</p>
+                </div>
+                <div class="release-item">
+                    <h4>Botão Baixar Base</h4>
+                    <p>Adicionado botão nas configurações para baixar em CSV tudo que o robô já aprendeu e tem salvo na memória no momento.</p>
+                </div>
+                <div class="release-item">
+                    <h4>Barra de Progresso e Performance</h4>
+                    <p>Processamento otimizado em lote. O navegador não trava mais ao ler arquivos gigantes.</p>
+                </div>
+                <div class="release-item">
+                    <h4>Regra de Senha Inteligente</h4>
+                    <p>O motor agora cruza o seu DEPARA (3ª Coluna). Se o exame exige senha (SIM) e na Orizon veio em branco, ele acusa o erro.</p>
+                </div>
+            </div>
+            <button class="btn" style="background: var(--accent); color: white; border: none; padding: 12px; margin-top: 10px;" onclick="fecharUpdate()">Ciente das Novidades</button>
+        </div>
+    </div>
+
+    <div id="modalConfig" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Memória do Sistema: DEPARA</h2>
+                <button class="close-btn" onclick="fecharConfig()">×</button>
+            </div>
+            <div style="font-size: 0.9em; color: #475569;">
+                O robô aprende os códigos e os guarda na memória do navegador. Importe seu CSV para alimentar ou atualizar os códigos. Se quiser exigir senha para o código, coloque "SIM" na terceira coluna.
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="file" id="fDeparaUpdate" class="custom-file-input" accept=".csv" onchange="processarUploadDepara(this)">
+                <label for="fDeparaUpdate" class="custom-file-label" style="flex:1; margin:0; background: var(--primary); color:white; border:none; border-radius: 4px;">➕ Atualizar Base (CSV)</label>
+                <button class="btn" style="background: var(--secondary); color: var(--primary); border: 1px solid #cbd5e1;" onclick="baixarDeparaAtual()">📥 Baixar Base</button>
+                <button class="btn" style="background: white; color: var(--danger); border: 1px solid var(--danger);" onclick="limparDeparaMemoria()">🗑️ Apagar Tudo</button>
+            </div>
+            <div style="font-weight: 800; color: var(--primary); font-size: 0.9em;">
+                Total de Códigos Salvos: <span id="deparaCount" style="color: var(--accent);">0</span>
+            </div>
+            <div class="depara-list-container" id="deparaListUI"></div>
+        </div>
+    </div>
+
+    <div id="modalAlerta" class="modal-overlay">
+        <div class="modal-content" style="border-top: 4px solid var(--danger); max-height: 90vh;">
+            <div class="modal-header">
+                <h2 style="color: var(--danger);">🚨 Alertas de Faturamento</h2>
+                <button class="close-btn" onclick="document.getElementById('modalAlerta').style.display='none'">×</button>
+            </div>
+            <div class="depara-list-container" id="listaAlertasUI" style="max-height: 400px; background: #fff; border: none; padding: 0;">
+                </div>
+            <button class="btn" style="align-self: flex-end; background: var(--bradesco); color: white; padding: 10px 30px; border:none;" onclick="document.getElementById('modalAlerta').style.display='none'">Ciente</button>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="file-group">
+            <span class="file-group-title">1. KORUS (Planilhas)</span>
+            <div style="display: flex; gap: 8px;">
+                <input type="file" id="fKorus" accept=".csv, .xlsx, .xls, .xlsm" multiple style="display: none;">
+                <label for="fKorus" id="lblKorus" class="custom-file-label" style="flex: 1; margin: 0;">Selecionar Arquivos</label>
+                
+                <input type="file" id="fKorusAdd" accept=".csv, .xlsx, .xls, .xlsm" multiple style="display: none;">
+                <button type="button" class="btn-plus" onclick="document.getElementById('fKorusAdd').click()" title="Adicionar mais arquivos sem apagar os anteriores">+</button>
+            </div>
+        </div>
+        <div class="file-group">
+            <span class="file-group-title">2. OPERADORA (Planilhas)</span>
+            <div style="display: flex; gap: 8px;">
+                <input type="file" id="fOrizon" accept=".csv" multiple style="display: none;">
+                <label for="fOrizon" id="lblOrizon" class="custom-file-label" style="flex: 1; margin: 0;">Selecionar Arquivos</label>
+                
+                <input type="file" id="fOrizonAdd" accept=".csv" multiple style="display: none;">
+                <button type="button" class="btn-plus" onclick="document.getElementById('fOrizonAdd').click()" title="Adicionar mais arquivos sem apagar os anteriores">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-wrapper">
+        <div class="kpi-grid">
+            <div class="card">
+                <h3>Atendimentos (Lidos)</h3>
+                <div class="value" id="kpi-atend-total">0</div>
+            </div>
+            <div class="card">
+                <h3>Exames (Lidos)</h3>
+                <div class="value" id="kpi-exame-total">0</div>
+            </div>
+            <div class="card financeiro">
+                <h3>Valor Total</h3>
+                <div class="value" id="kpi-valor-total">R$ 0,00</div>
+            </div>
+            <div class="card incorreto">
+                <h3>Atend. Incorretos</h3>
+                <div class="value" id="kpi-atend-inc">0</div>
+            </div>
+            <div class="card incorreto">
+                <h3>Exames Incorretos</h3>
+                <div class="value" id="kpi-exame-inc">0</div>
+            </div>
+            <div class="card incorreto">
+                <h3>Valor em Risco</h3>
+                <div class="value" id="kpi-valor-inc">R$ 0,00</div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h3 class="chart-title">Análise de Inconsistências (Qtde)</h3>
+            <div style="position: relative; height: 100%; min-height: 200px;">
+                <canvas id="errorChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="legenda-status">
+        <span style="text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Correção:</span>
+        <div class="legenda-item"><div class="legenda-cor" style="background:#e2e8f0; border: 1px solid #cbd5e1;"></div> Sem Status</div>
+        <div class="legenda-item"><div class="legenda-cor" style="background:#3b82f6;"></div> Ausente</div>
+        <div class="legenda-item"><div class="legenda-cor" style="background:#f59e0b;"></div> Pendente</div>
+        <div class="legenda-item"><div class="legenda-cor" style="background:#10b981;"></div> Corrigida</div>
+    </div>
+
+    <div class="filters-container">
+        <select id="filtroConvenio" class="filter-input" onchange="renderizarResultados()">
+            <option value="ALL">Todos os Convênios</option>
+        </select>
+
+        <select id="filtroUnid" class="filter-input" onchange="renderizarResultados()">
+            <option value="ALL">Todas as Unidades</option>
+        </select>
+        
+        <select id="filtroData" class="filter-input" onchange="renderizarResultados()">
+            <option value="ALL">Todas as Datas</option>
+        </select>
+
+        <select id="filtroTipo" class="filter-input" onchange="renderizarResultados()">
+            <option value="ALL">Todas Inconsistências</option>
+            <option value="NAO_LOCALIZADO">Não Localizados</option>
+            <option value="STATUS_INVALIDO">Recusados/Cancelados</option>
+            <option value="DIVERGENCIA_DATA">Data Incorreta</option>
+            <option value="DIVERGENCIA_QTDE">Qtde Inc./Zerada</option>
+            <option value="DIVERGENCIA_AUTH">Senha Incorreta</option>
+            <option value="SENHA_INVENTADA">Senha em branco na Orizon</option>
+            <option value="MULTIPLAS_SENHAS">Múltiplas Senhas na Guia</option>
+            <option value="IDADE_INVALIDA">Recém-Nascido</option>
+            <option value="DIVERGENCIA_PLANO">Múltiplos Planos</option>
+            <option value="SEM_DEPARA">Código Sem Depara (Inicia com 8)</option>
+            <option value="ALTO_CUSTO">Alto Custo (>= R$500)</option>
+        </select>
+
+        <div class="search-wrapper">
+            <input type="text" id="filtroBusca" list="listaAtend" class="search-bar" placeholder="Buscar Atendimento..." onkeypress="if(event.key === 'Enter') renderizarResultados()">
+            <datalist id="listaAtend"></datalist>
+            <button class="btn-search" onclick="renderizarResultados()" title="Aplicar Filtros">🔍</button>
+        </div>
+    </div>
+
+    <div id="resultados-container"></div>
+
+    <div id="barra-progresso-container">
+        <div class="progresso-texto" id="progresso-texto">Iniciando Motor...</div>
+        <div class="progresso-track">
+            <div class="progresso-fill" id="progresso-fill"></div>
+        </div>
+    </div>
+
+    <footer>Gestão Financeira & Faturamento | Desenvolvido por Breno Coutinho &copy; 2026</footer>
+
+    <script>
+        // ==========================================
+        // 🔒 TRAVA DE DOMÍNIO (LICENÇA DE USO)
+        // ==========================================
+        (function() {
+            const dominiosPermitidos = ["brcoutinho-coder.github.io", "localhost", "127.0.0.1", ""];
+            let hostAtual = window.location.hostname;
+            if (!dominiosPermitidos.includes(hostAtual)) {
+                document.body.innerHTML = `
+                    <div style="display:flex; height:100vh; width:100vw; background:#0f172a; color:white; justify-content:center; align-items:center; font-family:sans-serif; text-align:center; flex-direction:column;">
+                        <h1 style="color:#f43f5e; font-size:3em; margin-bottom:10px;">Acesso Bloqueado</h1>
+                        <p style="font-size:1.2em; color:#94a3b8;">Sistema proprietário de Breno Coutinho.</p>
+                        <p style="font-size:0.9em; color:#64748b; margin-top:20px;">Licença de uso não autorizada para este domínio.</p>
+                    </div>
+                `;
+                throw new Error("Violação de Licença: A execução do motor foi bloqueada pelo autor.");
+            }
+        })();
+
+        const VERSAO_SISTEMA = "2.1";
+
+        window.onload = async () => {
+            // Lógica de Notas de Atualização
+            if(localStorage.getItem('versaoAuditoria') !== VERSAO_SISTEMA) {
+                document.getElementById('modalUpdate').style.display = 'flex';
+            }
+            
+            // Lógica de Carregamento do DEPARA
+            let salvo = localStorage.getItem('deparaFinalCoutinhoMemoria');
+            if(salvo) { 
+                deparaMap = new Map(JSON.parse(salvo)); 
+                atualizarUIConfig();
+            } else {
+                // Tenta puxar a base padrão do GitHub se a memória estiver vazia
+                try {
+                    let response = await fetch('depara_padrao.csv');
+                    if(response.ok) {
+                        let text = await response.text();
+                        Papa.parse(text, {
+                            skipEmptyLines: true,
+                            complete: res => {
+                                res.data.forEach(row => {
+                                    let partes = row.join(";").split(/[;,]/);
+                                    if(partes.length >= 2) {
+                                        let chave = triturarAlfa(partes[0]);
+                                        let valor = String(partes[1]).replace(/\D/g, "").trim();
+                                        let exigeSenha = partes[2] ? padronizarTexto(partes[2]).includes("SIM") : false;
+                                        if(chave) deparaMap.set(chave, { cod: valor, reqAuth: exigeSenha });
+                                    }
+                                });
+                                localStorage.setItem('deparaFinalCoutinhoMemoria', JSON.stringify(Array.from(deparaMap.entries())));
+                                atualizarUIConfig();
+                            }
+                        });
+                    }
+                } catch(e) { 
+                    console.log("Base padrão não encontrada, iniciando vazia."); 
+                    atualizarUIConfig();
+                }
+            }
+        };
+
+        function fecharUpdate() {
+            localStorage.setItem('versaoAuditoria', VERSAO_SISTEMA);
+            document.getElementById('modalUpdate').style.display = 'none';
+        }
+
+        // PROGRESSO ASSINCRONO PARA NÃO TRAVAR A TELA
+        async function atualizarProgresso(percentual, texto) {
+            document.getElementById('barra-progresso-container').style.display = 'flex';
+            document.getElementById('progresso-fill').style.width = percentual + '%';
+            document.getElementById('progresso-texto').innerText = texto;
+            await new Promise(resolve => requestAnimationFrame(resolve));
+            await new Promise(resolve => setTimeout(resolve, 10));
+        }
+
+        let arquivosKorus = [];
+        let arquivosOrizon = [];
+
+        function atualizarLabel(labelId, array) {
+            let lbl = document.getElementById(labelId);
+            if(array.length > 1) {
+                lbl.innerHTML = `📄 ${array.length} Arquivos Adicionados`;
+                lbl.classList.add('has-file');
+            } else if(array.length === 1) {
+                lbl.innerHTML = `📄 ${array[0].name}`;
+                lbl.classList.add('has-file');
+            } else {
+                lbl.innerHTML = "Selecionar Arquivos";
+                lbl.classList.remove('has-file');
+            }
+        }
+
+        document.getElementById('fKorus').addEventListener('change', function() {
+            arquivosKorus = Array.from(this.files);
+            atualizarLabel('lblKorus', arquivosKorus);
+        });
+        document.getElementById('fKorusAdd').addEventListener('change', function() {
+            arquivosKorus = arquivosKorus.concat(Array.from(this.files));
+            atualizarLabel('lblKorus', arquivosKorus);
+            this.value = ""; 
+        });
+
+        document.getElementById('fOrizon').addEventListener('change', function() {
+            arquivosOrizon = Array.from(this.files);
+            atualizarLabel('lblOrizon', arquivosOrizon);
+        });
+        document.getElementById('fOrizonAdd').addEventListener('change', function() {
+            arquivosOrizon = arquivosOrizon.concat(Array.from(this.files));
+            atualizarLabel('lblOrizon', arquivosOrizon);
+            this.value = "";
+        });
+
+        Chart.register(ChartDataLabels);
+
+        let deparaMap = new Map();
+        let divergenciasEncontradas = [];
+        let relatorioCompleto = []; 
+        let todosAtendimentosGlobais = []; 
+        let numControleInterface = 1; 
+        let idExportacao = 250; 
+        let chartInstance = null;
+
+        function alterarStatusAuditoria(chaveAtendimentoSegura, elementoSelect) {
+            let dbFresco = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
+            dbFresco[chaveAtendimentoSegura] = elementoSelect.value;
+            localStorage.setItem('statusAuditoriaCoutinho', JSON.stringify(dbFresco));
+            
+            elementoSelect.className = `status-badge status-${elementoSelect.value}`;
+        }
+
+        function abrirConfig() { document.getElementById('modalConfig').style.display = 'flex'; }
+        function fecharConfig() { document.getElementById('modalConfig').style.display = 'none'; }
+        
+        function atualizarUIConfig() {
+            document.getElementById('deparaCount').innerText = deparaMap.size;
+            let listHTML = '';
+            let count = 0;
+            for (let [chave, deparaEntry] of deparaMap.entries()) {
+                if(count > 100) { listHTML += `<div class="depara-item">... e mais ${deparaMap.size - 100} itens ocultos para performance.</div>`; break; }
+                
+                let codExibicao = typeof deparaEntry === 'object' ? deparaEntry.cod : deparaEntry;
+                let authTag = (typeof deparaEntry === 'object' && deparaEntry.reqAuth) ? ' <span style="color:#059669; font-size:0.8em;">[🔑 SENHA: SIM]</span>' : '';
+
+                listHTML += `<div class="depara-item"><span class="depara-key">${chave}</span><span class="depara-val">➜ ${codExibicao}${authTag}</span></div>`;
+                count++;
+            }
+            if(deparaMap.size === 0) listHTML = '<div style="padding:15px; text-align:center; color:#94a3b8;">Nenhum código salvo na memória.</div>';
+            document.getElementById('deparaListUI').innerHTML = listHTML;
+        }
+
+        // DOWNLOAD DA BASE ATUAL
+        function baixarDeparaAtual() {
+            if(deparaMap.size === 0) return alert("A base DEPARA está vazia.");
+            let csv = "Exame;Codigo_Operadora;Exige_Senha\n";
+            for (let [chave, obj] of deparaMap.entries()) {
+                let cod = typeof obj === 'object' ? obj.cod : obj;
+                let req = (typeof obj === 'object' && obj.reqAuth) ? "SIM" : "NAO";
+                csv += `${chave};${cod};${req}\n`;
+            }
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' })); 
+            link.download = "depara_atual.csv";
+            link.click();
+        }
+
+        function limparDeparaMemoria() {
+            if(confirm("Tem certeza que deseja APAGAR toda a base DEPARA do navegador?")) {
+                deparaMap.clear();
+                localStorage.removeItem('deparaFinalCoutinhoMemoria');
+                atualizarUIConfig();
+                alert("Base apagada com sucesso.");
+            }
+        }
+
+        function processarUploadDepara(input) {
+            let file = input.files[0];
+            if (!file) return;
+            Papa.parse(file, { 
+                skipEmptyLines: true, 
+                complete: res => {
+                    let novos = 0, atualizados = 0;
+                    res.data.forEach(row => {
+                        let partes = row.join(";").split(/[;,]/);
+                        if(partes.length >= 2) {
+                            let chave = triturarAlfa(partes[0]);
+                            let valor = String(partes[1]).replace(/\D/g, "").trim();
+                            
+                            let exigeSenha = false;
+                            if(partes.length > 2) {
+                                let textoAuth = padronizarTexto(partes[2]);
+                                if(textoAuth === "SIM" || textoAuth === "S" || textoAuth === "TRUE") exigeSenha = true;
+                            }
+
+                            if(chave && valor) {
+                                let objNovo = { cod: valor, reqAuth: exigeSenha };
+
+                                if(deparaMap.has(chave)) { 
+                                    let oldEntry = deparaMap.get(chave);
+                                    let oldCod = typeof oldEntry === 'object' ? oldEntry.cod : oldEntry;
+                                    let oldReq = typeof oldEntry === 'object' ? oldEntry.reqAuth : false;
+                                    if(oldCod !== valor || oldReq !== exigeSenha) atualizados++; 
+                                } else { 
+                                    novos++; 
+                                }
+                                deparaMap.set(chave, objNovo);
+                            }
+                        }
+                    });
+                    localStorage.setItem('deparaFinalCoutinhoMemoria', JSON.stringify(Array.from(deparaMap.entries())));
+                    atualizarUIConfig();
+                    alert(`✅ Base DEPARA Atualizada!\n\nNovos Códigos Adicionados: ${novos}\nCódigos Atualizados: ${atualizados}\nTotal em Memória: ${deparaMap.size}`);
+                    input.value = "";
+                    input.nextElementSibling.innerHTML = "➕ Atualizar Base (CSV)";
+                }
+            });
+        }
+
+        function formatarMoeda(valor) { return (valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+
+        function extrairValor(texto) {
+            if (texto === undefined || texto === null) return 0;
+            let str = String(texto).replace(/[^0-9\,\.\-]/g, ''); 
+            if (str.includes(',') && str.includes('.')) { str = str.replace(/\./g, '').replace(',', '.'); } 
+            else if (str.includes(',')) { str = str.replace(',', '.'); }
+            return parseFloat(str) || 0;
+        }
+
+        function padronizarTexto(texto) {
+            if (!texto) return "";
+            return String(texto).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/["']/g, "").replace(/\s+/g, ' ').toUpperCase().trim();
+        }
+
+        function triturarAlfa(texto) {
+            if (!texto) return "";
+            return padronizarTexto(texto).replace(/[^A-Z0-9]/g, "");
+        }
+
+        function buscarColuna(row, palavrasChave) {
+            if (!row) return "";
+            let cols = Object.keys(row);
+            for(let c of cols) {
+                let cLimpa = triturarAlfa(c);
+                for(let pk of palavrasChave) { if(cLimpa === pk) return row[c]; }
+            }
+            for(let c of cols) {
+                let cLimpa = triturarAlfa(c);
+                for(let pk of palavrasChave) { if(cLimpa.includes(pk)) return row[c]; }
+            }
+            return "";
+        }
+
+        function gerarIdOrizon(nome, codigoExame, carteirinha) {
+            let nomeBase = padronizarTexto(nome).replace(/[^A-Z]/g, "").substring(0, 3);
+            let cartBase = String(carteirinha || "").replace(/\D/g, "");
+            let codExameLimpo = String(codigoExame || "").replace(/[^A-Z0-9]/gi, "").trim();
+            return `${nomeBase}${codExameLimpo}${cartBase}`;
+        }
+
+        function gerarIdKorus(nome, codigoExame, nomeExame, carteirinha) {
+            let nomeBase = padronizarTexto(nome).replace(/[^A-Z]/g, "").substring(0, 3);
+            let codExameLimpo = String(codigoExame || "").replace(/[^A-Z0-9]/gi, "").trim();
+            let chaveDepara = triturarAlfa(nomeExame);
+            
+            let deparaEntry = deparaMap.get(chaveDepara);
+            let deparaCod = deparaEntry ? (typeof deparaEntry === 'object' ? deparaEntry.cod : deparaEntry) : undefined;
+            
+            let exameFinal = deparaCod ? deparaCod : codExameLimpo;
+            let cartStr = String(carteirinha || "").replace(/\D/g, "");
+            let cartBase = cartStr;
+            if (cartStr.length >= 10) {
+                let esquerda = cartStr.substring(0, 3);
+                let meio = cartStr.substr(cartStr.length - 8, 2); 
+                let direita = cartStr.slice(-3); 
+                cartBase = esquerda + meio + direita;
+            }
+            return `${nomeBase}${exameFinal}${cartBase}`;
+        }
+
+        function extrairData(texto) {
+            if (!texto) return "DATA_VAZIA";
+            let textoSemHora = String(texto).trim().split(' ')[0];
+            let limpo = textoSemHora.replace(/[^0-9\/\-]/g, ''); 
+            if (/^\d{5}$/.test(limpo)) { 
+                let d = new Date(Math.round((parseFloat(limpo) - 25569) * 86400 * 1000));
+                return `${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${d.getUTCFullYear()}`;
+            }
+            let matchBR = limpo.match(/(\d{2})[\/\-](\d{2})[\/\-](\d{4})/);
+            if (matchBR) return `${matchBR[1]}/${matchBR[2]}/${matchBR[3]}`;
+            let matchEN = limpo.match(/(\d{4})[\/\-](\d{2})[\/\-](\d{2})/);
+            if (matchEN) return `${matchEN[3]}/${matchEN[2]}/${matchEN[1]}`;
+            return "DATA_INVALIDA";
+        }
+
+        function dataParaTimestamp(dataStr) {
+            if(!dataStr || dataStr === "DATA_VAZIA" || dataStr === "DATA_INVALIDA") return 0;
+            let partes = dataStr.split('/');
+            if(partes.length === 3) {
+                let ts = new Date(partes[2], partes[1] - 1, partes[0]).getTime();
+                return isNaN(ts) ? 0 : ts;
+            }
+            return 0;
+        }
+
+        async function lerMultiplasBases(filesArray, nome) {
+            if (!filesArray || filesArray.length === 0) throw new Error(`Nenhum arquivo válido de ${nome} foi selecionado.`);
+            let todosDados = [];
+            for (let i = 0; i < filesArray.length; i++) {
+                let file = filesArray[i];
+                let dadosArquivo = await new Promise((resolve, reject) => {
+                    if (file.name.toLowerCase().endsWith('.csv')) {
+                        Papa.parse(file, { header: true, skipEmptyLines: true, encoding: "ISO-8859-1", complete: r => resolve(r.data) });
+                    } else {
+                        let reader = new FileReader();
+                        reader.onload = e => {
+                            let wb = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
+                            resolve(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {raw:false}));
+                        };
+                        reader.readAsArrayBuffer(file);
+                    }
+                });
+                todosDados = todosDados.concat(dadosArquivo);
+            }
+            return todosDados;
+        }
+
+        async function iniciarVarredura() {
+            divergenciasEncontradas = []; 
+            relatorioCompleto = []; 
+            todosAtendimentosGlobais = [];
+            numControleInterface = 1;
+            idExportacao = 250;
+            
+            let alertasRecemNascidos = new Set();
+            let alertasSemDepara = new Set();
+
+            document.getElementById('resultados-container').innerHTML = '';
+            
+            try {
+                await atualizarProgresso(10, 'Lendo arquivos Operadora...');
+                let orizon = await lerMultiplasBases(arquivosOrizon, 'OPERADORA');
+
+                await atualizarProgresso(30, 'Mapeando Dados Orizon...');
+                let orizonMap = new Map();
+                orizon.forEach(row => {
+                    let nome = buscarColuna(row, ['BENEFICIARIO', 'NOME']);
+                    let cod = buscarColuna(row, ['PROCEDIMENTO', 'CODIGO']);
+                    let cart = buscarColuna(row, ['NUMERO', 'CARTAO']);
+                    let status = padronizarTexto(buscarColuna(row, ['SITUACAO', 'STATUS']));
+                    let trans = padronizarTexto(buscarColuna(row, ['TIPODETRANSACAO', 'TIPOTRANSACAO', 'TRANSACAO'])); 
+                    let descOrizon = padronizarTexto(buscarColuna(row, ['DESCRICAO', 'MOTIVO'])); 
+                    
+                    let dataCrua = buscarColuna(row, ['DATA']); 
+                    let qtde = parseFloat(buscarColuna(row, ['QUANTIDADE', 'QTDE'])) || 0;
+                    let auth = padronizarTexto(buscarColuna(row, ['SENHAEXTERNA']));
+                    
+                    if(!nome) return;
+                    let id = gerarIdOrizon(nome, cod, cart);
+                    let dataLimpa = extrairData(dataCrua);
+                    
+                    if (!orizonMap.has(id)) orizonMap.set(id, []);
+                    orizonMap.get(id).push({ dataLimpa, dataCrua: dataCrua, ts: dataParaTimestamp(dataLimpa), status, trans, descOrizon, qtde, auth, rowOriginal: row });
+                });
+
+                await atualizarProgresso(50, 'Lendo arquivos Korus...');
+                let korus = await lerMultiplasBases(arquivosKorus, 'KORUS');
+
+                let korusAgrupado = new Map();
+                let unidadesUnicas = new Set(); 
+                let datasUnicas = new Set();
+                let conveniosUnicos = new Set(); 
+                let listaAtendimentosPuros = new Set();
+
+                await atualizarProgresso(60, 'Cruzando Dados dos Hospitais...');
+                korus.forEach(row => {
+                    let matriculaRaw = buscarColuna(row, ['MATRICULA', 'CARTEIRINHA']);
+                    if (String(matriculaRaw).toUpperCase().includes('E+')) throw new Error("Korus corrompido (E+). Importe o CSV bruto.");
+
+                    let nomeRaw = padronizarTexto(buscarColuna(row, ['NOMEPACIENTE', 'PACIENTE'])); 
+                    let atend = triturarAlfa(buscarColuna(row, ['NUMATENDIMENTO', 'ATENDIMENTO']));
+                    
+                    let dataNascRaw = buscarColuna(row, ['DATANASC', 'NASCIMENTO']);
+                    let dataNascLimpa = extrairData(dataNascRaw);
+
+                    if (!nomeRaw || !matriculaRaw || !atend) return;
+
+                    listaAtendimentosPuros.add(atend);
+
+                    let unidadeRaw = padronizarTexto(buscarColuna(row, ['IDPOSTO', 'NUMEROUNIDADE', 'POSTO', 'UNIDADE', 'UNID'])) || "NÃO INFORMADA";
+                    unidadesUnicas.add(unidadeRaw);
+
+                    let convenioRaw = padronizarTexto(buscarColuna(row, ['NOMECONVENIO', 'CONVENIO'])) || "NÃO INFORMADO";
+                    conveniosUnicos.add(convenioRaw);
+                    let planoRaw = padronizarTexto(buscarColuna(row, ['NOMEPLANO', 'PLANO'])) || "NÃO INFORMADO";
+
+                    let codAmb = buscarColuna(row, ['CODIGOAMB', 'CODIGOEXAME']);
+                    let nomeExame = padronizarTexto(buscarColuna(row, ['NOMEEXAME', 'EXAMEANEXO'])); 
+                    let dataKorusRaw = buscarColuna(row, ['DATAENTRADA', 'DATAFATURA', 'DATA']);
+                    let authKorus = padronizarTexto(buscarColuna(row, ['AUTORIZACAO']));
+                    
+                    let qtdeKorusRaw = buscarColuna(row, ['QUANTIDADE', 'QTDE']);
+                    let qtdeKorusLinha = qtdeKorusRaw ? parseFloat(qtdeKorusRaw) || 1 : 1;
+
+                    let valorRaw = buscarColuna(row, ['VALORCONVENIO', 'VALOR']);
+                    let valorNum = extrairValor(valorRaw);
+                    
+                    let chaveDepara = triturarAlfa(nomeExame);
+                    
+                    let deparaEntry = deparaMap.get(chaveDepara);
+                    let deparaCod = deparaEntry ? (typeof deparaEntry === 'object' ? deparaEntry.cod : deparaEntry) : undefined;
+                    let deparaRequerSenha = deparaEntry ? (typeof deparaEntry === 'object' ? deparaEntry.reqAuth : false) : false;
+
+                    let codExameLimpo = String(codAmb).replace(/\D/g, "");
+                    let codExibicao = deparaCod ? deparaCod : codExameLimpo;
+
+                    let idGerado = gerarIdKorus(nomeRaw, codAmb, nomeExame, matriculaRaw);
+                    let dataKorusLimpa = extrairData(dataKorusRaw);
+                    
+                    if(dataKorusLimpa !== "DATA_VAZIA" && dataKorusLimpa !== "DATA_INVALIDA") datasUnicas.add(dataKorusLimpa);
+
+                    if (!korusAgrupado.has(atend)) {
+                        korusAgrupado.set(atend, { 
+                            atend: atend, unid: unidadeRaw, pac: nomeRaw, cart: padronizarTexto(matriculaRaw).replace(/\D/g, ""), 
+                            dataNasc: dataNascLimpa, convenio: convenioRaw, planos: new Set(), senhas: new Set(), 
+                            precisaDeSenhaNoAtendimento: false,
+                            exames: new Map() 
+                        });
+                    }
+                    
+                    let objAtend = korusAgrupado.get(atend);
+                    objAtend.planos.add(planoRaw); 
+                    
+                    if (deparaRequerSenha) {
+                        objAtend.precisaDeSenhaNoAtendimento = true;
+                    }
+
+                    let authLimpaParaSet = triturarAlfa(authKorus);
+                    if (authLimpaParaSet !== "") {
+                        objAtend.senhas.add(authLimpaParaSet);
+                    }
+                    
+                    let chaveExameUnico = idGerado + "_" + dataKorusLimpa + "_" + authKorus;
+                    
+                    if (!objAtend.exames.has(chaveExameUnico)) {
+                        objAtend.exames.set(chaveExameUnico, { 
+                            exame: nomeExame, cod: codExibicao, dataK: dataKorusLimpa, authK: authKorus, 
+                            reqAuth: deparaRequerSenha,
+                            qtdeK: 0, valorK: 0, valorRawK: valorRaw, idBuscado: idGerado 
+                        });
+                    }
+                    objAtend.exames.get(chaveExameUnico).qtdeK += qtdeKorusLinha;
+                    objAtend.exames.get(chaveExameUnico).valorK += valorNum; 
+                });
+
+                todosAtendimentosGlobais = Array.from(korusAgrupado.values());
+
+                let comboUnid = document.getElementById('filtroUnid');
+                comboUnid.innerHTML = '<option value="ALL">Todas as Unidades</option>';
+                Array.from(unidadesUnicas).sort().forEach(u => {
+                    let opt = document.createElement('option'); opt.value = u; opt.textContent = u; comboUnid.appendChild(opt);
+                });
+
+                let comboData = document.getElementById('filtroData');
+                comboData.innerHTML = '<option value="ALL">Todas as Datas Registradas</option>';
+                Array.from(datasUnicas).sort((a,b) => dataParaTimestamp(a) - dataParaTimestamp(b)).forEach(d => {
+                    let opt = document.createElement('option'); opt.value = d; opt.textContent = d; comboData.appendChild(opt);
+                });
+
+                let comboConvenio = document.getElementById('filtroConvenio');
+                comboConvenio.innerHTML = '<option value="ALL">Todos os Convênios</option>';
+                Array.from(conveniosUnicos).sort().forEach(c => {
+                    let opt = document.createElement('option'); opt.value = c; opt.textContent = c; comboConvenio.appendChild(opt);
+                });
+
+                let datalistAtend = document.getElementById('listaAtend');
+                datalistAtend.innerHTML = '';
+                Array.from(listaAtendimentosPuros).sort().forEach(a => {
+                    let opt = document.createElement('option'); opt.value = a; datalistAtend.appendChild(opt);
+                });
+
+                let atendimentosFinais = new Map();
+
+                await atualizarProgresso(80, 'Calculando Inconsistências Financeiras...');
+
+                todosAtendimentosGlobais.forEach(atendimento => {
+                    let temMultiplosPlanos = atendimento.planos.size > 1;
+                    let temMultiplasSenhas = atendimento.senhas.size > 1;
+
+                    atendimento.exames.forEach(exKorus => {
+                        let historico = orizonMap.get(exKorus.idBuscado);
+                        let msgIncorreto = [];
+                        let tipoInc = [];
+                        
+                        let isAltoCusto = exKorus.valorK >= 500;
+                        if(isAltoCusto) tipoInc.push('ALTO_CUSTO');
+
+                        if(temMultiplosPlanos) {
+                            msgIncorreto.push("Múltiplos Planos na Guia");
+                            tipoInc.push('DIVERGENCIA_PLANO');
+                        }
+
+                        if(temMultiplasSenhas) {
+                            msgIncorreto.push("Múltiplas Senhas na Guia");
+                            tipoInc.push('MULTIPLAS_SENHAS');
+                        }
+
+                        if (String(exKorus.cod).startsWith('8')) {
+                            msgIncorreto.push(`Possível Código Sem Depara`);
+                            tipoInc.push('SEM_DEPARA');
+                            alertasSemDepara.add(`Atend: ${atendimento.atend} | Paciente: ${atendimento.pac} | Cód: ${exKorus.cod}`);
+                        }
+
+                        let oData = "N/A", oDataCrua = "N/A", oQtde = "N/A", oAuth = "N/A", oStatus = "N/A", oTrans = "N/A", oDesc = "N/A";
+
+                        let authK_limpa = triturarAlfa(exKorus.authK);
+                        let authO_limpa = "";
+
+                        if (!historico) {
+                            msgIncorreto.push("Não Localizado na Operadora");
+                            tipoInc.push('NAO_LOCALIZADO');
+                        } else {
+                            let tsKorus = dataParaTimestamp(exKorus.dataK);
+                            
+                            let melhor = null;
+                            let melhorScore = -999999;
+
+                            historico.forEach(reg => {
+                                let score = 0;
+                                let sTrans = String(reg.trans).toUpperCase();
+                                let sStatus = String(reg.status).toUpperCase();
+                                let sDesc = String(reg.descOrizon).toUpperCase();
+                                let sFull = Object.values(reg.rowOriginal).join(" ").toUpperCase();
+                                
+                                let isCancelado = sTrans.includes('CANCEL') || sStatus.includes('CANCEL') || sDesc.includes('CANCEL') || sFull.includes('CANCELAMENTO');
+                                let isNegado = sStatus.includes('NEGAD') || sStatus.includes('RECUSAD') || sStatus.includes('GLOSA');
+                                let isAutorizado = !isCancelado && !isNegado && (sStatus.includes('AUTORIZAD') || sStatus.includes('JUSTIFICAD') || sStatus.includes('PAG') || sStatus.includes('LIBERAD') || sStatus.includes('APROV'));
+                                
+                                if (isAutorizado) score += 100000;
+                                else if (isNegado) score += 10000; 
+                                else if (isCancelado) score -= 50000; 
+                                else score += 5000; 
+                                
+                                if (reg.qtde === exKorus.qtdeK && exKorus.qtdeK > 0) score += 5000;
+                                if (reg.qtde === 0) score -= 2000; 
+                                
+                                let diffDias = Math.abs(reg.ts - tsKorus) / (1000 * 3600 * 24);
+                                score -= (diffDias * 10); 
+                                
+                                if (score > melhorScore) {
+                                    melhorScore = score;
+                                    melhor = reg;
+                                }
+                            });
+
+                            oData = melhor.dataLimpa;
+                            oDataCrua = melhor.dataCrua || "-";
+                            oQtde = melhor.qtde;
+                            oAuth = melhor.auth || "-";
+                            oStatus = melhor.status || "-";
+                            oTrans = melhor.trans || "-";
+                            oDesc = melhor.descOrizon || "-";
+
+                            let strTransM = String(melhor.trans).toUpperCase();
+                            let strStatusM = String(melhor.status).toUpperCase();
+                            let strDescM = String(melhor.descOrizon).toUpperCase();
+                            let strFullM = Object.values(melhor.rowOriginal).join(" ").toUpperCase();
+                            
+                            let ehCancelado = strTransM.includes('CANCEL') || strStatusM.includes('CANCEL') || strDescM.includes('CANCEL') || strFullM.includes('CANCELAMENTO');
+                            let ehNegado = strStatusM.includes('NEGAD') || strStatusM.includes('RECUSAD') || strStatusM.includes('GLOSA');
+                            let ehAutorizado = !ehCancelado && !ehNegado && (strStatusM.includes('AUTORIZAD') || strStatusM.includes('JUSTIFICAD') || strStatusM.includes('PAG') || strStatusM.includes('LIBERAD') || strStatusM.includes('APROV'));
+                            
+                            if (ehCancelado) {
+                                msgIncorreto.push("Cancelado na Operadora");
+                                tipoInc.push('STATUS_INVALIDO');
+                            } else if (ehNegado) {
+                                msgIncorreto.push("Recusado/Negada");
+                                tipoInc.push('STATUS_INVALIDO');
+                            } else if (!ehAutorizado) {
+                                msgIncorreto.push("Status Pendente");
+                                tipoInc.push('STATUS_INVALIDO');
+                            }
+                            
+                            if (melhor.qtde === 0) {
+                                msgIncorreto.push(`Qtde Operadora Zerada`);
+                                tipoInc.push('DIVERGENCIA_QTDE');
+                            } else if (exKorus.qtdeK !== melhor.qtde) {
+                                msgIncorreto.push(`Qtde K:${exKorus.qtdeK} vs O:${melhor.qtde}`);
+                                tipoInc.push('DIVERGENCIA_QTDE');
+                            }
+
+                            if (melhor.ts !== tsKorus) { 
+                                msgIncorreto.push(`Data K:${exKorus.dataK} vs O:${melhor.dataLimpa}`);
+                                tipoInc.push('DIVERGENCIA_DATA');
+                            }
+
+                            authO_limpa = triturarAlfa(melhor.auth);
+                            
+                            if (exKorus.reqAuth) {
+                                if (authO_limpa === "") {
+                                    msgIncorreto.push("Senha em branco na Orizon");
+                                    tipoInc.push('SENHA_INVENTADA');
+                                } else if (authK_limpa !== "" && authK_limpa !== authO_limpa) {
+                                    msgIncorreto.push(`Senha K:${exKorus.authK} vs O:${melhor.auth}`);
+                                    tipoInc.push('DIVERGENCIA_AUTH');
+                                }
+                            } else {
+                                if (!atendimento.precisaDeSenhaNoAtendimento) {
+                                    if (authK_limpa !== "") {
+                                        msgIncorreto.push("Sem necessidade de autorização");
+                                        tipoInc.push('SENHA_INVENTADA');
+                                    }
+                                }
+                            }
+                        }
+
+                        if (atendimento.dataNasc !== "DATA_VAZIA" && atendimento.dataNasc !== "DATA_INVALIDA") {
+                            let tsNasc = dataParaTimestamp(atendimento.dataNasc);
+                            let tsExame = dataParaTimestamp(exKorus.dataK);
+                            let idadeAnos = (tsExame - tsNasc) / (1000 * 3600 * 24 * 365.25);
+                            
+                            if (idadeAnos < 1) {
+                                msgIncorreto.push(`Aviso: Recém-Nascido`);
+                                tipoInc.push('IDADE_INVALIDA');
+                                alertasRecemNascidos.add(`Atend: ${atendimento.atend} | Paciente: ${atendimento.pac}`); 
+                            }
+                        }
+
+                        let temErroReal = msgIncorreto.length > 0;
+                        let statusGeral = temErroReal ? msgIncorreto.join(' | ') : "CONCILIADO - OK";
+                        let conciliado = temErroReal ? "NÃO" : "OK";
+
+                        let arrPlanos = Array.from(atendimento.planos).join(', ');
+                        
+                        let varIsSenhaInventada = tipoInc.includes('SENHA_INVENTADA') ? "SIM" : "NAO";
+                        let varIsMultiplasSenhas = temMultiplasSenhas ? "SIM" : "NAO";
+
+                        relatorioCompleto.push({
+                            idExport: idExportacao++,
+                            convenio: atendimento.convenio, planos: arrPlanos,
+                            unid: atendimento.unid, atend: atendimento.atend, pac: atendimento.pac, cart: atendimento.cart, dataNasc: atendimento.dataNasc,
+                            codK: exKorus.cod, exameK: exKorus.exame, dataK: exKorus.dataK, qtdeK: exKorus.qtdeK, valorK: exKorus.valorK, valorRawK: exKorus.valorRawK, authK: exKorus.authK,
+                            dataO: oDataCrua, qtdeO: oQtde, authO: oAuth, statusO: oStatus, transO: oTrans, descO: oDesc,
+                            conciliado: conciliado, motivo: statusGeral,
+                            isSenhaInventada: varIsSenhaInventada,
+                            isMultiplasSenhas: varIsMultiplasSenhas
+                        });
+
+                        if (temErroReal || isAltoCusto) {
+                            if (!atendimentosFinais.has(atendimento.atend)) {
+                                atendimentosFinais.set(atendimento.atend, { 
+                                    idControle: numControleInterface++, unid: atendimento.unid, atend: atendimento.atend, 
+                                    pac: atendimento.pac, cart: atendimento.cart, dataNasc: atendimento.dataNasc, 
+                                    convenio: atendimento.convenio, planos: arrPlanos, incorretos: [] 
+                                });
+                            }
+                            atendimentosFinais.get(atendimento.atend).incorretos.push({ 
+                                exame: exKorus.exame, cod: exKorus.cod, dataK: exKorus.dataK, qtde: exKorus.qtdeK, valor: exKorus.valorK, authK: exKorus.authK,
+                                desc: statusGeral, qtdeIncorreta: exKorus.qtdeK, tipo: tipoInc.join(','), isErro: temErroReal,
+                                statusOrizon: oStatus, transOrizon: oTrans, descOrizon: oDesc 
+                            });
+                        }
+                    });
+                });
+
+                divergenciasEncontradas = Array.from(atendimentosFinais.values());
+                
+                await atualizarProgresso(95, 'Renderizando Painel...');
+                renderizarResultados(); 
+                
+                await atualizarProgresso(100, 'Varredura Concluída!');
+                setTimeout(() => { document.getElementById('barra-progresso-container').style.display = 'none'; }, 1000);
+
+                let mostrarModal = false;
+                let htmlAlertas = "";
+
+                if(alertasRecemNascidos.size > 0) {
+                    htmlAlertas += `<div style="padding: 12px; background: #fef2f2; border-left: 4px solid #ef4444; margin-bottom: 12px; border-radius: 4px;">
+                                        <h4 style="margin:0 0 8px 0; color:#b91c1c;">👶 Recém-Nascidos (< 1 ano)</h4>`;
+                    alertasRecemNascidos.forEach(a => {
+                        let textoLimpo = a.replace(/%/g, ' ').replace(/\s+/g, ' ');
+                        htmlAlertas += `<div style="font-size:0.85em; color:#7f1d1d; margin-bottom:4px; font-weight:600;">• ${textoLimpo}</div>`;
+                    });
+                    htmlAlertas += `</div>`;
+                    mostrarModal = true;
+                }
+
+                if(alertasSemDepara.size > 0) {
+                    htmlAlertas += `<div style="padding: 12px; background: #fffbeb; border-left: 4px solid #f59e0b; margin-bottom: 10px; border-radius: 4px;">
+                                        <h4 style="margin:0 0 8px 0; color:#b45309;">⚠️ Códigos Sem Depara (Inicia com 8)</h4>`;
+                    alertasSemDepara.forEach(a => {
+                        let textoLimpo = a.replace(/%/g, ' ').replace(/\s+/g, ' ');
+                        htmlAlertas += `<div style="font-size:0.85em; color:#92400e; margin-bottom:4px; font-weight:600;">• ${textoLimpo}</div>`;
+                    });
+                    htmlAlertas += `</div>`;
+                    mostrarModal = true;
+                }
+
+                if(mostrarModal) {
+                    document.getElementById('listaAlertasUI').innerHTML = htmlAlertas;
+                    setTimeout(() => { document.getElementById('modalAlerta').style.display = 'flex'; }, 500);
+                }
+
+            } catch (err) {
+                document.getElementById('resultados-container').innerHTML = `<div style="padding: 20px; background: #fee2e2; color: #b91c1c; border-radius: 8px; border: 1px solid #f87171;"><strong>ERRO CRÍTICO:</strong> ${err.message}</div>`;
+                document.getElementById('barra-progresso-container').style.display = 'none';
+            }
+        }
+
+        function renderizarResultados() {
+            let container = document.getElementById('resultados-container');
+            
+            let filtroCombo = document.getElementById('filtroTipo').value;
+            let filtroUnid = document.getElementById('filtroUnid').value;
+            let filtroData = document.getElementById('filtroData').value;
+            let filtroConv = document.getElementById('filtroConvenio').value;
+            let termoBusca = triturarAlfa(document.getElementById('filtroBusca').value);
+            
+            let dbStatus = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
+
+            let filtrados = [];
+            let valorTotalGeral = 0;
+            let examesTotalGeral = 0;
+            let atendTotalGeral = 0;
+
+            if (filtroCombo === 'ALL') {
+                todosAtendimentosGlobais.forEach(atend => {
+                    let passaUnid = filtroUnid === 'ALL' || String(atend.unid).trim() === String(filtroUnid).trim();
+                    let passaConv = filtroConv === 'ALL' || String(atend.convenio).trim() === String(filtroConv).trim();
+                    let passaBusca = termoBusca === '' || atend.atend.includes(termoBusca);
+                    
+                    if (passaUnid && passaBusca && passaConv) {
+                        let examesValidosNaData = Array.from(atend.exames.values()).filter(ex => filtroData === 'ALL' || ex.dataK === filtroData);
+                        if (examesValidosNaData.length > 0) {
+                            atendTotalGeral++;
+                            examesValidosNaData.forEach(ex => {
+                                examesTotalGeral += ex.qtdeK;
+                                valorTotalGeral += ex.valorK;
+                            });
+                        }
+                    }
+                });
+            }
+
+            divergenciasEncontradas.forEach(atend => {
+                let incorretosFiltrados = atend.incorretos.filter(e => {
+                    let passaCombo = false;
+                    if(filtroCombo === 'ALL') passaCombo = e.isErro;
+                    else passaCombo = e.tipo.includes(filtroCombo);
+                    
+                    let passaData = filtroData === 'ALL' || e.dataK === filtroData;
+                    return passaCombo && passaData;
+                });
+
+                let passaUnid = filtroUnid === 'ALL' || String(atend.unid).trim() === String(filtroUnid).trim();
+                let passaConv = filtroConv === 'ALL' || String(atend.convenio).trim() === String(filtroConv).trim();
+                let passaBusca = termoBusca === '' || atend.atend.includes(termoBusca);
+
+                if (incorretosFiltrados.length > 0 && passaUnid && passaBusca && passaConv) {
+                    filtrados.push({ ...atend, incorretos: incorretosFiltrados });
+                }
+            });
+
+            let dynStats = { incNaoLoc: 0, incData: 0, incQtde: 0, incStatus: 0, incAuth: 0, incCancel: 0, incIdade: 0, incPlano: 0, incSemDepara: 0, incSenhaInv: 0, incMultSenha: 0, atendInc: 0, examesInc: 0, valorEmRisco: 0 };
+            
+            filtrados.forEach(atend => {
+                let temErroNesteAtend = false;
+                atend.incorretos.forEach(e => {
+                    let passaCombo = filtroCombo === 'ALL' ? e.isErro : e.tipo.includes(filtroCombo);
+                    
+                    if (passaCombo) {
+                        dynStats.examesInc += e.qtdeIncorreta;
+                        dynStats.valorEmRisco += e.valor;
+                        temErroNesteAtend = true;
+                        
+                        if(e.tipo.includes('NAO_LOCALIZADO')) dynStats.incNaoLoc += e.qtdeIncorreta;
+                        if(e.tipo.includes('DIVERGENCIA_DATA')) dynStats.incData += e.qtdeIncorreta;
+                        if(e.tipo.includes('DIVERGENCIA_QTDE')) dynStats.incQtde += e.qtdeIncorreta;
+                        if(e.tipo.includes('DIVERGENCIA_AUTH')) dynStats.incAuth += e.qtdeIncorreta;
+                        if(e.tipo.includes('STATUS_INVALIDO')) dynStats.incStatus += e.qtdeIncorreta;
+                        if(e.tipo.includes('IDADE_INVALIDA')) dynStats.incIdade += e.qtdeIncorreta;
+                        if(e.tipo.includes('DIVERGENCIA_PLANO')) dynStats.incPlano += e.qtdeIncorreta;
+                        if(e.tipo.includes('SEM_DEPARA')) dynStats.incSemDepara += e.qtdeIncorreta;
+                        if(e.tipo.includes('SENHA_INVENTADA')) dynStats.incSenhaInv += e.qtdeIncorreta;
+                        if(e.tipo.includes('MULTIPLAS_SENHAS')) dynStats.incMultSenha += e.qtdeIncorreta;
+                    }
+                });
+                if(temErroNesteAtend) dynStats.atendInc++;
+            });
+
+            if (filtroCombo !== 'ALL') {
+                atendTotalGeral = dynStats.atendInc;
+                examesTotalGeral = dynStats.examesInc;
+                valorTotalGeral = dynStats.valorEmRisco;
+            }
+
+            document.getElementById('kpi-atend-total').innerText = atendTotalGeral;
+            document.getElementById('kpi-exame-total').innerText = examesTotalGeral;
+            document.getElementById('kpi-valor-total').innerText = formatarMoeda(valorTotalGeral);
+            
+            document.getElementById('kpi-atend-inc').innerText = dynStats.atendInc;
+            document.getElementById('kpi-exame-inc').innerText = dynStats.examesInc;
+            document.getElementById('kpi-valor-inc').innerText = formatarMoeda(dynStats.valorEmRisco);
+            
+            desenharGrafico(dynStats);
+
+            container.innerHTML = '';
+            if(filtrados.length === 0) { 
+                container.innerHTML = '<div style="text-align:center; padding: 40px; color:#64748b; font-weight:600;">Nenhuma inconsistência encontrada com os filtros selecionados.</div>'; 
+                return; 
+            }
+
+            let htmlSaida = "";
+
+            filtrados.forEach(d => {
+                let chaveUnicaStatusSegura = triturarAlfa(d.unid) + "_" + triturarAlfa(d.atend);
+                let statusSalvo = dbStatus[chaveUnicaStatusSegura] || 'DEFAULT';
+
+                let htmlSeletorStatus = `
+                    <select class="status-badge status-${statusSalvo}" onclick="event.stopPropagation()" onchange="alterarStatusAuditoria('${chaveUnicaStatusSegura}', this)">
+                        <option value="DEFAULT" ${statusSalvo === 'DEFAULT' ? 'selected' : ''}>STATUS</option>
+                        <option value="AUSENTE" ${statusSalvo === 'AUSENTE' ? 'selected' : ''}>Ausente</option>
+                        <option value="PENDENTE" ${statusSalvo === 'PENDENTE' ? 'selected' : ''}>Pendente</option>
+                        <option value="CORRIGIDA" ${statusSalvo === 'CORRIGIDA' ? 'selected' : ''}>Corrigida</option>
+                    </select>
+                `;
+
+                let detalhesHTML = d.incorretos.map(e => {
+                    let corTag = 'tag-warning';
+                    if (!e.isErro) corTag = 'tag-success';
+                    else if (e.tipo.includes('NAO_LOCALIZADO') || e.tipo.includes('STATUS_INVALIDO') || e.tipo.includes('IDADE_INVALIDA') || e.tipo.includes('DIVERGENCIA_PLANO') || e.tipo.includes('SEM_DEPARA') || e.tipo.includes('SENHA_INVENTADA') || e.tipo.includes('MULTIPLAS_SENHAS')) corTag = 'tag-danger';
+
+                    return `
+                    <tr><td>${e.cod}</td><td>${e.exame}</td><td>${e.dataK}</td><td>${e.qtdeIncorreta}</td>
+                    <td style="font-weight:bold; color: ${e.valor >= 500 ? 'var(--bradesco-dark)' : '#334155'};">${formatarMoeda(e.valor)}</td>
+                    <td><div style="font-weight:bold; color:var(--primary)">${e.statusOrizon || '-'}</div><div style="font-size:0.85em; color:#94a3b8;">${e.transOrizon || ''}</div></td>
+                    <td class="desc-texto" title="${e.descOrizon}">${e.descOrizon || '-'}</td>
+                    <td><span class="tag ${corTag}">${e.desc}</span></td></tr>
+                    `;
+                }).join('');
+
+                htmlSaida += `
+                    <details>
+                        <summary>
+                            <div class="summary-title">
+                                ${htmlSeletorStatus}
+                                ${d.unid} [Atend: ${d.atend}] | Paciente: ${d.pac.replace(/%/g, ' ')}
+                            </div>
+                            <div style="color: #94a3b8; font-weight:bold;">[+] Expandir</div>
+                        </summary>
+                        <div class="details-content">
+                            <div class="info-row">
+                                <span><strong>Carteirinha:</strong> ${d.cart} | <strong>Nasc:</strong> ${d.dataNasc || '-'}</span>
+                                <span><strong>Convênio:</strong> ${d.convenio}</span>
+                                <span><strong>Plano(s):</strong> ${d.planos}</span>
+                            </div>
+                            <table>
+                                <thead><tr><th>Cód. Exame</th><th>Descrição Korus</th><th>Data Korus</th><th>Qtde</th><th>Valor (R$)</th><th>Status Operadora</th><th>Desc. Operadora</th><th>Status Auditoria</th></tr></thead>
+                                <tbody>${detalhesHTML}</tbody>
+                            </table>
+                        </div>
+                    </details>
+                `;
+            });
+            
+            container.innerHTML = htmlSaida;
+        }
+
+        function desenharGrafico(dynStats) {
+            let ctx = document.getElementById('errorChart').getContext('2d');
+            
+            if(chartInstance) {
+                chartInstance.data.labels = ['Não Localizado', 'Data Inc.', 'Qtde Inc.', 'Divergência Senha', 'Senha Branco / Desnecessária', 'Múltiplas Senhas', 'Recus./Cancel.', 'Idade Inc.', 'Múltiplos Planos', 'Sem Depara'];
+                chartInstance.data.datasets[0].data = [dynStats.incNaoLoc, dynStats.incData, dynStats.incQtde, dynStats.incAuth, dynStats.incSenhaInv, dynStats.incMultSenha, dynStats.incStatus, dynStats.incIdade, dynStats.incPlano, dynStats.incSemDepara];
+                chartInstance.update();
+            } else {
+                chartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Não Localizado', 'Data Inc.', 'Qtde Inc.', 'Divergência Senha', 'Senha Branco / Desnecessária', 'Múltiplas Senhas', 'Recus./Cancel.', 'Idade Inc.', 'Múltiplos Planos', 'Sem Depara'],
+                        datasets: [{
+                            data: [dynStats.incNaoLoc, dynStats.incData, dynStats.incQtde, dynStats.incAuth, dynStats.incSenhaInv, dynStats.incMultSenha, dynStats.incStatus, dynStats.incIdade, dynStats.incPlano, dynStats.incSemDepara],
+                            backgroundColor: ['#cc092f', '#d97706', '#d97706', '#d97706', '#ef4444', '#b91c1c', '#cc092f', '#8b5cf6', '#1e293b', '#f59e0b'],
+                            borderWidth: 0,
+                            borderRadius: { topLeft: 4, topRight: 4 }
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: { padding: { top: 30 } }, 
+                        plugins: {
+                            legend: { display: false },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'top',
+                                color: '#475569',
+                                font: { weight: 'bold', size: 14, family: 'Inter' }
+                            }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, display: false }, 
+                            x: { grid: { display: false }, ticks: { font: { family: 'Inter', weight: 600 } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        function forcarTexto(val) {
+            if(val === undefined || val === null || val === "" || val === "-") return "";
+            return `="${val}"`;
+        }
+
+        function exportarCSVCompleto() {
+            gerarCSV(relatorioCompleto, "Relatorio_Forense_Completo.csv");
+        }
+
+        function exportarCSVIncorretos() {
+            let apenasErros = relatorioCompleto.filter(r => r.conciliado === "NÃO");
+            if(apenasErros.length === 0) return alert("Nenhuma inconsistência para exportar.");
+            gerarCSV(apenasErros, "Relatorio_Apenas_Incorretos.csv");
+        }
+
+        function gerarCSV(dados, nomeArquivo) {
+            if(dados.length === 0) return alert("Nenhum dado processado para exportar.");
+            
+            let dbStatus = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
+            
+            let csv = "ID Controle;Convênio;Plano(s);Unidade;Atendimento;Nome Paciente;Data Nasc.;Carteirinha;Cod Exame;Exame Korus;Data Korus;Qtde Korus;Valor Bruto Korus (Debug);Valor Final (R$);Auth Korus;Data Operadora;Qtde Operadora;Auth Operadora;Status Operadora;Transacao Operadora;Descricao Operadora;Conciliado;Motivo Inconsistencia;Status Correcao (Kanban);Senha em branco na Orizon;Multiplas Senhas no Atendimento\n";
+            
+            dados.forEach(r => {
+                let chaveUnicaStatusSegura = triturarAlfa(r.unid) + "_" + triturarAlfa(r.atend);
+                let statusMemoria = dbStatus[chaveUnicaStatusSegura] || "SEM STATUS";
+                
+                csv += `${r.idExport};${r.convenio};${r.planos};${r.unid};${r.atend};${r.pac.replace(/%/g, ' ')};${r.dataNasc};${forcarTexto(r.cart)};${r.codK};${r.exameK};${r.dataK};${r.qtdeK};${forcarTexto(r.valorRawK)};${r.valorK.toFixed(2).replace('.',',')};${forcarTexto(r.authK)};${r.dataO};${r.qtdeO};${forcarTexto(r.authO)};${r.statusO};${forcarTexto(r.transO)};${forcarTexto(r.descO)};${r.conciliado};${r.motivo};${statusMemoria};${r.isSenhaInventada};${r.isMultiplasSenhas}\n`;
+            });
+            
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' })); 
+            link.download = nomeArquivo;
+            link.click();
+        }
+    </script>
+</body>
+</html>
