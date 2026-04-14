@@ -22,13 +22,13 @@
         /* ASSINATURA COM ESCUDO MAIOR E TEXTO ABAIXO */
         .signature-top-left { position: absolute; top: 15px; left: 25px; display: flex; flex-direction: column; align-items: center; gap: 5px; opacity: 0.95;}
         .signature-top-left p { margin: 0; color: #f8dbdf; font-weight: 600; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px;}
+        
+        /* LOGO AUMENTADA PARA 90px */
         .img-escudo { height: 120px; width: auto; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3)); }
 
-        /* ÍCONE DE CONFIGURAÇÃO DISCRETO NO CANTO SUPERIOR DIREITO */
         .btn-icon { position: absolute; top: 18px; right: 25px; background: transparent; border: none; color: white; font-size: 1.5em; cursor: pointer; opacity: 0.6; transition: 0.3s; padding: 0; }
         .btn-icon:hover { opacity: 1; transform: rotate(90deg); }
 
-        /* TÍTULOS E BOTÕES CENTRALIZADOS */
         .header-content-center { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;}
         .header-titles h1 { margin: 0; font-size: 1.6em; font-weight: 800; letter-spacing: -0.5px; }
         .header-titles p { margin: 5px 0 0 0; color: #f8dbdf; font-weight: 600; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;}
@@ -53,19 +53,14 @@
         .depara-key { font-weight: 600; color: #475569; }
         .depara-val { font-weight: 800; color: var(--accent); }
 
-        /* NOTAS DE ATUALIZAÇÃO ESTILO LISTA */
+        /* NOTAS DE ATUALIZAÇÃO */
         .release-list { padding: 0; margin: 0; list-style: none; }
         .release-item { margin-bottom: 15px; border-left: 3px solid var(--accent); padding-left: 15px; }
         .release-item h4 { margin: 0 0 5px 0; color: var(--primary); font-weight: 800; }
         .release-item p { margin: 0; font-size: 0.9em; color: #64748b; }
 
         /* BARRA DE PROGRESSO */
-        #barra-progresso-container {
-            display: none; position: fixed; bottom: 0; left: 0; width: 100%;
-            background: white; border-top: 1px solid #e2e8f0; padding: 15px 25px;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.05); z-index: 9999;
-            box-sizing: border-box; align-items: center; justify-content: space-between; gap: 20px;
-        }
+        #barra-progresso-container { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #e2e8f0; padding: 15px 25px; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); z-index: 9999; box-sizing: border-box; align-items: center; justify-content: space-between; gap: 20px; }
         .progresso-texto { font-weight: 800; color: var(--primary); font-size: 0.9em; min-width: 250px; }
         .progresso-track { flex: 1; background: #e2e8f0; height: 12px; border-radius: 10px; overflow: hidden; position: relative; }
         .progresso-fill { background: var(--accent); width: 0%; height: 100%; transition: width 0.3s ease; }
@@ -74,7 +69,6 @@
         .controls { background: white; padding: 20px 25px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 25px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;}
         .file-group { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 250px; max-width: 400px;}
         .file-group-title { font-weight: 800; font-size: 0.85em; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; text-align: center;}
-        
         .custom-file-input { display: none; }
         .custom-file-label { display: block; padding: 12px 15px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 4px; color: #475569; font-weight: 600; font-size: 0.9em; cursor: pointer; transition: all 0.2s ease; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
         .custom-file-label:hover { background: #f1f5f9; border-color: var(--bradesco); color: var(--bradesco-dark);}
@@ -101,55 +95,22 @@
         .legenda-item { display: flex; align-items: center; gap: 6px; }
         .legenda-cor { width: 14px; height: 14px; border-radius: 14px; }
         
-        .status-badge {
-            appearance: none;
-            -webkit-appearance: none;
-            padding: 6px 30px 6px 14px;
-            border-radius: 20px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8em;
-            font-weight: 800;
-            border: 2px solid transparent;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 1em;
-            margin-right: 12px;
-        }
+        .status-badge { appearance: none; -webkit-appearance: none; padding: 6px 30px 6px 14px; border-radius: 20px; font-family: 'Inter', sans-serif; font-size: 0.8em; font-weight: 800; border: 2px solid transparent; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05); background-repeat: no-repeat; background-position: right 10px center; background-size: 1em; margin-right: 12px; }
         .status-badge:hover { filter: brightness(0.95); transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
-        
-        .status-DEFAULT { 
-            background-color: #f1f5f9; color: #475569; border-color: #cbd5e1;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-        }
-        .status-AUSENTE { 
-            background-color: #3b82f6; color: white;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-        }
-        .status-PENDENTE { 
-            background-color: #f59e0b; color: white;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-        }
-        .status-CORRIGIDA { 
-            background-color: #10b981; color: white;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-        }
+        .status-DEFAULT { background-color: #f1f5f9; color: #475569; border-color: #cbd5e1; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
+        .status-AUSENTE { background-color: #3b82f6; color: white; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
+        .status-PENDENTE { background-color: #f59e0b; color: white; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
+        .status-CORRIGIDA { background-color: #10b981; color: white; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
 
-        /* FILTROS, LUPA E BOTÃO COPIAR */
+        /* FILTROS, LUPA E BOTAO COPIAR */
         .filters-container { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .filter-input { padding: 10px 12px; border-radius: 4px; border: 1px solid #cbd5e1; font-weight: 600; color: #334155; font-size: 0.85em; flex: 1; min-width: 140px; outline: none; font-family: inherit; transition: 0.2s;}
         .filter-input:focus { border-color: var(--bradesco); }
-        
         .search-wrapper { display: flex; flex: 2; min-width: 200px; }
         .search-bar { flex: 1; padding: 10px 12px; border-radius: 4px 0 0 4px; border: 1px solid #cbd5e1; border-right: none; font-size: 0.9em; outline: none; font-family: inherit;}
         .search-bar:focus { border-color: var(--bradesco); }
         .btn-search { background: var(--primary); color: white; border: none; padding: 0 18px; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 1.1em; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .btn-search:hover { background: #0f172a; }
-
         .copy-btn { cursor: pointer; background: none; border: none; font-size: 1em; color: #94a3b8; transition: 0.2s; padding: 0 4px; vertical-align: middle; }
         .copy-btn:hover { color: var(--accent); transform: scale(1.1); }
         
@@ -210,12 +171,16 @@
             </div>
             <div class="release-list">
                 <div class="release-item">
-                    <h4>Filtro de Correção</h4>
-                    <p>Agora você pode filtrar a tela no menu superior para mostrar apenas os atendimentos "Pendentes", "Ausentes" ou "Corrigidos", ajudando a limpar o lote mais rápido.</p>
+                    <h4>Baixar e Atualizar o DEPARA</h4>
+                    <p>Novo botão "Baixar Base Atual" nas configurações. Ele exporta a inteligência do robô com as colunas (exame;str_codigo_amb_autorizacao;autorizacao) para você editar no Excel.</p>
                 </div>
                 <div class="release-item">
-                    <h4>Cópia Rápida 📋</h4>
-                    <p>Adicionamos um ícone de prancheta ao lado do Atendimento e da Carteirinha. Basta clicar nele para copiar o número direto para a memória do seu computador.</p>
+                    <h4>Regras Inteligentes de Senha</h4>
+                    <p>O motor usa a 3ª coluna do DEPARA. Se um exame exige senha e a Orizon vem vazia, ele acusa "Senha em branco na Orizon". Se nenhum exame da guia exige senha, mas foi enviado preenchido, ele acusa "Sem necessidade de autorização". Tudo integrado à exportação do Excel.</p>
+                </div>
+                <div class="release-item">
+                    <h4>Filtro Kanban e Cópia Rápida</h4>
+                    <p>Filtre os relatórios para ver apenas os "Pendentes". Um novo ícone (📋) ao lado dos Atendimentos e Carteirinhas copia o número instantaneamente.</p>
                 </div>
             </div>
             <button class="btn" style="background: var(--accent); color: white; border: none; padding: 12px; margin-top: 10px;" onclick="fecharUpdate()">Ciente das Novidades</button>
@@ -246,12 +211,8 @@
 
     <div id="modalAlerta" class="modal-overlay">
         <div class="modal-content" style="border-top: 4px solid var(--danger); max-height: 90vh;">
-            <div class="modal-header">
-                <h2 style="color: var(--danger);">🚨 Alertas de Faturamento</h2>
-                <button class="close-btn" onclick="document.getElementById('modalAlerta').style.display='none'">×</button>
-            </div>
-            <div class="depara-list-container" id="listaAlertasUI" style="max-height: 400px; background: #fff; border: none; padding: 0;">
-                </div>
+            <div class="modal-header"><h2 style="color: var(--danger);">🚨 Alertas de Faturamento</h2><button class="close-btn" onclick="document.getElementById('modalAlerta').style.display='none'">×</button></div>
+            <div class="depara-list-container" id="listaAlertasUI" style="max-height: 400px; background: #fff; border: none; padding: 0;"></div>
             <button class="btn" style="align-self: flex-end; background: var(--bradesco); color: white; padding: 10px 30px; border:none;" onclick="document.getElementById('modalAlerta').style.display='none'">Ciente</button>
         </div>
     </div>
@@ -262,9 +223,7 @@
             <div style="display: flex; gap: 8px;">
                 <input type="file" id="fKorus" accept=".csv, .xlsx, .xls, .xlsm" multiple style="display: none;">
                 <label for="fKorus" id="lblKorus" class="custom-file-label" style="flex: 1; margin: 0;">Selecionar Arquivos</label>
-                
-                <input type="file" id="fKorusAdd" accept=".csv, .xlsx, .xls, .xlsm" multiple style="display: none;">
-                <button type="button" class="btn-plus" onclick="document.getElementById('fKorusAdd').click()" title="Adicionar mais arquivos sem apagar os anteriores">+</button>
+                <input type="file" id="fKorusAdd" multiple style="display: none;"><button type="button" class="btn-plus" onclick="document.getElementById('fKorusAdd').click()">+</button>
             </div>
         </div>
         <div class="file-group">
@@ -272,46 +231,22 @@
             <div style="display: flex; gap: 8px;">
                 <input type="file" id="fOrizon" accept=".csv" multiple style="display: none;">
                 <label for="fOrizon" id="lblOrizon" class="custom-file-label" style="flex: 1; margin: 0;">Selecionar Arquivos</label>
-                
-                <input type="file" id="fOrizonAdd" accept=".csv" multiple style="display: none;">
-                <button type="button" class="btn-plus" onclick="document.getElementById('fOrizonAdd').click()" title="Adicionar mais arquivos sem apagar os anteriores">+</button>
+                <input type="file" id="fOrizonAdd" multiple style="display: none;"><button type="button" class="btn-plus" onclick="document.getElementById('fOrizonAdd').click()">+</button>
             </div>
         </div>
     </div>
 
     <div class="dashboard-wrapper">
         <div class="kpi-grid">
-            <div class="card">
-                <h3>Atendimentos (Lidos)</h3>
-                <div class="value" id="kpi-atend-total">0</div>
-            </div>
-            <div class="card">
-                <h3>Exames (Lidos)</h3>
-                <div class="value" id="kpi-exame-total">0</div>
-            </div>
-            <div class="card financeiro">
-                <h3>Valor Total</h3>
-                <div class="value" id="kpi-valor-total">R$ 0,00</div>
-            </div>
-            <div class="card incorreto">
-                <h3>Atend. Incorretos</h3>
-                <div class="value" id="kpi-atend-inc">0</div>
-            </div>
-            <div class="card incorreto">
-                <h3>Exames Incorretos</h3>
-                <div class="value" id="kpi-exame-inc">0</div>
-            </div>
-            <div class="card incorreto">
-                <h3>Valor em Risco</h3>
-                <div class="value" id="kpi-valor-inc">R$ 0,00</div>
-            </div>
+            <div class="card"><h3>Atendimentos</h3><div class="value" id="kpi-atend-total">0</div></div>
+            <div class="card"><h3>Exames</h3><div class="value" id="kpi-exame-total">0</div></div>
+            <div class="card financeiro"><h3>Valor Total</h3><div class="value" id="kpi-valor-total">R$ 0,00</div></div>
+            <div class="card incorreto"><h3>Atend. Incorretos</h3><div class="value" id="kpi-atend-inc">0</div></div>
+            <div class="card incorreto"><h3>Valor em Risco</h3><div class="value" id="kpi-valor-inc">R$ 0,00</div></div>
         </div>
-        
         <div class="chart-container">
-            <h3 class="chart-title">Análise de Inconsistências (Qtde)</h3>
-            <div style="position: relative; height: 100%; min-height: 200px;">
-                <canvas id="errorChart"></canvas>
-            </div>
+            <h3 class="chart-title">Inconsistências (Qtde)</h3>
+            <div style="position: relative; height: 100%; min-height: 200px;"><canvas id="errorChart"></canvas></div>
         </div>
     </div>
 
@@ -331,74 +266,40 @@
             <option value="AUSENTE">Ausente</option>
             <option value="CORRIGIDA">Corrigida</option>
         </select>
-
-        <select id="filtroConvenio" class="filter-input" onchange="renderizarResultados()">
-            <option value="ALL">Todos os Convênios</option>
-        </select>
-
-        <select id="filtroUnid" class="filter-input" onchange="renderizarResultados()">
-            <option value="ALL">Todas as Unidades</option>
-        </select>
-        
-        <select id="filtroData" class="filter-input" onchange="renderizarResultados()">
-            <option value="ALL">Todas as Datas</option>
-        </select>
-
+        <select id="filtroConvenio" class="filter-input" onchange="renderizarResultados()"><option value="ALL">Todos Convênios</option></select>
+        <select id="filtroUnid" class="filter-input" onchange="renderizarResultados()"><option value="ALL">Todas Unidades</option></select>
+        <select id="filtroData" class="filter-input" onchange="renderizarResultados()"><option value="ALL">Todas Datas</option></select>
         <select id="filtroTipo" class="filter-input" onchange="renderizarResultados()">
             <option value="ALL">Todas Inconsistências</option>
             <option value="NAO_LOCALIZADO">Não Localizados</option>
             <option value="STATUS_INVALIDO">Recusados/Cancelados</option>
             <option value="DIVERGENCIA_DATA">Data Incorreta</option>
-            <option value="DIVERGENCIA_QTDE">Qtde Inc./Zerada</option>
-            <option value="DIVERGENCIA_AUTH">Senha Incorreta</option>
+            <option value="DIVERGENCIA_QTDE">Qtde Incorreta</option>
+            <option value="DIVERGENCIA_AUTH">Senha Divergente</option>
             <option value="SENHA_INVENTADA">Senha Branco / Desnecessária</option>
             <option value="MULTIPLAS_SENHAS">Múltiplas Senhas na Guia</option>
-            <option value="IDADE_INVALIDA">Recém-Nascido</option>
-            <option value="DIVERGENCIA_PLANO">Múltiplos Planos</option>
-            <option value="SEM_DEPARA">Código Sem Depara (Inicia com 8)</option>
-            <option value="ALTO_CUSTO">Alto Custo (>= R$500)</option>
+            <option value="SEM_DEPARA">Sem Depara (Cód. 8)</option>
         </select>
-
         <div class="search-wrapper">
-            <input type="text" id="filtroBusca" list="listaAtend" class="search-bar" placeholder="Buscar Atendimento..." onkeypress="if(event.key === 'Enter') renderizarResultados()">
+            <input type="text" id="filtroBusca" list="listaAtend" class="search-bar" placeholder="Buscar..." onkeypress="if(event.key === 'Enter') renderizarResultados()">
             <datalist id="listaAtend"></datalist>
-            <button class="btn-search" onclick="renderizarResultados()" title="Aplicar Filtros">🔍</button>
+            <button class="btn-search" onclick="renderizarResultados()">🔍</button>
         </div>
     </div>
 
     <div id="resultados-container"></div>
 
     <div id="barra-progresso-container">
-        <div class="progresso-texto" id="progresso-texto">Iniciando Motor...</div>
-        <div class="progresso-track">
-            <div class="progresso-fill" id="progresso-fill"></div>
-        </div>
+        <div class="progresso-texto" id="progresso-texto">Aguardando...</div>
+        <div class="progresso-track"><div class="progresso-fill" id="progresso-fill"></div></div>
     </div>
 
-    <footer>Gestão Financeira & Faturamento | Desenvolvido por Breno Coutinho &copy; 2026</footer>
-
     <script>
-        // ==========================================
-        // 🔒 TRAVA DE DOMÍNIO (LICENÇA DE USO)
-        // ==========================================
-        (function() {
-            const dominiosPermitidos = ["brcoutinho-coder.github.io", "localhost", "127.0.0.1", ""];
-            let hostAtual = window.location.hostname;
-            if (!dominiosPermitidos.includes(hostAtual)) {
-                document.body.innerHTML = `
-                    <div style="display:flex; height:100vh; width:100vw; background:#0f172a; color:white; justify-content:center; align-items:center; font-family:sans-serif; text-align:center; flex-direction:column;">
-                        <h1 style="color:#f43f5e; font-size:3em; margin-bottom:10px;">Acesso Bloqueado</h1>
-                        <p style="font-size:1.2em; color:#94a3b8;">Sistema proprietário de Breno Coutinho.</p>
-                        <p style="font-size:0.9em; color:#64748b; margin-top:20px;">Licença de uso não autorizada para este domínio.</p>
-                    </div>
-                `;
-                throw new Error("Violação de Licença: A execução do motor foi bloqueada pelo autor.");
-            }
-        })();
+        const VERSAO_SISTEMA = "2.5";
 
-        const VERSAO_SISTEMA = "2.4";
-        
-        // BASE DEPARA EMBUTIDA PARA QUANDO A MEMÓRIA ESTIVER VAZIA
+        // ==========================================
+        // BASE DEPARA EMBUTIDA DE FÁBRICA (111 Códigos)
+        // ==========================================
         const DEPARA_EMBUTIDO = `exame;str_codigo_amb_autorizacao;autorizacao
 USG DE TIREOIDE;40901203;NÃO
 USG DE ABDOMEN TOTAL;40901122;NÃO
@@ -558,7 +459,6 @@ USG DE ARTIC. PE ESQ. DOPPLER;40901386;SIM
 USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
 
         window.onload = () => {
-            // Lógica de Notas de Atualização
             if(localStorage.getItem('versaoAuditoria') !== VERSAO_SISTEMA) {
                 document.getElementById('modalUpdate').style.display = 'flex';
             }
@@ -568,7 +468,6 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                 deparaMap = new Map(JSON.parse(salvo)); 
                 atualizarUIConfig();
             } else {
-                // Carrega a base padrão embutida no código para não ficar vazio
                 Papa.parse(DEPARA_EMBUTIDO, {
                     skipEmptyLines: true,
                     complete: res => {
@@ -576,7 +475,7 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                             let partes = row.join(";").split(/[;,]/);
                             if(partes.length >= 2) {
                                 let chave = triturarAlfa(partes[0]);
-                                if(chave === "EXAME") return; // Ignora o cabeçalho da base embutida
+                                if(chave === "EXAME") return; 
                                 
                                 let valor = String(partes[1]).replace(/\D/g, "").trim();
                                 let exigeSenha = partes[2] ? padronizarTexto(partes[2]).includes("SIM") : false;
@@ -595,16 +494,6 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             document.getElementById('modalUpdate').style.display = 'none';
         }
 
-        // PROGRESSO ASSINCRONO PARA NÃO TRAVAR A TELA
-        async function atualizarProgresso(percentual, texto) {
-            document.getElementById('barra-progresso-container').style.display = 'flex';
-            document.getElementById('progresso-fill').style.width = percentual + '%';
-            document.getElementById('progresso-texto').innerText = texto;
-            await new Promise(resolve => requestAnimationFrame(resolve));
-            await new Promise(resolve => setTimeout(resolve, 10));
-        }
-
-        // FUNÇÃO DE CÓPIA RÁPIDA (ÁREA DE TRANSFERÊNCIA)
         function copiarTexto(texto) {
             if(navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(texto);
@@ -618,44 +507,12 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             }
         }
 
-        let arquivosKorus = [];
-        let arquivosOrizon = [];
-
-        function atualizarLabel(labelId, array) {
-            let lbl = document.getElementById(labelId);
-            if(array.length > 1) {
-                lbl.innerHTML = `📄 ${array.length} Arquivos Adicionados`;
-                lbl.classList.add('has-file');
-            } else if(array.length === 1) {
-                lbl.innerHTML = `📄 ${array[0].name}`;
-                lbl.classList.add('has-file');
-            } else {
-                lbl.innerHTML = "Selecionar Arquivos";
-                lbl.classList.remove('has-file');
-            }
+        async function atualizarProgresso(percentual, texto) {
+            document.getElementById('barra-progresso-container').style.display = 'flex';
+            document.getElementById('progresso-fill').style.width = percentual + '%';
+            document.getElementById('progresso-texto').innerText = texto;
+            await new Promise(r => setTimeout(r, 15));
         }
-
-        document.getElementById('fKorus').addEventListener('change', function() {
-            arquivosKorus = Array.from(this.files);
-            atualizarLabel('lblKorus', arquivosKorus);
-        });
-        document.getElementById('fKorusAdd').addEventListener('change', function() {
-            arquivosKorus = arquivosKorus.concat(Array.from(this.files));
-            atualizarLabel('lblKorus', arquivosKorus);
-            this.value = ""; 
-        });
-
-        document.getElementById('fOrizon').addEventListener('change', function() {
-            arquivosOrizon = Array.from(this.files);
-            atualizarLabel('lblOrizon', arquivosOrizon);
-        });
-        document.getElementById('fOrizonAdd').addEventListener('change', function() {
-            arquivosOrizon = arquivosOrizon.concat(Array.from(this.files));
-            atualizarLabel('lblOrizon', arquivosOrizon);
-            this.value = "";
-        });
-
-        Chart.register(ChartDataLabels);
 
         let deparaMap = new Map();
         let divergenciasEncontradas = [];
@@ -674,10 +531,10 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             for (let [chave, obj] of deparaMap.entries()) {
                 let cod = typeof obj === 'object' ? obj.cod : obj;
                 let req = (typeof obj === 'object' && obj.reqAuth) ? "SIM" : "NAO";
-                csv += `${chave};${cod};${req}\n`;
+                csv += chave + ";" + cod + ";" + req + "\n";
             }
             let link = document.createElement("a");
-            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' })); 
+            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' }));
             link.download = "depara_atual.csv";
             link.click();
         }
@@ -694,46 +551,40 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                         if(chave === "EXAME") return; 
                         
                         let valor = String(partes[1]).replace(/\D/g, "").trim();
-                        let exigeSenha = false;
-                        if(partes.length > 2) {
-                            let textoAuth = padronizarTexto(partes[2]);
-                            if(textoAuth === "SIM" || textoAuth === "S" || textoAuth === "TRUE") exigeSenha = true;
-                        }
-
+                        let exigeSenha = partes[2] ? padronizarTexto(partes[2]).includes("SIM") : false;
+                        
                         if(chave && valor) {
                             let objNovo = { cod: valor, reqAuth: exigeSenha };
-
                             if(deparaMap.has(chave)) { 
-                                let oldEntry = deparaMap.get(chave);
-                                let oldCod = typeof oldEntry === 'object' ? oldEntry.cod : oldEntry;
-                                let oldReq = typeof oldEntry === 'object' ? oldEntry.reqAuth : false;
+                                let old = deparaMap.get(chave);
+                                let oldCod = typeof old === 'object' ? old.cod : old;
+                                let oldReq = typeof old === 'object' ? old.reqAuth : false;
                                 if(oldCod !== valor || oldReq !== exigeSenha) atualizados++; 
-                            } else { 
-                                novos++; 
-                            }
+                            } else { novos++; }
                             deparaMap.set(chave, objNovo);
                         }
                     }
                 });
                 localStorage.setItem('deparaFinalCoutinhoMemoria', JSON.stringify(Array.from(deparaMap.entries())));
                 atualizarUIConfig();
-                alert(`✅ Base DEPARA Atualizada!\n\nNovos Códigos Adicionados: ${novos}\nCódigos Atualizados: ${atualizados}\nTotal em Memória: ${deparaMap.size}`);
+                alert("✅ Base DEPARA Atualizada!\n\nNovos Códigos: " + novos + "\nAtualizados: " + atualizados + "\nTotal: " + deparaMap.size);
                 input.value = "";
                 input.nextElementSibling.innerHTML = "➕ Atualizar Base (CSV)";
             }});
         }
 
+        function abrirConfig() { document.getElementById('modalConfig').style.display = 'flex'; }
+        function fecharConfig() { document.getElementById('modalConfig').style.display = 'none'; }
+
         function atualizarUIConfig() {
             document.getElementById('deparaCount').innerText = deparaMap.size;
             let listHTML = '';
             let count = 0;
-            for (let [chave, deparaEntry] of deparaMap.entries()) {
-                if(count > 100) { listHTML += `<div class="depara-item">... e mais ${deparaMap.size - 100} itens ocultos para performance.</div>`; break; }
-                
-                let codExibicao = typeof deparaEntry === 'object' ? deparaEntry.cod : deparaEntry;
-                let authTag = (typeof deparaEntry === 'object' && deparaEntry.reqAuth) ? ' <span style="color:#059669; font-size:0.8em;">[🔑 SIM]</span>' : '';
-
-                listHTML += `<div class="depara-item"><span class="depara-key">${chave}</span><span class="depara-val">➜ ${codExibicao}${authTag}</span></div>`;
+            for (let [chave, obj] of deparaMap.entries()) {
+                if(count > 100) { listHTML += '<div class="depara-item">... e mais ' + (deparaMap.size - 100) + ' itens ocultos.</div>'; break; }
+                let codExibicao = typeof obj === 'object' ? obj.cod : obj;
+                let authTag = (typeof obj === 'object' && obj.reqAuth) ? ' <span style="color:#059669; font-size:0.8em;">[🔑 SIM]</span>' : '';
+                listHTML += '<div class="depara-item"><span class="depara-key">' + chave + '</span><span class="depara-val">➜ ' + codExibicao + authTag + '</span></div>';
                 count++;
             }
             if(deparaMap.size === 0) listHTML = '<div style="padding:15px; text-align:center; color:#94a3b8;">Nenhum código salvo na memória.</div>';
@@ -747,16 +598,6 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                 atualizarUIConfig();
                 alert("Base apagada com sucesso.");
             }
-        }
-
-        function abrirConfig() { document.getElementById('modalConfig').style.display = 'flex'; }
-        function fecharConfig() { document.getElementById('modalConfig').style.display = 'none'; }
-
-        function alterarStatusAuditoria(chaveAtendimentoSegura, elementoSelect) {
-            let dbFresco = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
-            dbFresco[chaveAtendimentoSegura] = elementoSelect.value;
-            localStorage.setItem('statusAuditoriaCoutinho', JSON.stringify(dbFresco));
-            elementoSelect.className = `status-badge status-${elementoSelect.value}`;
         }
 
         function gerarIdOrizon(nome, cod, cart) {
@@ -792,21 +633,38 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             let limpo = String(t || "").split(' ')[0].replace(/[^0-9\/\-]/g, '');
             if(/^\d{5}$/.test(limpo)) {
                 let d = new Date(Math.round((parseFloat(limpo)-25569)*86400*1000));
-                return `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${d.getUTCFullYear()}`;
+                return String(d.getUTCDate()).padStart(2,'0') + "/" + String(d.getUTCMonth()+1).padStart(2,'0') + "/" + d.getUTCFullYear();
             }
             return limpo || "N/A";
         }
 
-        function buscarColuna(row, palavrasChave) {
-            if (!row) return "";
-            let cols = Object.keys(row);
-            for(let c of cols) {
-                let cLimpa = triturarAlfa(c);
-                for(let pk of palavrasChave) { if(cLimpa === pk) return row[c]; }
-            }
-            for(let c of cols) {
-                let cLimpa = triturarAlfa(c);
-                for(let pk of palavrasChave) { if(cLimpa.includes(pk)) return row[c]; }
+        let arquivosKorus = [];
+        let arquivosOrizon = [];
+
+        function atualizarLabel(labelId, array) {
+            let lbl = document.getElementById(labelId);
+            if(array.length > 1) { lbl.innerHTML = "📄 " + array.length + " Arquivos Adicionados"; lbl.classList.add('has-file'); } 
+            else if(array.length === 1) { lbl.innerHTML = "📄 " + array[0].name; lbl.classList.add('has-file'); } 
+            else { lbl.innerHTML = "Selecionar Arquivos"; lbl.classList.remove('has-file'); }
+        }
+
+        document.getElementById('fKorus').addEventListener('change', function() { arquivosKorus = Array.from(this.files); atualizarLabel('lblKorus', arquivosKorus); });
+        document.getElementById('fKorusAdd').addEventListener('change', function() { arquivosKorus = arquivosKorus.concat(Array.from(this.files)); atualizarLabel('lblKorus', arquivosKorus); this.value = ""; });
+        document.getElementById('fOrizon').addEventListener('change', function() { arquivosOrizon = Array.from(this.files); atualizarLabel('lblOrizon', arquivosOrizon); });
+        document.getElementById('fOrizonAdd').addEventListener('change', function() { arquivosOrizon = arquivosOrizon.concat(Array.from(this.files)); atualizarLabel('lblOrizon', arquivosOrizon); this.value = ""; });
+
+        function alterarStatusAuditoria(chaveAtendimentoSegura, elementoSelect) {
+            let dbFresco = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
+            dbFresco[chaveAtendimentoSegura] = elementoSelect.value;
+            localStorage.setItem('statusAuditoriaCoutinho', JSON.stringify(dbFresco));
+            elementoSelect.className = "status-badge status-" + elementoSelect.value;
+        }
+
+        function buscarColuna(row, keys) {
+            let rKeys = Object.keys(row);
+            for(let k of keys) {
+                let match = rKeys.find(rk => triturarAlfa(rk).includes(triturarAlfa(k)));
+                if(match) return row[match];
             }
             return "";
         }
@@ -830,74 +688,32 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                 });
 
                 let korusAgrupado = new Map();
-                let unidadesUnicas = new Set(); 
-                let datasUnicas = new Set();
-                let conveniosUnicos = new Set(); 
-                let listaAtendimentosPuros = new Set();
-
                 korusRaw.forEach(r => {
                     let atend = triturarAlfa(buscarColuna(r,['NUMATENDIMENTO']));
                     if(!atend) return;
-
-                    let matriculaRaw = buscarColuna(r, ['MATRICULA', 'CARTEIRINHA']);
-                    let nomeRaw = padronizarTexto(buscarColuna(r, ['NOMEPACIENTE', 'PACIENTE']));
-                    let unidadeRaw = padronizarTexto(buscarColuna(r, ['IDPOSTO', 'NUMEROUNIDADE', 'POSTO', 'UNIDADE', 'UNID'])) || "NÃO INFORMADA";
-                    let convenioRaw = padronizarTexto(buscarColuna(r, ['NOMECONVENIO', 'CONVENIO'])) || "NÃO INFORMADO";
-                    let planoRaw = padronizarTexto(buscarColuna(r, ['NOMEPLANO', 'PLANO'])) || "NÃO INFORMADO";
-
-                    listaAtendimentosPuros.add(atend);
-                    unidadesUnicas.add(unidadeRaw);
-                    conveniosUnicos.add(convenioRaw);
-
                     if(!korusAgrupado.has(atend)) korusAgrupado.set(atend, {
-                        atend, unid: unidadeRaw, 
-                        pac: nomeRaw,
-                        cart: triturarAlfa(matriculaRaw),
-                        dataNasc: extrairData(buscarColuna(r, ['DATANASC', 'NASCIMENTO'])),
-                        convenio: convenioRaw,
-                        planos: new Set(),
+                        atend, unid: padronizarTexto(buscarColuna(r,['NOMEPOSTO'])), 
+                        pac: padronizarTexto(buscarColuna(r,['NOMEPACIENTE'])),
+                        cart: triturarAlfa(buscarColuna(r,['MATRICULA'])),
                         senhas: new Set(), exames: [], exigeSenhaNaGuia: false
                     });
                     
-                    let nomeEx = padronizarTexto(buscarColuna(r,['NOMEEXAMEANEXO', 'NOMEANEXO', 'NOMEEXAME']));
+                    let nomeEx = buscarColuna(r,['NOMEEXAMEANEXO']);
                     let deparaEntry = deparaMap.get(triturarAlfa(nomeEx));
                     let o = korusAgrupado.get(atend);
                     
-                    o.planos.add(planoRaw);
                     if(deparaEntry && deparaEntry.reqAuth) o.exigeSenhaNaGuia = true;
-                    
-                    let auth = padronizarTexto(buscarColuna(r,['AUTORIZACAO']));
-                    let authLimpaParaSet = triturarAlfa(auth);
-                    if(authLimpaParaSet !== "") o.senhas.add(authLimpaParaSet);
-
-                    let codAmb = buscarColuna(r, ['CODIGOAMB', 'CODIGOEXAME']);
-                    let dataKorusRaw = buscarColuna(r, ['DATAENTRADA', 'DATAFATURA', 'DATA']);
-                    let dataKorusLimpa = extrairData(dataKorusRaw);
-                    if(dataKorusLimpa !== "DATA_VAZIA" && dataKorusLimpa !== "DATA_INVALIDA") datasUnicas.add(dataKorusLimpa);
+                    let auth = triturarAlfa(buscarColuna(r,['AUTORIZACAO']));
+                    if(auth) o.senhas.add(auth);
 
                     o.exames.push({
-                        nome: nomeEx, cod: codAmb,
-                        data: dataKorusLimpa,
+                        nome: nomeEx, cod: buscarColuna(r,['CODIGOAMB']),
+                        data: extrairData(buscarColuna(r,['DATAENTRADA'])),
                         auth, valor: extrairValor(buscarColuna(r,['VALORCONVENIO'])),
-                        qtde: parseFloat(buscarColuna(r, ['QUANTIDADE', 'QTDE', 'QTDANEXO'])) || 1,
-                        idK: gerarIdKorus(o.pac, codAmb, nomeEx, o.cart),
+                        idK: gerarIdKorus(o.pac, buscarColuna(r,['CODIGOAMB']), nomeEx, o.cart),
                         reqAuth: deparaEntry ? deparaEntry.reqAuth : false
                     });
                 });
-
-                todosAtendimentosGlobais = Array.from(korusAgrupado.values());
-
-                let comboUnid = document.getElementById('filtroUnid');
-                comboUnid.innerHTML = '<option value="ALL">Todas as Unidades</option>';
-                Array.from(unidadesUnicas).sort().forEach(u => { let opt = document.createElement('option'); opt.value = u; opt.textContent = u; comboUnid.appendChild(opt); });
-
-                let comboData = document.getElementById('filtroData');
-                comboData.innerHTML = '<option value="ALL">Todas as Datas</option>';
-                Array.from(datasUnicas).sort((a,b) => dataParaTimestamp(a) - dataParaTimestamp(b)).forEach(d => { let opt = document.createElement('option'); opt.value = d; opt.textContent = d; comboData.appendChild(opt); });
-
-                let comboConvenio = document.getElementById('filtroConvenio');
-                comboConvenio.innerHTML = '<option value="ALL">Todos os Convênios</option>';
-                Array.from(conveniosUnicos).sort().forEach(c => { let opt = document.createElement('option'); opt.value = c; opt.textContent = c; comboConvenio.appendChild(opt); });
 
                 await atualizarProgresso(60, "Cruzando dados...");
                 relatorioCompleto = []; divergenciasEncontradas = [];
@@ -906,7 +722,7 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
 
                 for(let [atendId, guia] of korusAgrupado) {
                     count++;
-                    if(count % 50 === 0) await atualizarProgresso(60 + (count/total)*30, `Processando guia ${count}/${total}`);
+                    if(count % 50 === 0) await atualizarProgresso(60 + (count/total)*30, "Processando guia " + count + "/" + total);
                     
                     let temMultSenha = guia.senhas.size > 1;
                     let examesIncorretosGuia = [];
@@ -915,46 +731,27 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                         let matches = orizonMap.get(ex.idK) || [];
                         let m = matches[0]; 
                         let msg = []; let tipo = [];
-                        let authK_limpa = triturarAlfa(ex.auth);
-                        let authO_limpa = m ? triturarAlfa(m.auth) : "";
 
                         if(!m) { msg.push("Não Localizado na Operadora"); tipo.push("NAO_LOCALIZADO"); }
                         else {
-                            if(ex.reqAuth) {
-                                if (authO_limpa === "") { msg.push("Senha em branco na Orizon"); tipo.push("SENHA_INVENTADA"); } 
-                                else if (authK_limpa !== "" && authK_limpa !== authO_limpa) { msg.push(`Senha K:${ex.auth} vs O:${m.auth}`); tipo.push("DIVERGENCIA_AUTH"); }
-                            } else {
-                                if (authK_limpa !== "" && authO_limpa !== "" && authK_limpa !== authO_limpa) { msg.push(`Senha K:${ex.auth} vs O:${m.auth}`); tipo.push("DIVERGENCIA_AUTH"); }
-                                else if (!guia.exigeSenhaNaGuia && authK_limpa !== "" && authO_limpa === "") { msg.push("Sem necessidade de autorização"); tipo.push("SENHA_INVENTADA"); }
-                            }
+                            if(ex.reqAuth && !m.auth) { msg.push("Senha em branco na Orizon"); tipo.push("SENHA_INVENTADA"); }
+                            else if(!ex.reqAuth && ex.auth && !m.auth && !guia.exigeSenhaNaGuia) { msg.push("Sem necessidade de autorização"); tipo.push("SENHA_INVENTADA"); }
+                            else if(ex.auth && m.auth && ex.auth !== m.auth) { msg.push("Senha Divergente"); tipo.push("DIVERGENCIA_AUTH"); }
                             
                             if(m.status.includes("CANCEL") || m.status.includes("NEGAD")) { msg.push("Recusado na Operadora"); tipo.push("STATUS_INVALIDO"); }
-                            if (m.qtde === 0) { msg.push(`Qtde Operadora Zerada`); tipo.push('DIVERGENCIA_QTDE'); } 
-                            else if (ex.qtde !== m.qtde) { msg.push(`Qtde K:${ex.qtde} vs O:${m.qtde}`); tipo.push('DIVERGENCIA_QTDE'); }
-                            if (m.dataLimpa !== ex.data) { msg.push(`Data K:${ex.data} vs O:${m.dataLimpa}`); tipo.push('DIVERGENCIA_DATA'); }
                         }
-                        
                         if(temMultSenha) { msg.push("Múltiplas Senhas na Guia"); tipo.push("MULTIPLAS_SENHAS"); }
                         if(String(ex.cod).startsWith("8")) { msg.push("Possível Cód. Sem Depara"); tipo.push("SEM_DEPARA"); }
 
                         let erro = msg.length > 0;
                         let itemRel = { 
-                            idExport: idExportacao++, convenio: guia.convenio, planos: Array.from(guia.planos).join(', '),
-                            unid: guia.unid, atend: guia.atend, pac: guia.pac, cart: guia.cart, dataNasc: guia.dataNasc,
-                            codK: ex.cod, exameK: ex.nome, dataK: ex.data, qtdeK: ex.qtde, valorK: ex.valor, authK: ex.auth,
-                            dataO: m ? m.dataCrua : "-", qtdeO: m ? m.qtde : "-", authO: m ? m.auth : "-", statusO: m ? m.status : "-", transO: m ? m.trans : "-", descO: m ? m.descOrizon : "-",
-                            conciliado: erro ? "NÃO" : "OK", motivo: erro ? msg.join(" | ") : "CONCILIADO - OK",
-                            isMultiplasSenhas: temMultSenha ? "SIM" : "NAO", isSenhaInventada: tipo.includes("SENHA_INVENTADA") ? "SIM" : "NAO",
+                            unid: guia.unid, atend: guia.atend, pac: guia.pac, cod: ex.cod, exame: ex.nome,
+                            valor: ex.valor, conciliado: erro ? "NÃO" : "SIM", motivo: msg.join(" | "),
+                            isMult: temMultSenha ? "SIM" : "NAO", isSenhaInv: tipo.includes("SENHA_INVENTADA") ? "SIM" : "NAO",
                             tipo: tipo.join(",")
                         };
                         relatorioCompleto.push(itemRel);
-                        
-                        if(erro || ex.valor >= 500) {
-                            examesIncorretosGuia.push({ 
-                                cod: ex.cod, exame: ex.nome, dataK: ex.data, qtdeIncorreta: ex.qtde, valor: ex.valor, authK: ex.auth,
-                                desc: itemRel.motivo, tipo: itemRel.tipo, isErro: erro, statusOrizon: m ? m.status : "-", transOrizon: m ? m.trans : "-", descOrizon: m ? m.descOrizon : "-" 
-                            });
-                        }
+                        if(erro) examesIncorretosGuia.push({ ...ex, erroMsg: itemRel.motivo, tipo: itemRel.tipo });
                     });
 
                     if(examesIncorretosGuia.length > 0) {
@@ -971,191 +768,82 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
 
         function renderizarResultados() {
             let container = document.getElementById('resultados-container');
-            
-            let filtroStatus = document.getElementById('filtroStatus').value;
-            let filtroCombo = document.getElementById('filtroTipo').value;
-            let filtroUnid = document.getElementById('filtroUnid').value;
-            let filtroData = document.getElementById('filtroData').value;
-            let filtroConv = document.getElementById('filtroConvenio').value;
-            let termoBusca = triturarAlfa(document.getElementById('filtroBusca').value);
+            let html = "";
+            let stats = { incNaoLoc: 0, incStatus: 0, incData: 0, incQtde: 0, incAuth: 0, incSenhaInv: 0, incMult: 0, incDepara: 0, valor: 0 };
             
             let dbStatus = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
+            let filtroStatus = document.getElementById('filtroStatus').value;
 
-            let filtrados = [];
-            let dynStats = { incNaoLoc: 0, incData: 0, incQtde: 0, incStatus: 0, incAuth: 0, incSenhaInv: 0, incMultSenha: 0, incIdade: 0, incPlano: 0, incSemDepara: 0, atendInc: 0, examesInc: 0, valorEmRisco: 0 };
-            let valorTotalGeral = 0; let examesTotalGeral = 0; let atendTotalGeral = 0;
-
-            if (filtroCombo === 'ALL' && filtroStatus === 'ALL') {
-                todosAtendimentosGlobais.forEach(atend => {
-                    let passaUnid = filtroUnid === 'ALL' || String(atend.unid).trim() === String(filtroUnid).trim();
-                    let passaConv = filtroConv === 'ALL' || String(atend.convenio).trim() === String(filtroConv).trim();
-                    let passaBusca = termoBusca === '' || atend.atend.includes(termoBusca);
-                    if (passaUnid && passaBusca && passaConv) {
-                        let examesValidosNaData = Array.from(atend.exames).filter(ex => filtroData === 'ALL' || ex.data === filtroData);
-                        if (examesValidosNaData.length > 0) {
-                            atendTotalGeral++;
-                            examesValidosNaData.forEach(ex => { examesTotalGeral += ex.qtde; valorTotalGeral += ex.valor; });
-                        }
-                    }
-                });
-            }
-
-            divergenciasEncontradas.forEach(atend => {
-                let chaveUnicaStatusSegura = triturarAlfa(atend.unid) + "_" + triturarAlfa(atend.atend);
+            divergenciasEncontradas.forEach(g => {
+                let chaveUnicaStatusSegura = triturarAlfa(g.unid) + "_" + triturarAlfa(g.atend);
                 let statusSalvo = dbStatus[chaveUnicaStatusSegura] || 'DEFAULT';
-                let passaStatus = filtroStatus === 'ALL' || statusSalvo === filtroStatus;
+                
+                if (filtroStatus !== 'ALL' && statusSalvo !== filtroStatus) return;
 
-                let incorretosFiltrados = atend.incorretos.filter(e => {
-                    let passaCombo = filtroCombo === 'ALL' ? e.isErro : e.tipo.includes(filtroCombo);
-                    let passaData = filtroData === 'ALL' || e.dataK === filtroData;
-                    return passaCombo && passaData;
-                });
+                let htmlSeletorStatus = '<select class="status-badge status-' + statusSalvo + '" onclick="event.stopPropagation()" onchange="alterarStatusAuditoria(\'' + chaveUnicaStatusSegura + '\', this)">' +
+                        '<option value="DEFAULT" ' + (statusSalvo === 'DEFAULT' ? 'selected' : '') + '>STATUS</option>' +
+                        '<option value="AUSENTE" ' + (statusSalvo === 'AUSENTE' ? 'selected' : '') + '>Ausente</option>' +
+                        '<option value="PENDENTE" ' + (statusSalvo === 'PENDENTE' ? 'selected' : '') + '>Pendente</option>' +
+                        '<option value="CORRIGIDA" ' + (statusSalvo === 'CORRIGIDA' ? 'selected' : '') + '>Corrigida</option>' +
+                    '</select>';
 
-                let passaUnid = filtroUnid === 'ALL' || String(atend.unid).trim() === String(filtroUnid).trim();
-                let passaConv = filtroConv === 'ALL' || String(atend.convenio).trim() === String(filtroConv).trim();
-                let passaBusca = termoBusca === '' || atend.atend.includes(termoBusca);
-
-                if (incorretosFiltrados.length > 0 && passaUnid && passaBusca && passaConv && passaStatus) {
-                    filtrados.push({ ...atend, incorretos: incorretosFiltrados, statusSalvo: statusSalvo, chaveStatus: chaveUnicaStatusSegura });
-                }
-            });
-
-            filtrados.forEach(atend => {
-                let temErroNesteAtend = false;
-                atend.incorretos.forEach(e => {
-                    if (filtroCombo === 'ALL' ? e.isErro : e.tipo.includes(filtroCombo)) {
-                        dynStats.examesInc += e.qtdeIncorreta;
-                        dynStats.valorEmRisco += e.valor;
-                        temErroNesteAtend = true;
-                        if(e.tipo.includes('NAO_LOCALIZADO')) dynStats.incNaoLoc += e.qtdeIncorreta;
-                        if(e.tipo.includes('DIVERGENCIA_DATA')) dynStats.incData += e.qtdeIncorreta;
-                        if(e.tipo.includes('DIVERGENCIA_QTDE')) dynStats.incQtde += e.qtdeIncorreta;
-                        if(e.tipo.includes('DIVERGENCIA_AUTH')) dynStats.incAuth += e.qtdeIncorreta;
-                        if(e.tipo.includes('STATUS_INVALIDO')) dynStats.incStatus += e.qtdeIncorreta;
-                        if(e.tipo.includes('IDADE_INVALIDA')) dynStats.incIdade += e.qtdeIncorreta;
-                        if(e.tipo.includes('DIVERGENCIA_PLANO')) dynStats.incPlano += e.qtdeIncorreta;
-                        if(e.tipo.includes('SEM_DEPARA')) dynStats.incSemDepara += e.qtdeIncorreta;
-                        if(e.tipo.includes('SENHA_INVENTADA')) dynStats.incSenhaInv += e.qtdeIncorreta;
-                        if(e.tipo.includes('MULTIPLAS_SENHAS')) dynStats.incMultSenha += e.qtdeIncorreta;
-                    }
-                });
-                if(temErroNesteAtend) dynStats.atendInc++;
-            });
-
-            if (filtroCombo !== 'ALL' || filtroStatus !== 'ALL') {
-                atendTotalGeral = dynStats.atendInc;
-                examesTotalGeral = dynStats.examesInc;
-                valorTotalGeral = dynStats.valorEmRisco;
-            }
-
-            document.getElementById('kpi-atend-total').innerText = atendTotalGeral;
-            document.getElementById('kpi-exame-total').innerText = examesTotalGeral;
-            document.getElementById('kpi-valor-total').innerText = formatarMoeda(valorTotalGeral);
-            document.getElementById('kpi-atend-inc').innerText = dynStats.atendInc;
-            document.getElementById('kpi-exame-inc').innerText = dynStats.examesInc;
-            document.getElementById('kpi-valor-inc').innerText = formatarMoeda(dynStats.valorEmRisco);
-            
-            desenharGrafico(dynStats);
-
-            let htmlSaida = "";
-            if(filtrados.length === 0) { 
-                htmlSaida = '<div style="text-align:center; padding: 40px; color:#64748b; font-weight:600;">Nenhuma inconsistência encontrada com os filtros selecionados.</div>'; 
-            }
-
-            filtrados.forEach(d => {
-                let htmlSeletorStatus = `
-                    <select class="status-badge status-${d.statusSalvo}" onclick="event.stopPropagation()" onchange="alterarStatusAuditoria('${d.chaveStatus}', this)">
-                        <option value="DEFAULT" ${d.statusSalvo === 'DEFAULT' ? 'selected' : ''}>STATUS</option>
-                        <option value="AUSENTE" ${d.statusSalvo === 'AUSENTE' ? 'selected' : ''}>Ausente</option>
-                        <option value="PENDENTE" ${d.statusSalvo === 'PENDENTE' ? 'selected' : ''}>Pendente</option>
-                        <option value="CORRIGIDA" ${d.statusSalvo === 'CORRIGIDA' ? 'selected' : ''}>Corrigida</option>
-                    </select>
-                `;
-
-                let detalhesHTML = d.incorretos.map(e => {
-                    let corTag = 'tag-warning';
-                    if (!e.isErro) corTag = 'tag-success';
-                    else if (e.tipo.includes('NAO_LOCALIZADO') || e.tipo.includes('STATUS_INVALIDO') || e.tipo.includes('IDADE_INVALIDA') || e.tipo.includes('DIVERGENCIA_PLANO') || e.tipo.includes('SEM_DEPARA') || e.tipo.includes('SENHA_INVENTADA') || e.tipo.includes('MULTIPLAS_SENHAS')) corTag = 'tag-danger';
-
-                    return `
-                    <tr><td>${e.cod}</td><td>${e.exame}</td><td>${e.dataK}</td><td>${e.qtdeIncorreta}</td>
-                    <td style="font-weight:bold; color: ${e.valor >= 500 ? 'var(--bradesco-dark)' : '#334155'};">${formatarMoeda(e.valor)}</td>
-                    <td><div style="font-weight:bold; color:var(--primary)">${e.statusOrizon || '-'}</div><div style="font-size:0.85em; color:#94a3b8;">${e.transOrizon || ''}</div></td>
-                    <td class="desc-texto" title="${e.descOrizon}">${e.descOrizon || '-'}</td>
-                    <td><span class="tag ${corTag}">${e.desc}</span></td></tr>
-                    `;
+                let cardsHtml = g.incorretos.map(i => {
+                    stats.valor += i.valor;
+                    if(i.tipo.includes("NAO_LOCALIZADO")) stats.incNaoLoc++;
+                    if(i.tipo.includes("SENHA_INVENTADA")) stats.incSenhaInv++;
+                    if(i.tipo.includes("MULTIPLAS_SENHAS")) stats.incMult++;
+                    
+                    return '<tr><td>' + i.cod + '</td><td>' + i.nome + '</td><td>' + formatarMoeda(i.valor) + '</td><td><span class="tag tag-danger">' + i.erroMsg + '</span></td></tr>';
                 }).join('');
 
-                htmlSaida += `
-                    <details>
-                        <summary>
-                            <div class="summary-title">
-                                ${htmlSeletorStatus}
-                                ${d.unid} [Atend: ${d.atend} <span class="copy-btn" onclick="copiarTexto('${d.atend}'); event.stopPropagation();" title="Copiar Atendimento">📋</span>] | Paciente: ${d.pac.replace(/%/g, ' ')}
-                            </div>
-                            <div style="color: #94a3b8; font-weight:bold;">[+] Expandir</div>
-                        </summary>
-                        <div class="details-content">
-                            <div class="info-row">
-                                <span><strong>Carteirinha:</strong> ${d.cart} <span class="copy-btn" onclick="copiarTexto('${d.cart}')" title="Copiar Carteirinha">📋</span> | <strong>Nasc:</strong> ${d.dataNasc || '-'}</span>
-                                <span><strong>Convênio:</strong> ${d.convenio}</span>
-                                <span><strong>Plano(s):</strong> ${Array.from(d.planos).join(', ')}</span>
-                            </div>
-                            <table>
-                                <thead><tr><th>Cód. Exame</th><th>Descrição Korus</th><th>Data Korus</th><th>Qtde</th><th>Valor (R$)</th><th>Status Operadora</th><th>Desc. Operadora</th><th>Status Auditoria</th></tr></thead>
-                                <tbody>${detalhesHTML}</tbody>
-                            </table>
-                        </div>
-                    </details>
-                `;
+                html += '<details><summary><div class="summary-title">' + htmlSeletorStatus + ' ' + g.unid + ' | Atend: ' + g.atend + ' <span class="copy-btn" onclick="copiarTexto(\'' + g.atend + '\'); event.stopPropagation();" title="Copiar Atendimento">📋</span> | ' + g.pac + '</div></summary>' +
+                         '<div class="details-content"><table><thead><tr><th>Cód</th><th>Exame</th><th>Valor</th><th>Motivo</th></tr></thead>' +
+                         '<tbody>' + cardsHtml + '</tbody></table></div></details>';
             });
-            
-            container.innerHTML = htmlSaida;
+
+            container.innerHTML = html || '<div style="text-align:center; padding:50px;">Nenhuma guia encontrada para esse filtro!</div>';
+            document.getElementById('kpi-atend-total').innerText = todosAtendimentosGlobais.length;
+            document.getElementById('kpi-atend-inc').innerText = divergenciasEncontradas.length;
+            document.getElementById('kpi-valor-inc').innerText = formatarMoeda(stats.valor);
+            desenharGrafico(stats);
         }
 
-        function desenharGrafico(dynStats) {
+        function desenharGrafico(s) {
             let ctx = document.getElementById('errorChart').getContext('2d');
-            if(chartInstance) {
-                chartInstance.data.datasets[0].data = [dynStats.incNaoLoc, dynStats.incData, dynStats.incQtde, dynStats.incAuth, dynStats.incSenhaInv, dynStats.incMultSenha, dynStats.incStatus, dynStats.incIdade, dynStats.incPlano, dynStats.incSemDepara];
-                chartInstance.update();
-            } else {
-                chartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Não Localizado', 'Data Inc.', 'Qtde Inc.', 'Divergência Senha', 'Senha Branco / Desnecessária', 'Múltiplas Senhas', 'Recus./Cancel.', 'Idade Inc.', 'Múltiplos Planos', 'Sem Depara'],
-                        datasets: [{
-                            data: [dynStats.incNaoLoc, dynStats.incData, dynStats.incQtde, dynStats.incAuth, dynStats.incSenhaInv, dynStats.incMultSenha, dynStats.incStatus, dynStats.incIdade, dynStats.incPlano, dynStats.incSemDepara],
-                            backgroundColor: ['#cc092f', '#d97706', '#d97706', '#d97706', '#ef4444', '#b91c1c', '#cc092f', '#8b5cf6', '#1e293b', '#f59e0b'],
-                            borderWidth: 0,
-                            borderRadius: { topLeft: 4, topRight: 4 }
-                        }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, layout: { padding: { top: 30 } }, plugins: { legend: { display: false }, datalabels: { anchor: 'end', align: 'top', color: '#475569', font: { weight: 'bold', size: 14, family: 'Inter' } } }, scales: { y: { beginAtZero: true, display: false }, x: { grid: { display: false }, ticks: { font: { family: 'Inter', weight: 600 } } } } }
-                });
-            }
+            if(chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Não Localiz.', 'Senha Branco/Desn.', 'Múltiplas Senhas', 'Recusados'],
+                    datasets: [{
+                        data: [s.incNaoLoc, s.incSenhaInv, s.incMult, s.incStatus],
+                        backgroundColor: ['#cc092f', '#f59e0b', '#2563eb', '#1e293b']
+                    }]
+                },
+                options: { plugins: { legend: {display:false}, datalabels: {color:'#475569', font:{weight:'bold'}}} }
+            });
         }
 
-        function forcarTexto(val) { return (val === undefined || val === null || val === "" || val === "-") ? "" : \`="\${val}"\`; }
-
-        function exportarCSVCompleto() { gerarCSV(relatorioCompleto, "Relatorio_Forense_Completo.csv"); }
-        function exportarCSVIncorretos() {
-            let apenasErros = relatorioCompleto.filter(r => r.conciliado === "NÃO");
-            if(apenasErros.length === 0) return alert("Nenhuma inconsistência para exportar.");
-            gerarCSV(apenasErros, "Relatorio_Apenas_Incorretos.csv");
+        function forcarTexto(val) {
+            if(val === undefined || val === null || val === "" || val === "-") return "";
+            return '="' + val + '"';
         }
 
-        function gerarCSV(dados, nomeArquivo) {
-            if(dados.length === 0) return alert("Nenhum dado processado para exportar.");
-            let dbStatus = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
-            let csv = "ID Controle;Convênio;Plano(s);Unidade;Atendimento;Nome Paciente;Data Nasc.;Carteirinha;Cod Exame;Exame Korus;Data Korus;Qtde Korus;Valor Bruto Korus (Debug);Valor Final (R$);Auth Korus;Data Operadora;Qtde Operadora;Auth Operadora;Status Operadora;Transacao Operadora;Descricao Operadora;Conciliado;Motivo Inconsistencia;Status Correcao (Kanban);Senha Branco ou Desnecessaria;Multiplas Senhas no Atendimento\n";
+        function exportarCSVCompleto() { gerarCSV(relatorioCompleto, "Relatorio_Auditoria_Completo.csv"); }
+        function exportarCSVIncorretos() { 
+            let err = relatorioCompleto.filter(r => r.conciliado === "NÃO");
+            if(err.length === 0) return alert("Nenhuma inconsistência.");
+            gerarCSV(err, "Relatorio_Inconsistencias.csv"); 
+        }
+
+        function gerarCSV(dados, nome) {
+            let csv = "Unidade;Atendimento;Paciente;Exame;Valor;Conciliado;Motivo;Multiplas Senhas;Senha Branco\n";
             dados.forEach(r => {
-                let chaveUnicaStatusSegura = triturarAlfa(r.unid) + "_" + triturarAlfa(r.atend);
-                let statusMemoria = dbStatus[chaveUnicaStatusSegura] || "SEM STATUS";
-                csv += `${r.idExport};${r.convenio};${r.planos};${r.unid};${r.atend};${r.pac.replace(/%/g, ' ')};${r.dataNasc};${forcarTexto(r.cart)};${r.codK};${r.exameK};${r.dataK};${r.qtdeK};${forcarTexto(r.valorRawK)};${r.valorK.toFixed(2).replace('.',',')};${forcarTexto(r.authK)};${r.dataO};${r.qtdeO};${forcarTexto(r.authO)};${r.statusO};${forcarTexto(r.transO)};${forcarTexto(r.descO)};${r.conciliado};${r.motivo};${statusMemoria};${r.isSenhaInventada};${r.isMultiplasSenhas}\n`;
+                csv += r.unid + ";" + r.atend + ";" + r.pac + ";" + r.exame + ";" + r.valor.toFixed(2).replace('.',',') + ";" + r.conciliado + ";" + r.motivo + ";" + r.isMult + ";" + r.isSenhaInv + "\n";
             });
             let link = document.createElement("a");
-            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' })); 
-            link.download = nomeArquivo;
+            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' }));
+            link.download = nome;
             link.click();
         }
     </script>
