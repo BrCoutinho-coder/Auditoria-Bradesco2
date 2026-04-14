@@ -23,12 +23,14 @@
         .signature-top-left { position: absolute; top: 15px; left: 25px; display: flex; flex-direction: column; align-items: center; gap: 5px; opacity: 0.95;}
         .signature-top-left p { margin: 0; color: #f8dbdf; font-weight: 600; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px;}
         
-        /* LOGO AUMENTADA PARA 90px */
+        /* AUMENTO DA LOGO EM 30% (De 60px para 78px) */
         .img-escudo { height: 120px; width: auto; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3)); }
 
+        /* ÍCONE DE CONFIGURAÇÃO DISCRETO NO CANTO SUPERIOR DIREITO */
         .btn-icon { position: absolute; top: 18px; right: 25px; background: transparent; border: none; color: white; font-size: 1.5em; cursor: pointer; opacity: 0.6; transition: 0.3s; padding: 0; }
         .btn-icon:hover { opacity: 1; transform: rotate(90deg); }
 
+        /* TÍTULOS E BOTÕES CENTRALIZADOS */
         .header-content-center { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;}
         .header-titles h1 { margin: 0; font-size: 1.6em; font-weight: 800; letter-spacing: -0.5px; }
         .header-titles p { margin: 5px 0 0 0; color: #f8dbdf; font-weight: 600; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px;}
@@ -53,14 +55,19 @@
         .depara-key { font-weight: 600; color: #475569; }
         .depara-val { font-weight: 800; color: var(--accent); }
 
-        /* NOTAS DE ATUALIZAÇÃO */
+        /* NOTAS DE ATUALIZAÇÃO ESTILO LISTA */
         .release-list { padding: 0; margin: 0; list-style: none; }
         .release-item { margin-bottom: 15px; border-left: 3px solid var(--accent); padding-left: 15px; }
         .release-item h4 { margin: 0 0 5px 0; color: var(--primary); font-weight: 800; }
         .release-item p { margin: 0; font-size: 0.9em; color: #64748b; }
 
         /* BARRA DE PROGRESSO */
-        #barra-progresso-container { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #e2e8f0; padding: 15px 25px; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); z-index: 9999; box-sizing: border-box; align-items: center; justify-content: space-between; gap: 20px; }
+        #barra-progresso-container {
+            display: none; position: fixed; bottom: 0; left: 0; width: 100%;
+            background: white; border-top: 1px solid #e2e8f0; padding: 15px 25px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05); z-index: 9999;
+            box-sizing: border-box; align-items: center; justify-content: space-between; gap: 20px;
+        }
         .progresso-texto { font-weight: 800; color: var(--primary); font-size: 0.9em; min-width: 250px; }
         .progresso-track { flex: 1; background: #e2e8f0; height: 12px; border-radius: 10px; overflow: hidden; position: relative; }
         .progresso-fill { background: var(--accent); width: 0%; height: 100%; transition: width 0.3s ease; }
@@ -69,6 +76,7 @@
         .controls { background: white; padding: 20px 25px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 25px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;}
         .file-group { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 250px; max-width: 400px;}
         .file-group-title { font-weight: 800; font-size: 0.85em; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; text-align: center;}
+        
         .custom-file-input { display: none; }
         .custom-file-label { display: block; padding: 12px 15px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 4px; color: #475569; font-weight: 600; font-size: 0.9em; cursor: pointer; transition: all 0.2s ease; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
         .custom-file-label:hover { background: #f1f5f9; border-color: var(--bradesco); color: var(--bradesco-dark);}
@@ -95,24 +103,54 @@
         .legenda-item { display: flex; align-items: center; gap: 6px; }
         .legenda-cor { width: 14px; height: 14px; border-radius: 14px; }
         
-        .status-badge { appearance: none; -webkit-appearance: none; padding: 6px 30px 6px 14px; border-radius: 20px; font-family: 'Inter', sans-serif; font-size: 0.8em; font-weight: 800; border: 2px solid transparent; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05); background-repeat: no-repeat; background-position: right 10px center; background-size: 1em; margin-right: 12px; }
+        .status-badge {
+            appearance: none;
+            -webkit-appearance: none;
+            padding: 6px 30px 6px 14px;
+            border-radius: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8em;
+            font-weight: 800;
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 1em;
+            margin-right: 12px;
+        }
         .status-badge:hover { filter: brightness(0.95); transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
-        .status-DEFAULT { background-color: #f1f5f9; color: #475569; border-color: #cbd5e1; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
-        .status-AUSENTE { background-color: #3b82f6; color: white; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
-        .status-PENDENTE { background-color: #f59e0b; color: white; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
-        .status-CORRIGIDA { background-color: #10b981; color: white; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
+        
+        .status-DEFAULT { 
+            background-color: #f1f5f9; color: #475569; border-color: #cbd5e1;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+        .status-AUSENTE { 
+            background-color: #3b82f6; color: white;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+        .status-PENDENTE { 
+            background-color: #f59e0b; color: white;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+        .status-CORRIGIDA { 
+            background-color: #10b981; color: white;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
 
-        /* FILTROS, LUPA E BOTAO COPIAR */
+        /* FILTROS E LUPA */
         .filters-container { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .filter-input { padding: 10px 12px; border-radius: 4px; border: 1px solid #cbd5e1; font-weight: 600; color: #334155; font-size: 0.85em; flex: 1; min-width: 140px; outline: none; font-family: inherit; transition: 0.2s;}
         .filter-input:focus { border-color: var(--bradesco); }
+        
         .search-wrapper { display: flex; flex: 2; min-width: 200px; }
         .search-bar { flex: 1; padding: 10px 12px; border-radius: 4px 0 0 4px; border: 1px solid #cbd5e1; border-right: none; font-size: 0.9em; outline: none; font-family: inherit;}
         .search-bar:focus { border-color: var(--bradesco); }
         .btn-search { background: var(--primary); color: white; border: none; padding: 0 18px; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 1.1em; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .btn-search:hover { background: #0f172a; }
-        .copy-btn { cursor: pointer; background: none; border: none; font-size: 1em; color: #94a3b8; transition: 0.2s; padding: 0 4px; vertical-align: middle; }
-        .copy-btn:hover { color: var(--accent); transform: scale(1.1); }
         
         /* RESULTADOS */
         details { background: white; margin-bottom: 10px; border-radius: 6px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
@@ -155,7 +193,7 @@
             </div>
             <div class="header-buttons">
                 <button class="btn" onclick="location.reload()">Limpar Painel</button>
-                <button class="btn btn-primary" onclick="iniciarVarredura()">▶ Iniciar Varredura</button>
+                <button class="btn btn-primary" onclick="iniciarVarredura()">▶ Iniciar Varredura (Lotes)</button>
                 <button class="btn btn-warning" onclick="exportarCSVIncorretos()">Exportar Apenas Incorretos</button>
                 <button class="btn" onclick="exportarCSVCompleto()">Exportar Tudo</button>
             </div>
@@ -163,27 +201,22 @@
     </header>
 
     <div id="modalUpdate" class="modal-overlay">
-        <div class="modal-content" style="border-top: 5px solid var(--accent);">
+        <div class="modal-content" style="border-top: 4px solid var(--accent);">
             
             <div class="modal-header">
-                <h2>🚀 Novidades da Versão 2.4</h2>
-                <button class="close-btn" onclick="fecharUpdate()">×</button>
+                <h2 style="color: var(--primary);">🚀 Sistema Atualizado (v2.5)</h2>
+                <button class="close-btn" onclick="fecharModalUpdate()">×</button>
             </div>
-            <div class="release-list">
-                <div class="release-item">
-                    <h4>Baixar e Atualizar o DEPARA</h4>
-                    <p>Novo botão "Baixar Base Atual" nas configurações. Ele exporta a inteligência do robô com as colunas (exame;str_codigo_amb_autorizacao;autorizacao) para você editar no Excel.</p>
-                </div>
-                <div class="release-item">
-                    <h4>Regras Inteligentes de Senha</h4>
-                    <p>O motor usa a 3ª coluna do DEPARA. Se um exame exige senha e a Orizon vem vazia, ele acusa "Senha em branco na Orizon". Se nenhum exame da guia exige senha, mas foi enviado preenchido, ele acusa "Sem necessidade de autorização". Tudo integrado à exportação do Excel.</p>
-                </div>
-                <div class="release-item">
-                    <h4>Filtro Kanban e Cópia Rápida</h4>
-                    <p>Filtre os relatórios para ver apenas os "Pendentes". Um novo ícone (📋) ao lado dos Atendimentos e Carteirinhas copia o número instantaneamente.</p>
-                </div>
+            <div style="font-size: 0.95em; color: #475569; line-height: 1.6;">
+                <p style="margin-top:0;"><strong>O que há de novo nesta versão:</strong></p>
+                <ul style="padding-left: 20px; margin-bottom: 20px;">
+                    <li><strong>Base de Fábrica Embutida:</strong> O sistema já carrega os códigos e as regras de autorização automaticamente no 1º acesso.</li>
+                    <li><strong>Baixar DEPARA:</strong> Acesse as configurações (⚙️) para baixar sua base atual em CSV, edite no Excel e suba novamente.</li>
+                    <li><strong>Inteligência de Senhas:</strong> O robô acusa "Senha em branco" se o exame exigir e "Sem necessidade" se a recepção colocar senha em exames simples da guia.</li>
+                
+                </ul>
             </div>
-            <button class="btn" style="background: var(--accent); color: white; border: none; padding: 12px; margin-top: 10px;" onclick="fecharUpdate()">Ciente das Novidades</button>
+            <button class="btn" style="align-self: flex-end; background: var(--accent); color: white; padding: 10px 30px; border:none;" onclick="fecharModalUpdate()">Ciente das Novidades</button>
         </div>
     </div>
 
@@ -194,7 +227,7 @@
                 <button class="close-btn" onclick="fecharConfig()">×</button>
             </div>
             <div style="font-size: 0.9em; color: #475569;">
-                O robô aprende os códigos e os guarda na memória do navegador. Importe seu CSV para alimentar ou atualizar os códigos. Se quiser exigir senha para o código, coloque "SIM" na terceira coluna.
+                O robô aprende os códigos e os guarda na memória do navegador. Importe seu CSV para alimentar ou atualizar os códigos. Se quiser exigir senha, coloque "SIM" na terceira coluna.
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <input type="file" id="fDeparaUpdate" class="custom-file-input" accept=".csv" onchange="processarUploadDepara(this)">
@@ -211,8 +244,12 @@
 
     <div id="modalAlerta" class="modal-overlay">
         <div class="modal-content" style="border-top: 4px solid var(--danger); max-height: 90vh;">
-            <div class="modal-header"><h2 style="color: var(--danger);">🚨 Alertas de Faturamento</h2><button class="close-btn" onclick="document.getElementById('modalAlerta').style.display='none'">×</button></div>
-            <div class="depara-list-container" id="listaAlertasUI" style="max-height: 400px; background: #fff; border: none; padding: 0;"></div>
+            <div class="modal-header">
+                <h2 style="color: var(--danger);">🚨 Alertas de Faturamento</h2>
+                <button class="close-btn" onclick="document.getElementById('modalAlerta').style.display='none'">×</button>
+            </div>
+            <div class="depara-list-container" id="listaAlertasUI" style="max-height: 400px; background: #fff; border: none; padding: 0;">
+                </div>
             <button class="btn" style="align-self: flex-end; background: var(--bradesco); color: white; padding: 10px 30px; border:none;" onclick="document.getElementById('modalAlerta').style.display='none'">Ciente</button>
         </div>
     </div>
@@ -223,7 +260,9 @@
             <div style="display: flex; gap: 8px;">
                 <input type="file" id="fKorus" accept=".csv, .xlsx, .xls, .xlsm" multiple style="display: none;">
                 <label for="fKorus" id="lblKorus" class="custom-file-label" style="flex: 1; margin: 0;">Selecionar Arquivos</label>
-                <input type="file" id="fKorusAdd" multiple style="display: none;"><button type="button" class="btn-plus" onclick="document.getElementById('fKorusAdd').click()">+</button>
+                
+                <input type="file" id="fKorusAdd" accept=".csv, .xlsx, .xls, .xlsm" multiple style="display: none;">
+                <button type="button" class="btn-plus" onclick="document.getElementById('fKorusAdd').click()" title="Adicionar mais arquivos sem apagar os anteriores">+</button>
             </div>
         </div>
         <div class="file-group">
@@ -231,27 +270,51 @@
             <div style="display: flex; gap: 8px;">
                 <input type="file" id="fOrizon" accept=".csv" multiple style="display: none;">
                 <label for="fOrizon" id="lblOrizon" class="custom-file-label" style="flex: 1; margin: 0;">Selecionar Arquivos</label>
-                <input type="file" id="fOrizonAdd" multiple style="display: none;"><button type="button" class="btn-plus" onclick="document.getElementById('fOrizonAdd').click()">+</button>
+                
+                <input type="file" id="fOrizonAdd" accept=".csv" multiple style="display: none;">
+                <button type="button" class="btn-plus" onclick="document.getElementById('fOrizonAdd').click()" title="Adicionar mais arquivos sem apagar os anteriores">+</button>
             </div>
         </div>
     </div>
 
     <div class="dashboard-wrapper">
         <div class="kpi-grid">
-            <div class="card"><h3>Atendimentos</h3><div class="value" id="kpi-atend-total">0</div></div>
-            <div class="card"><h3>Exames</h3><div class="value" id="kpi-exame-total">0</div></div>
-            <div class="card financeiro"><h3>Valor Total</h3><div class="value" id="kpi-valor-total">R$ 0,00</div></div>
-            <div class="card incorreto"><h3>Atend. Incorretos</h3><div class="value" id="kpi-atend-inc">0</div></div>
-            <div class="card incorreto"><h3>Valor em Risco</h3><div class="value" id="kpi-valor-inc">R$ 0,00</div></div>
+            <div class="card">
+                <h3>Atendimentos (Lidos)</h3>
+                <div class="value" id="kpi-atend-total">0</div>
+            </div>
+            <div class="card">
+                <h3>Exames (Lidos)</h3>
+                <div class="value" id="kpi-exame-total">0</div>
+            </div>
+            <div class="card financeiro">
+                <h3>Valor Total</h3>
+                <div class="value" id="kpi-valor-total">R$ 0,00</div>
+            </div>
+            <div class="card incorreto">
+                <h3>Atend. Incorretos</h3>
+                <div class="value" id="kpi-atend-inc">0</div>
+            </div>
+            <div class="card incorreto">
+                <h3>Exames Incorretos</h3>
+                <div class="value" id="kpi-exame-inc">0</div>
+            </div>
+            <div class="card incorreto">
+                <h3>Valor em Risco</h3>
+                <div class="value" id="kpi-valor-inc">R$ 0,00</div>
+            </div>
         </div>
+        
         <div class="chart-container">
-            <h3 class="chart-title">Inconsistências (Qtde)</h3>
-            <div style="position: relative; height: 100%; min-height: 200px;"><canvas id="errorChart"></canvas></div>
+            <h3 class="chart-title">Análise de Inconsistências (Qtde)</h3>
+            <div style="position: relative; height: 100%; min-height: 200px;">
+                <canvas id="errorChart"></canvas>
+            </div>
         </div>
     </div>
 
     <div class="legenda-status">
-        <span style="text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Correção:</span>
+        <span style="text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Correção (Kanban):</span>
         <div class="legenda-item"><div class="legenda-cor" style="background:#e2e8f0; border: 1px solid #cbd5e1;"></div> Sem Status</div>
         <div class="legenda-item"><div class="legenda-cor" style="background:#3b82f6;"></div> Ausente</div>
         <div class="legenda-item"><div class="legenda-cor" style="background:#f59e0b;"></div> Pendente</div>
@@ -259,215 +322,246 @@
     </div>
 
     <div class="filters-container">
-        <select id="filtroStatus" class="filter-input" onchange="renderizarResultados()">
-            <option value="ALL">Todos os Status</option>
-            <option value="DEFAULT">Sem Status</option>
-            <option value="PENDENTE">Pendente</option>
-            <option value="AUSENTE">Ausente</option>
-            <option value="CORRIGIDA">Corrigida</option>
+        <select id="filtroConvenio" class="filter-input" onchange="renderizarResultados()">
+            <option value="ALL">Todos os Convênios</option>
         </select>
-        <select id="filtroConvenio" class="filter-input" onchange="renderizarResultados()"><option value="ALL">Todos Convênios</option></select>
-        <select id="filtroUnid" class="filter-input" onchange="renderizarResultados()"><option value="ALL">Todas Unidades</option></select>
-        <select id="filtroData" class="filter-input" onchange="renderizarResultados()"><option value="ALL">Todas Datas</option></select>
+
+        <select id="filtroUnid" class="filter-input" onchange="renderizarResultados()">
+            <option value="ALL">Todas as Unidades</option>
+        </select>
+        
+        <select id="filtroData" class="filter-input" onchange="renderizarResultados()">
+            <option value="ALL">Todas as Datas</option>
+        </select>
+
         <select id="filtroTipo" class="filter-input" onchange="renderizarResultados()">
             <option value="ALL">Todas Inconsistências</option>
             <option value="NAO_LOCALIZADO">Não Localizados</option>
             <option value="STATUS_INVALIDO">Recusados/Cancelados</option>
             <option value="DIVERGENCIA_DATA">Data Incorreta</option>
-            <option value="DIVERGENCIA_QTDE">Qtde Incorreta</option>
-            <option value="DIVERGENCIA_AUTH">Senha Divergente</option>
-            <option value="SENHA_INVENTADA">Senha Branco / Desnecessária</option>
+            <option value="DIVERGENCIA_QTDE">Qtde Inc./Zerada</option>
+            <option value="DIVERGENCIA_AUTH">Senha Incorreta</option>
+            <option value="SENHA_INVENTADA">Senha em Branco / Desnecessária</option>
             <option value="MULTIPLAS_SENHAS">Múltiplas Senhas na Guia</option>
-            <option value="SEM_DEPARA">Sem Depara (Cód. 8)</option>
+            <option value="IDADE_INVALIDA">Recém-Nascido</option>
+            <option value="DIVERGENCIA_PLANO">Múltiplos Planos</option>
+            <option value="SEM_DEPARA">Código Sem Depara (Inicia com 8)</option>
+            <option value="ALTO_CUSTO">Alto Custo (>= R$500)</option>
         </select>
+
         <div class="search-wrapper">
-            <input type="text" id="filtroBusca" list="listaAtend" class="search-bar" placeholder="Buscar..." onkeypress="if(event.key === 'Enter') renderizarResultados()">
+            <input type="text" id="filtroBusca" list="listaAtend" class="search-bar" placeholder="Buscar Atendimento..." onkeypress="if(event.key === 'Enter') renderizarResultados()">
             <datalist id="listaAtend"></datalist>
-            <button class="btn-search" onclick="renderizarResultados()">🔍</button>
+            <button class="btn-search" onclick="renderizarResultados()" title="Aplicar Filtros">🔍</button>
         </div>
     </div>
 
     <div id="resultados-container"></div>
 
     <div id="barra-progresso-container">
-        <div class="progresso-texto" id="progresso-texto">Aguardando...</div>
-        <div class="progresso-track"><div class="progresso-fill" id="progresso-fill"></div></div>
+        <div class="progresso-texto" id="progresso-texto">Iniciando Motor...</div>
+        <div class="progresso-track">
+            <div class="progresso-fill" id="progresso-fill"></div>
+        </div>
     </div>
 
+    <footer>Gestão Financeira & Faturamento | Desenvolvido por Breno Coutinho &copy; 2026</footer>
+
     <script>
-        const VERSAO_SISTEMA = "2.5";
+        // ==========================================
+        // 🔒 TRAVA DE DOMÍNIO E CONTROLE DE VERSÃO
+        // ==========================================
+        const VERSAO_SISTEMA = "2.5"; // PARA FORÇAR O POP-UP DE NOVO, SÓ MUDAR ESTE NÚMERO NO FUTURO
+
+        (function() {
+            const dominiosPermitidos = ["brcoutinho-coder.github.io", "localhost", "127.0.0.1", ""];
+            let hostAtual = window.location.hostname;
+            if (!dominiosPermitidos.includes(hostAtual)) {
+                document.body.innerHTML = `
+                    <div style="display:flex; height:100vh; width:100vw; background:#0f172a; color:white; justify-content:center; align-items:center; font-family:sans-serif; text-align:center; flex-direction:column;">
+                        <h1 style="color:#f43f5e; font-size:3em; margin-bottom:10px;">Acesso Bloqueado</h1>
+                        <p style="font-size:1.2em; color:#94a3b8;">Sistema proprietário de Breno Coutinho.</p>
+                        <p style="font-size:0.9em; color:#64748b; margin-top:20px;">Licença de uso não autorizada para este domínio.</p>
+                    </div>
+                `;
+                throw new Error("Violação de Licença: A execução do motor foi bloqueada pelo autor.");
+            }
+        })();
 
         // ==========================================
-        // BASE DEPARA EMBUTIDA DE FÁBRICA (111 Códigos)
+        // BASE DEPARA EMBUTIDA (111 Códigos)
         // ==========================================
-        const DEPARA_EMBUTIDO = `exame;str_codigo_amb_autorizacao;autorizacao
-USG DE TIREOIDE;40901203;NÃO
-USG DE ABDOMEN TOTAL;40901122;NÃO
-USG DE MAMAS;40901114;NÃO
-USG DE TIREOIDE C/ DOPPLER;40901386;SIM
-USG TRANSVAGINAL;40901300;NÃO
-USG - ESTRUTURAS SUPERFICIAIS (CERVICAL OU MUSCULO OU TENDAO);40901211;NÃO
-DENSITOMETRIA OSSEA 2 SEG;40808130;SIM
-RM COLUNA CERVICAL;41101227;SIM
-RM DE PELVE;41101189;SIM
-USG PELVICA;40901181;NÃO
-RM DE MAMAS SEM PRÓTESE;41101480;SIM
-CORE BIOPSY POR USG;40808262;SIM
-USG DE ABDOMEN TOTAL DOPPLER;40901386;SIM
-USG TRANSVAGINAL COM PREPARO INTESTINAL;40901300;NÃO
-MAMOTOMIA POR RM;40808300;SIM
-USG DE MAMA C/ DOPPLER;40901386;SIM
-USG - ESTRUTURAS SUPERFICIAIS (CERVICAL OU AXILAS OU MUSCULO OU TENDAO);40901211;NÃO
-MAMOGRAFIA DIGITAL;40808041;SIM
-USG DE PARTES MOLES;40901211;NÃO
-DENSITOMETRIA OSSEA;40808130;SIM
-USG DE RINS E VIA URINARIA;40901769;NÃO
-RM DE JOELHO DIREITO;41101316;SIM
-RM DE JOELHO ESQUERDO;41101316;SIM
-USG OBST. COM DOPPLER;40901246;SIM
-RM COLUNA LOMBAR;41101227;SIM
-USG TRANSVAGINAL OBSTETRICO;40901297;NÃO
-DOPPLER DE CAROTIDAS E VERTEBRAS;40901360;SIM
-PAAF-PUNCAO AGUL. FINA TIRE;40809161;SIM
-USG TRANSV. COM DOPPLER;40901386;SIM
-RM COXO-FEMURAL DIREITA;41101316;SIM
-MAMOTOMIA POR ESTEREOTAXIA;40808289;SIM
-PAAF-PUNCAO AGUL. FINA MAMA;40808238;SIM
-RM DE TORNOZELO DIREITO;41101316;SIM
-RM ABDOMEN SUPERIOR;41101170;SIM
-RM DE MAMAS COM PRÓTESE;41101480;SIM
-USG MORFOLOGICO 2 TRIMESTRE;40901262;NÃO
-USG TRANSVAGINAL PARA MEDIDA DO COLO;40901297;NÃO
-RM PE DIREITO;41101308;SIM
-RM DE MAMAS (BILATERAL);41101480;SIM
-USG OBSTETRICA;40901238;NÃO
-DOPPLER COL VENO MMB INFERI;40901483;SIM
-USG DE ABDOMEN SUPERIOR;40901130;NÃO
-RM BRACO DIREITO;41101316;SIM
-RM OMBRO DIREITO;41101316;SIM
-USG OBST. TRANSLU. NUCAL;40901254;SIM
-RM COLUNA TORACICA;41101227;SIM
-DOPPLER COL AORTA E ILIACAS;40901408;SIM
-RM DE PAREDE ABDOMINAL;41101316;SIM
-RM DE CRANIO;41101014;SIM
-USG PAREDE ABDOMINAL;40901211;NÃO
-USG PELVICA COM DOPPLER;40901386;SIM
-DOPPLER COL ARTE MMB INFERI;40901475;SIM
-USG DE ARTIC. PUNHO ESQ.;40901220;NÃO
-USG INGUINAL;40901211;NÃO
-USG DE ARTIC. PUNHO DIR.;40901220;NÃO
-USG MORFOLOGICO;40901262;NÃO
-DENSITOMETRIA CORPO INTEIRO;40808149;SIM
-USG CERVICAL COM DOPPLER;40901386;SIM
-RM PUNHO ESQUERDO;41101316;SIM
-RM PE ESQUERDO;41101308;SIM
-RM QUADRIL DIREITO;41101316;SIM
-SECOND LOOK (USG MAMAS);40901114;NÃO
-DOPPLER COLORIDO ORG EST ISOLADA;40901386;SIM
-USG DE ARTIC. TORNOZELO ESQ. DOPPLER;40901386;SIM
-USG DE ARTIC. TORNOZELO DIR. DOPPLER;40901386;SIM
-USG DE ARTIC. TORNOZEL DIR.;40901220;NÃO
-USG DE ARTIC. TORNOZEL ESQ.;40901220;NÃO
-USG DE ARTIC. COTOVELO ESQ.;40901220;NÃO
-RM COXA DIREITA;41101286;SIM
-USG DE ARTICUL. MAO DIR.;40901220;NÃO
-DOPPLER COL ARTE MMB SUPER;40901459;SIM
-USG MORFOLOGICO DOPPLER;40901262;SIM
-USG - ESTRUTURAS SUPERFICIAIS COM DOPPLER (CERVICAL OU AXILAS OU MUSCULO OU TENDAO);40901386;SIM
-RM DE MAO DIREITA;41101260;SIM
-RM DE MAO ESQUERDA;41101260;SIM
-RM PUNHO DIREITO;41101316;SIM
-USG DERMATOLOGICO - PELE E SUBCUTANEO;40901190;NÃO
-USG DE ARTICUL. OMBRO ESQ.;40901220;NÃO
-DOPPLER COL VEIA CAVA SUPERIOR;40901432;SIM
-RM DE TORNOZELO ESQUERDO;41101316;SIM
-USG DE ARTIC. COTOVELO DIR.;40901220;NÃO
-USG DE ARTICUL. MAO ESQ.;40901220;NÃO
-USG DE ARTIC. COTOVELO DIR. DOPPLER;40901386;SIM
-USG DE ARTIC. COTOVELO ESQ. DOPPLER;40901386;SIM
-USG DE ARTIC. MAO DIR. DOPPLER;40901386;SIM
-USG DE ARTIC. MAO ESQ. DOPPLER;40901386;SIM
-USG DE ARTICUL. OMBRO DIR.;40901220;NÃO
-USG DE ARTIC. PUNHO DIR. DOPPLER;40901386;SIM
-USG DE ARTIC. PUNHO ESQ. DOPPLER;40901386;SIM
-RM DE OSSOS TEMPORAIS BILATERAL;41101081;SIM
-RM DE OUVIDO;41101081;SIM
-MAMOGRAFIA COM TOMOSSINTESE;40808041;SIM
-RM QUADRIL ESQUERDO;41101316;SIM
-RM DE COXA ESQUERDA;41101286;SIM
-RM BACIA;41101278;SIM
-USG DE RINS E VIAS C/DOPPLER;40901386;SIM
-RM COXO-FEMURAL ESQUERDA;41101316;SIM
-RM DE MASTOIDES;41101081;SIM
-ANGIO RM VENOSA DO CRANIO;41101545;SIM
-ANGIO RM VENOSA PESCOCO;41101626;SIM
-RM DE PERNA DIREITA;41101294;SIM
-RM DE FACE;41101090;SIM
-RM PESCOCO;41101111;SIM
-RM OMBRO ESQUERDO;41101316;SIM
-HISTEROSCOPIA DIAGNOSTICA;40201155;SIM
-RM COLUNA DORSAL;41101227;SIM
-COLANGIO RESSONANCIA;41101359;SIM
-USG DE ARTIC. QUADRIL DIR.;40901220;NÃO
-USG DE ARTIC. QUADRIL ESQ.;40901220;NÃO
-USG DE PARTES MOLES DOPPLER;40901386;SIM
-MAMOTOMIA POR USG;40808297;SIM
-USG DE ABDOMEN SUPERIOR DOPPLER;40901386;SIM
-RM FLUXO LIQUORICO;41101235;SIM
-REPOSICIONAMENTO DE DIU;31303307;SIM
-RETIRADA DE DIU;31303307;SIM
-RM SACRO ILIACAS;41101278;SIM
-ANGIO RM ARTERIAL DO CRANIO;41101537;SIM
-RM COTOVELO ESQUERDO;41101316;SIM
-DOPPLER COL VEIA CAVA INFERIOR;40901432;SIM
-USG DE ARTICUL. PE DIR.;40901220;NÃO
-USG DE ARTICUL. PE ESQ.;40901220;NÃO
-PERFIL BIOFISICO FETAL;40901505;SIM
-USG DE ARTIC. JOELHO DIR.;40901220;NÃO
-RM ATM-BILATERAL;41101103;SIM
-DOPPLER COL VENO MMB SUPER;40901467;SIM
-RM DE PERNA ESQUERDA;41101294;SIM
-RM SELA TURCICA (HIPOFISE) COM CONTRASTE;41101022;SIM
-RM COCCIX;41101316;SIM
-RM COTOVELO DIREITO;41101316;SIM
-ANGIO RM VEN ABDOME SUPERI;41101529;SIM
-ANGIO RM VENOSA DE PELVE;41101600;SIM
-RM TORNOZELO ESQUERDO C/ CONTR;41101316;SIM
-RM ATM (BILATERAL) COM CONTRASTE;41101103;SIM
-USG DE AXILA;40901211;NÃO
-RM SELA TURCICA;41101022;SIM
-DOPPLER DE ARTERIAS RENAIS;40901394;SIM
-CORE BIOPSY POR EXTEREOTAXIA;40808254;SIM
-RM BRACO ESQUERDO;41101316;SIM
-RM DE PELVE CONTRASTE;41101189;SIM
-USG DE ARTICULACOES;40901220;NÃO
-RM DE MAMAS COM PRÓTESE ;41101480;SIM
-USG DE MAMAS C/ DOPPLER;40901386;SIM
-FATOR V DE LEIDEN (SANGUE);40314057;SIM
-ENTEROGRAFIA RM;41101189;SIM
-FATOR V LEIDEN PCR;40314057;SIM
-CALPROTECTINA FECAL;40303330;SIM
-USG TRANSVAGINAL COM PREPARO INTESTINAL - ENDOMETRIOSE;40901300;NÃO
-DOPPLER COL VENO MMB INFERI UNILATERAL;40901483;SIM
-DOPPLER COL ARTE MMB INFERI UNILATERAL;40901475;SIM
-USG PAREDE ABDOMINAL DOPPLER;40901386;SIM
-CORE BIOPSY POR ESTEREOTAXIA;40808254;SIM
-DOPPLER COL VENO MMB SUPER UNILATERAL;40901467;SIM
-USG - ESTRUTURAS SUPERFICIAIS COM DOPPLER (CERVICAL OU MUSCULO OU TENDAO);40901386;SIM
-RM AXILAS;41101480;SIM
-USG DE ARTIC. PE ESQ. DOPPLER;40901386;SIM
-USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
+        const DEPARA_EMBUTIDO = "exame;str_codigo_amb_autorizacao;autorizacao\n" +
+"USG DE TIREOIDE;40901203;NÃO\n" +
+"USG DE ABDOMEN TOTAL;40901122;NÃO\n" +
+"USG DE MAMAS;40901114;NÃO\n" +
+"USG DE TIREOIDE C/ DOPPLER;40901386;SIM\n" +
+"USG TRANSVAGINAL;40901300;NÃO\n" +
+"USG - ESTRUTURAS SUPERFICIAIS (CERVICAL OU MUSCULO OU TENDAO);40901211;NÃO\n" +
+"DENSITOMETRIA OSSEA 2 SEG;40808130;SIM\n" +
+"RM COLUNA CERVICAL;41101227;SIM\n" +
+"RM DE PELVE;41101189;SIM\n" +
+"USG PELVICA;40901181;NÃO\n" +
+"RM DE MAMAS SEM PRÓTESE;41101480;SIM\n" +
+"CORE BIOPSY POR USG;40808262;SIM\n" +
+"USG DE ABDOMEN TOTAL DOPPLER;40901386;SIM\n" +
+"USG TRANSVAGINAL COM PREPARO INTESTINAL;40901300;NÃO\n" +
+"MAMOTOMIA POR RM;40808300;SIM\n" +
+"USG DE MAMA C/ DOPPLER;40901386;SIM\n" +
+"USG - ESTRUTURAS SUPERFICIAIS (CERVICAL OU AXILAS OU MUSCULO OU TENDAO);40901211;NÃO\n" +
+"MAMOGRAFIA DIGITAL;40808041;SIM\n" +
+"USG DE PARTES MOLES;40901211;NÃO\n" +
+"DENSITOMETRIA OSSEA;40808130;SIM\n" +
+"USG DE RINS E VIA URINARIA;40901769;NÃO\n" +
+"RM DE JOELHO DIREITO;41101316;SIM\n" +
+"RM DE JOELHO ESQUERDO;41101316;SIM\n" +
+"USG OBST. COM DOPPLER;40901246;SIM\n" +
+"RM COLUNA LOMBAR;41101227;SIM\n" +
+"USG TRANSVAGINAL OBSTETRICO;40901297;NÃO\n" +
+"DOPPLER DE CAROTIDAS E VERTEBRAS;40901360;SIM\n" +
+"PAAF-PUNCAO AGUL. FINA TIRE;40809161;SIM\n" +
+"USG TRANSV. COM DOPPLER;40901386;SIM\n" +
+"RM COXO-FEMURAL DIREITA;41101316;SIM\n" +
+"MAMOTOMIA POR ESTEREOTAXIA;40808289;SIM\n" +
+"PAAF-PUNCAO AGUL. FINA MAMA;40808238;SIM\n" +
+"RM DE TORNOZELO DIREITO;41101316;SIM\n" +
+"RM ABDOMEN SUPERIOR;41101170;SIM\n" +
+"RM DE MAMAS COM PRÓTESE;41101480;SIM\n" +
+"USG MORFOLOGICO 2 TRIMESTRE;40901262;NÃO\n" +
+"USG TRANSVAGINAL PARA MEDIDA DO COLO;40901297;NÃO\n" +
+"RM PE DIREITO;41101308;SIM\n" +
+"RM DE MAMAS (BILATERAL);41101480;SIM\n" +
+"USG OBSTETRICA;40901238;NÃO\n" +
+"DOPPLER COL VENO MMB INFERI;40901483;SIM\n" +
+"USG DE ABDOMEN SUPERIOR;40901130;NÃO\n" +
+"RM BRACO DIREITO;41101316;SIM\n" +
+"RM OMBRO DIREITO;41101316;SIM\n" +
+"USG OBST. TRANSLU. NUCAL;40901254;SIM\n" +
+"RM COLUNA TORACICA;41101227;SIM\n" +
+"DOPPLER COL AORTA E ILIACAS;40901408;SIM\n" +
+"RM DE PAREDE ABDOMINAL;41101316;SIM\n" +
+"RM DE CRANIO;41101014;SIM\n" +
+"USG PAREDE ABDOMINAL;40901211;NÃO\n" +
+"USG PELVICA COM DOPPLER;40901386;SIM\n" +
+"DOPPLER COL ARTE MMB INFERI;40901475;SIM\n" +
+"USG DE ARTIC. PUNHO ESQ.;40901220;NÃO\n" +
+"USG INGUINAL;40901211;NÃO\n" +
+"USG DE ARTIC. PUNHO DIR.;40901220;NÃO\n" +
+"USG MORFOLOGICO;40901262;NÃO\n" +
+"DENSITOMETRIA CORPO INTEIRO;40808149;SIM\n" +
+"USG CERVICAL COM DOPPLER;40901386;SIM\n" +
+"RM PUNHO ESQUERDO;41101316;SIM\n" +
+"RM PE ESQUERDO;41101308;SIM\n" +
+"RM QUADRIL DIREITO;41101316;SIM\n" +
+"SECOND LOOK (USG MAMAS);40901114;NÃO\n" +
+"DOPPLER COLORIDO ORG EST ISOLADA;40901386;SIM\n" +
+"USG DE ARTIC. TORNOZELO ESQ. DOPPLER;40901386;SIM\n" +
+"USG DE ARTIC. TORNOZELO DIR. DOPPLER;40901386;SIM\n" +
+"USG DE ARTIC. TORNOZEL DIR.;40901220;NÃO\n" +
+"USG DE ARTIC. TORNOZEL ESQ.;40901220;NÃO\n" +
+"USG DE ARTIC. COTOVELO ESQ.;40901220;NÃO\n" +
+"RM COXA DIREITA;41101286;SIM\n" +
+"USG DE ARTICUL. MAO DIR.;40901220;NÃO\n" +
+"DOPPLER COL ARTE MMB SUPER;40901459;SIM\n" +
+"USG MORFOLOGICO DOPPLER;40901262;SIM\n" +
+"USG - ESTRUTURAS SUPERFICIAIS COM DOPPLER (CERVICAL OU AXILAS OU MUSCULO OU TENDAO);40901386;SIM\n" +
+"RM DE MAO DIREITA;41101260;SIM\n" +
+"RM DE MAO ESQUERDA;41101260;SIM\n" +
+"RM PUNHO DIREITO;41101316;SIM\n" +
+"USG DERMATOLOGICO - PELE E SUBCUTANEO;40901190;NÃO\n" +
+"USG DE ARTICUL. OMBRO ESQ.;40901220;NÃO\n" +
+"DOPPLER COL VEIA CAVA SUPERIOR;40901432;SIM\n" +
+"RM DE TORNOZELO ESQUERDO;41101316;SIM\n" +
+"USG DE ARTIC. COTOVELO DIR.;40901220;NÃO\n" +
+"USG DE ARTICUL. MAO ESQ.;40901220;NÃO\n" +
+"USG DE ARTIC. COTOVELO DIR. DOPPLER;40901386;SIM\n" +
+"USG DE ARTIC. COTOVELO ESQ. DOPPLER;40901386;SIM\n" +
+"USG DE ARTIC. MAO DIR. DOPPLER;40901386;SIM\n" +
+"USG DE ARTIC. MAO ESQ. DOPPLER;40901386;SIM\n" +
+"USG DE ARTICUL. OMBRO DIR.;40901220;NÃO\n" +
+"USG DE ARTIC. PUNHO DIR. DOPPLER;40901386;SIM\n" +
+"USG DE ARTIC. PUNHO ESQ. DOPPLER;40901386;SIM\n" +
+"RM DE OSSOS TEMPORAIS BILATERAL;41101081;SIM\n" +
+"RM DE OUVIDO;41101081;SIM\n" +
+"MAMOGRAFIA COM TOMOSSINTESE;40808041;SIM\n" +
+"RM QUADRIL ESQUERDO;41101316;SIM\n" +
+"RM DE COXA ESQUERDA;41101286;SIM\n" +
+"RM BACIA;41101278;SIM\n" +
+"USG DE RINS E VIAS C/DOPPLER;40901386;SIM\n" +
+"RM COXO-FEMURAL ESQUERDA;41101316;SIM\n" +
+"RM DE MASTOIDES;41101081;SIM\n" +
+"ANGIO RM VENOSA DO CRANIO;41101545;SIM\n" +
+"ANGIO RM VENOSA PESCOCO;41101626;SIM\n" +
+"RM DE PERNA DIREITA;41101294;SIM\n" +
+"RM DE FACE;41101090;SIM\n" +
+"RM PESCOCO;41101111;SIM\n" +
+"RM OMBRO ESQUERDO;41101316;SIM\n" +
+"HISTEROSCOPIA DIAGNOSTICA;40201155;SIM\n" +
+"RM COLUNA DORSAL;41101227;SIM\n" +
+"COLANGIO RESSONANCIA;41101359;SIM\n" +
+"USG DE ARTIC. QUADRIL DIR.;40901220;NÃO\n" +
+"USG DE ARTIC. QUADRIL ESQ.;40901220;NÃO\n" +
+"USG DE PARTES MOLES DOPPLER;40901386;SIM\n" +
+"MAMOTOMIA POR USG;40808297;SIM\n" +
+"USG DE ABDOMEN SUPERIOR DOPPLER;40901386;SIM\n" +
+"RM FLUXO LIQUORICO;41101235;SIM\n" +
+"REPOSICIONAMENTO DE DIU;31303307;SIM\n" +
+"RETIRADA DE DIU;31303307;SIM\n" +
+"RM SACRO ILIACAS;41101278;SIM\n" +
+"ANGIO RM ARTERIAL DO CRANIO;41101537;SIM\n" +
+"RM COTOVELO ESQUERDO;41101316;SIM\n" +
+"DOPPLER COL VEIA CAVA INFERIOR;40901432;SIM\n" +
+"USG DE ARTICUL. PE DIR.;40901220;NÃO\n" +
+"USG DE ARTICUL. PE ESQ.;40901220;NÃO\n" +
+"PERFIL BIOFISICO FETAL;40901505;SIM\n" +
+"USG DE ARTIC. JOELHO DIR.;40901220;NÃO\n" +
+"RM ATM-BILATERAL;41101103;SIM\n" +
+"DOPPLER COL VENO MMB SUPER;40901467;SIM\n" +
+"RM DE PERNA ESQUERDA;41101294;SIM\n" +
+"RM SELA TURCICA (HIPOFISE) COM CONTRASTE;41101022;SIM\n" +
+"RM COCCIX;41101316;SIM\n" +
+"RM COTOVELO DIREITO;41101316;SIM\n" +
+"ANGIO RM VEN ABDOME SUPERI;41101529;SIM\n" +
+"ANGIO RM VENOSA DE PELVE;41101600;SIM\n" +
+"RM TORNOZELO ESQUERDO C/ CONTR;41101316;SIM\n" +
+"RM ATM (BILATERAL) COM CONTRASTE;41101103;SIM\n" +
+"USG DE AXILA;40901211;NÃO\n" +
+"RM SELA TURCICA;41101022;SIM\n" +
+"DOPPLER DE ARTERIAS RENAIS;40901394;SIM\n" +
+"CORE BIOPSY POR EXTEREOTAXIA;40808254;SIM\n" +
+"RM BRACO ESQUERDO;41101316;SIM\n" +
+"RM DE PELVE CONTRASTE;41101189;SIM\n" +
+"USG DE ARTICULACOES;40901220;NÃO\n" +
+"RM DE MAMAS COM PRÓTESE ;41101480;SIM\n" +
+"USG DE MAMAS C/ DOPPLER;40901386;SIM\n" +
+"FATOR V DE LEIDEN (SANGUE);40314057;SIM\n" +
+"ENTEROGRAFIA RM;41101189;SIM\n" +
+"FATOR V LEIDEN PCR;40314057;SIM\n" +
+"CALPROTECTINA FECAL;40303330;SIM\n" +
+"USG TRANSVAGINAL COM PREPARO INTESTINAL - ENDOMETRIOSE;40901300;NÃO\n" +
+"DOPPLER COL VENO MMB INFERI UNILATERAL;40901483;SIM\n" +
+"DOPPLER COL ARTE MMB INFERI UNILATERAL;40901475;SIM\n" +
+"USG PAREDE ABDOMINAL DOPPLER;40901386;SIM\n" +
+"CORE BIOPSY POR ESTEREOTAXIA;40808254;SIM\n" +
+"DOPPLER COL VENO MMB SUPER UNILATERAL;40901467;SIM\n" +
+"USG - ESTRUTURAS SUPERFICIAIS COM DOPPLER (CERVICAL OU MUSCULO OU TENDAO);40901386;SIM\n" +
+"RM AXILAS;41101480;SIM\n" +
+"USG DE ARTIC. PE ESQ. DOPPLER;40901386;SIM\n" +
+"USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM\n";
 
+        // LÓGICA DO POP-UP DE ATUALIZAÇÃO (RELEASE NOTES) E STARTUP
         window.onload = () => {
-            if(localStorage.getItem('versaoAuditoria') !== VERSAO_SISTEMA) {
+            let savedVersion = localStorage.getItem('coutinhoAppVersion');
+            if (savedVersion !== VERSAO_SISTEMA) {
                 document.getElementById('modalUpdate').style.display = 'flex';
             }
-            
+
             let salvo = localStorage.getItem('deparaFinalCoutinhoMemoria');
             if(salvo) { 
                 deparaMap = new Map(JSON.parse(salvo)); 
                 atualizarUIConfig();
             } else {
+                // CARREGA A BASE DE FÁBRICA SE TIVER VAZIO
                 Papa.parse(DEPARA_EMBUTIDO, {
                     skipEmptyLines: true,
                     complete: res => {
@@ -475,8 +569,7 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                             let partes = row.join(";").split(/[;,]/);
                             if(partes.length >= 2) {
                                 let chave = triturarAlfa(partes[0]);
-                                if(chave === "EXAME") return; 
-                                
+                                if(chave === "EXAME") return; // ignora a palavra cabeçalho
                                 let valor = String(partes[1]).replace(/\D/g, "").trim();
                                 let exigeSenha = partes[2] ? padronizarTexto(partes[2]).includes("SIM") : false;
                                 if(chave) deparaMap.set(chave, { cod: valor, reqAuth: exigeSenha });
@@ -489,106 +582,104 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             }
         };
 
-        function fecharUpdate() {
-            localStorage.setItem('versaoAuditoria', VERSAO_SISTEMA);
+        function fecharModalUpdate() {
+            localStorage.setItem('coutinhoAppVersion', VERSAO_SISTEMA);
             document.getElementById('modalUpdate').style.display = 'none';
         }
 
-        function copiarTexto(texto) {
-            if(navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(texto);
+        let arquivosKorus = [];
+        let arquivosOrizon = [];
+
+        function atualizarLabel(labelId, array) {
+            let lbl = document.getElementById(labelId);
+            if(array.length > 1) {
+                lbl.innerHTML = `📄 ${array.length} Arquivos Adicionados`;
+                lbl.classList.add('has-file');
+            } else if(array.length === 1) {
+                lbl.innerHTML = `📄 ${array[0].name}`;
+                lbl.classList.add('has-file');
             } else {
-                let tempInput = document.createElement("textarea");
-                tempInput.value = texto;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand("copy");
-                document.body.removeChild(tempInput);
+                lbl.innerHTML = "Selecionar Arquivos";
+                lbl.classList.remove('has-file');
             }
         }
 
-        async function atualizarProgresso(percentual, texto) {
-            document.getElementById('barra-progresso-container').style.display = 'flex';
-            document.getElementById('progresso-fill').style.width = percentual + '%';
-            document.getElementById('progresso-texto').innerText = texto;
-            await new Promise(r => setTimeout(r, 15));
-        }
+        document.getElementById('fKorus').addEventListener('change', function() {
+            arquivosKorus = Array.from(this.files);
+            atualizarLabel('lblKorus', arquivosKorus);
+        });
+        document.getElementById('fKorusAdd').addEventListener('change', function() {
+            arquivosKorus = arquivosKorus.concat(Array.from(this.files));
+            atualizarLabel('lblKorus', arquivosKorus);
+            this.value = ""; 
+        });
+
+        document.getElementById('fOrizon').addEventListener('change', function() {
+            arquivosOrizon = Array.from(this.files);
+            atualizarLabel('lblOrizon', arquivosOrizon);
+        });
+        document.getElementById('fOrizonAdd').addEventListener('change', function() {
+            arquivosOrizon = arquivosOrizon.concat(Array.from(this.files));
+            atualizarLabel('lblOrizon', arquivosOrizon);
+            this.value = "";
+        });
+
+        Chart.register(ChartDataLabels);
 
         let deparaMap = new Map();
         let divergenciasEncontradas = [];
         let relatorioCompleto = []; 
         let todosAtendimentosGlobais = []; 
+        let numControleInterface = 1; 
+        let idExportacao = 250; 
         let chartInstance = null;
 
-        function triturarAlfa(t) { return String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z0-9]/gi, "").toUpperCase(); }
-        function formatarMoeda(v) { return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
-        function extrairValor(t) { return parseFloat(String(t || 0).replace(/[^0-9\,\-]/g, '').replace(',', '.')) || 0; }
-        function padronizarTexto(t) { return String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim(); }
+        // ==========================================
+        // 💾 MOTOR DE GRAVAÇÃO BLINDADA DO STATUS KANBAN
+        // ==========================================
+        function alterarStatusAuditoria(chaveAtendimentoSegura, elementoSelect) {
+            let dbFresco = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
+            dbFresco[chaveAtendimentoSegura] = elementoSelect.value;
+            localStorage.setItem('statusAuditoriaCoutinho', JSON.stringify(dbFresco));
+            
+            elementoSelect.className = `status-badge status-${elementoSelect.value}`;
+        }
 
+        function abrirConfig() { document.getElementById('modalConfig').style.display = 'flex'; }
+        function fecharConfig() { document.getElementById('modalConfig').style.display = 'none'; }
+        
+        function atualizarUIConfig() {
+            document.getElementById('deparaCount').innerText = deparaMap.size;
+            let listHTML = '';
+            let count = 0;
+            for (let [chave, obj] of deparaMap.entries()) {
+                if(count > 100) { listHTML += `<div class="depara-item">... e mais ${deparaMap.size - 100} itens ocultos para performance.</div>`; break; }
+                
+                let codExibicao = typeof obj === 'object' ? obj.cod : obj;
+                let authTag = (typeof obj === 'object' && obj.reqAuth) ? ' <span style="color:#059669; font-size:0.8em;">[🔑 SIM]</span>' : '';
+
+                listHTML += `<div class="depara-item"><span class="depara-key">${chave}</span><span class="depara-val">➜ ${codExibicao}${authTag}</span></div>`;
+                count++;
+            }
+            if(deparaMap.size === 0) listHTML = '<div style="padding:15px; text-align:center; color:#94a3b8;">Nenhum código salvo na memória.</div>';
+            document.getElementById('deparaListUI').innerHTML = listHTML;
+        }
+
+        // ==========================================
+        // BOTÃO BAIXAR BASE
+        // ==========================================
         function baixarDeparaAtual() {
             if(deparaMap.size === 0) return alert("A base DEPARA está vazia.");
             let csv = "exame;str_codigo_amb_autorizacao;autorizacao\n";
             for (let [chave, obj] of deparaMap.entries()) {
                 let cod = typeof obj === 'object' ? obj.cod : obj;
                 let req = (typeof obj === 'object' && obj.reqAuth) ? "SIM" : "NAO";
-                csv += chave + ";" + cod + ";" + req + "\n";
+                csv += `${chave};${cod};${req}\n`;
             }
             let link = document.createElement("a");
-            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' }));
+            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' })); 
             link.download = "depara_atual.csv";
             link.click();
-        }
-
-        function processarUploadDepara(input) {
-            let file = input.files[0];
-            if (!file) return;
-            Papa.parse(file, { skipEmptyLines: true, complete: res => {
-                let novos = 0, atualizados = 0;
-                res.data.forEach(row => {
-                    let partes = row.join(";").split(/[;,]/);
-                    if(partes.length >= 2) {
-                        let chave = triturarAlfa(partes[0]);
-                        if(chave === "EXAME") return; 
-                        
-                        let valor = String(partes[1]).replace(/\D/g, "").trim();
-                        let exigeSenha = partes[2] ? padronizarTexto(partes[2]).includes("SIM") : false;
-                        
-                        if(chave && valor) {
-                            let objNovo = { cod: valor, reqAuth: exigeSenha };
-                            if(deparaMap.has(chave)) { 
-                                let old = deparaMap.get(chave);
-                                let oldCod = typeof old === 'object' ? old.cod : old;
-                                let oldReq = typeof old === 'object' ? old.reqAuth : false;
-                                if(oldCod !== valor || oldReq !== exigeSenha) atualizados++; 
-                            } else { novos++; }
-                            deparaMap.set(chave, objNovo);
-                        }
-                    }
-                });
-                localStorage.setItem('deparaFinalCoutinhoMemoria', JSON.stringify(Array.from(deparaMap.entries())));
-                atualizarUIConfig();
-                alert("✅ Base DEPARA Atualizada!\n\nNovos Códigos: " + novos + "\nAtualizados: " + atualizados + "\nTotal: " + deparaMap.size);
-                input.value = "";
-                input.nextElementSibling.innerHTML = "➕ Atualizar Base (CSV)";
-            }});
-        }
-
-        function abrirConfig() { document.getElementById('modalConfig').style.display = 'flex'; }
-        function fecharConfig() { document.getElementById('modalConfig').style.display = 'none'; }
-
-        function atualizarUIConfig() {
-            document.getElementById('deparaCount').innerText = deparaMap.size;
-            let listHTML = '';
-            let count = 0;
-            for (let [chave, obj] of deparaMap.entries()) {
-                if(count > 100) { listHTML += '<div class="depara-item">... e mais ' + (deparaMap.size - 100) + ' itens ocultos.</div>'; break; }
-                let codExibicao = typeof obj === 'object' ? obj.cod : obj;
-                let authTag = (typeof obj === 'object' && obj.reqAuth) ? ' <span style="color:#059669; font-size:0.8em;">[🔑 SIM]</span>' : '';
-                listHTML += '<div class="depara-item"><span class="depara-key">' + chave + '</span><span class="depara-val">➜ ' + codExibicao + authTag + '</span></div>';
-                count++;
-            }
-            if(deparaMap.size === 0) listHTML = '<div style="padding:15px; text-align:center; color:#94a3b8;">Nenhum código salvo na memória.</div>';
-            document.getElementById('deparaListUI').innerHTML = listHTML;
         }
 
         function limparDeparaMemoria() {
@@ -600,250 +691,797 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             }
         }
 
-        function gerarIdOrizon(nome, cod, cart) {
-            return triturarAlfa(nome).substring(0,3) + triturarAlfa(cod) + triturarAlfa(cart);
+        function processarUploadDepara(input) {
+            let file = input.files[0];
+            if (!file) return;
+            Papa.parse(file, { 
+                skipEmptyLines: true, 
+                complete: res => {
+                    let novos = 0, atualizados = 0;
+                    res.data.forEach(row => {
+                        let partes = row.join(";").split(/[;,]/);
+                        if(partes.length >= 2) {
+                            let chave = triturarAlfa(partes[0]);
+                            if(chave === "EXAME") return; // Ignora o cabeçalho "Exame"
+
+                            let valor = String(partes[1]).replace(/\D/g, "").trim();
+                            let exigeSenha = false;
+                            if(partes.length > 2) {
+                                let textoAuth = padronizarTexto(partes[2]);
+                                if(textoAuth === "SIM" || textoAuth === "S" || textoAuth === "TRUE") exigeSenha = true;
+                            }
+
+                            if(chave && valor) {
+                                let objNovo = { cod: valor, reqAuth: exigeSenha };
+
+                                if(deparaMap.has(chave)) { 
+                                    let oldEntry = deparaMap.get(chave);
+                                    let oldCod = typeof oldEntry === 'object' ? oldEntry.cod : oldEntry;
+                                    let oldReq = typeof oldEntry === 'object' ? oldEntry.reqAuth : false;
+                                    if(oldCod !== valor || oldReq !== exigeSenha) atualizados++; 
+                                } else { 
+                                    novos++; 
+                                }
+                                deparaMap.set(chave, objNovo);
+                            }
+                        }
+                    });
+                    localStorage.setItem('deparaFinalCoutinhoMemoria', JSON.stringify(Array.from(deparaMap.entries())));
+                    atualizarUIConfig();
+                    alert(`✅ Base DEPARA Atualizada!\n\nNovos Códigos Adicionados: ${novos}\nCódigos Atualizados: ${atualizados}\nTotal em Memória: ${deparaMap.size}`);
+                    input.value = "";
+                    input.nextElementSibling.innerHTML = "➕ Atualizar Base (CSV)";
+                }
+            });
         }
 
-        function gerarIdKorus(nome, cod, nomeExame, cart) {
-            let entry = deparaMap.get(triturarAlfa(nomeExame));
-            let codFinal = entry ? (typeof entry === 'object' ? entry.cod : entry) : triturarAlfa(cod);
-            return triturarAlfa(nome).substring(0,3) + codFinal + triturarAlfa(cart);
+        function formatarMoeda(valor) { return (valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+
+        function extrairValor(texto) {
+            if (texto === undefined || texto === null) return 0;
+            let str = String(texto).replace(/[^0-9\,\.\-]/g, ''); 
+            if (str.includes(',') && str.includes('.')) { str = str.replace(/\./g, '').replace(',', '.'); } 
+            else if (str.includes(',')) { str = str.replace(',', '.'); }
+            return parseFloat(str) || 0;
         }
 
-        async function lerMultiplasBases(files, nome) {
-            let d = [];
-            for (let f of files) {
-                let res = await new Promise(resolve => {
-                    if (f.name.endsWith('.csv')) Papa.parse(f, {header:true, skipEmptyLines:true, encoding:"ISO-8859-1", complete: r => resolve(r.data)});
-                    else {
-                        let r = new FileReader();
-                        r.onload = e => {
-                            let wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
-                            resolve(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {raw:false}));
-                        };
-                        r.readAsArrayBuffer(f);
-                    }
-                });
-                d = d.concat(res);
+        function padronizarTexto(texto) {
+            if (!texto) return "";
+            return String(texto).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/["']/g, "").replace(/\s+/g, ' ').toUpperCase().trim();
+        }
+
+        function triturarAlfa(texto) {
+            if (!texto) return "";
+            return padronizarTexto(texto).replace(/[^A-Z0-9]/g, "");
+        }
+
+        function buscarColuna(row, palavrasChave) {
+            if (!row) return "";
+            let cols = Object.keys(row);
+            for(let c of cols) {
+                let cLimpa = triturarAlfa(c);
+                for(let pk of palavrasChave) { if(cLimpa === pk) return row[c]; }
             }
-            return d;
-        }
-
-        function extrairData(t) {
-            let limpo = String(t || "").split(' ')[0].replace(/[^0-9\/\-]/g, '');
-            if(/^\d{5}$/.test(limpo)) {
-                let d = new Date(Math.round((parseFloat(limpo)-25569)*86400*1000));
-                return String(d.getUTCDate()).padStart(2,'0') + "/" + String(d.getUTCMonth()+1).padStart(2,'0') + "/" + d.getUTCFullYear();
-            }
-            return limpo || "N/A";
-        }
-
-        let arquivosKorus = [];
-        let arquivosOrizon = [];
-
-        function atualizarLabel(labelId, array) {
-            let lbl = document.getElementById(labelId);
-            if(array.length > 1) { lbl.innerHTML = "📄 " + array.length + " Arquivos Adicionados"; lbl.classList.add('has-file'); } 
-            else if(array.length === 1) { lbl.innerHTML = "📄 " + array[0].name; lbl.classList.add('has-file'); } 
-            else { lbl.innerHTML = "Selecionar Arquivos"; lbl.classList.remove('has-file'); }
-        }
-
-        document.getElementById('fKorus').addEventListener('change', function() { arquivosKorus = Array.from(this.files); atualizarLabel('lblKorus', arquivosKorus); });
-        document.getElementById('fKorusAdd').addEventListener('change', function() { arquivosKorus = arquivosKorus.concat(Array.from(this.files)); atualizarLabel('lblKorus', arquivosKorus); this.value = ""; });
-        document.getElementById('fOrizon').addEventListener('change', function() { arquivosOrizon = Array.from(this.files); atualizarLabel('lblOrizon', arquivosOrizon); });
-        document.getElementById('fOrizonAdd').addEventListener('change', function() { arquivosOrizon = arquivosOrizon.concat(Array.from(this.files)); atualizarLabel('lblOrizon', arquivosOrizon); this.value = ""; });
-
-        function alterarStatusAuditoria(chaveAtendimentoSegura, elementoSelect) {
-            let dbFresco = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
-            dbFresco[chaveAtendimentoSegura] = elementoSelect.value;
-            localStorage.setItem('statusAuditoriaCoutinho', JSON.stringify(dbFresco));
-            elementoSelect.className = "status-badge status-" + elementoSelect.value;
-        }
-
-        function buscarColuna(row, keys) {
-            let rKeys = Object.keys(row);
-            for(let k of keys) {
-                let match = rKeys.find(rk => triturarAlfa(rk).includes(triturarAlfa(k)));
-                if(match) return row[match];
+            for(let c of cols) {
+                let cLimpa = triturarAlfa(c);
+                for(let pk of palavrasChave) { if(cLimpa.includes(pk)) return row[c]; }
             }
             return "";
         }
 
+        function gerarIdOrizon(nome, codigoExame, carteirinha) {
+            let nomeBase = padronizarTexto(nome).replace(/[^A-Z]/g, "").substring(0, 3);
+            let cartBase = String(carteirinha || "").replace(/\D/g, "");
+            let codExameLimpo = String(codigoExame || "").replace(/[^A-Z0-9]/gi, "").trim();
+            return `${nomeBase}${codExameLimpo}${cartBase}`;
+        }
+
+        function gerarIdKorus(nome, codigoExame, nomeExame, carteirinha) {
+            let nomeBase = padronizarTexto(nome).replace(/[^A-Z]/g, "").substring(0, 3);
+            let codExameLimpo = String(codigoExame || "").replace(/[^A-Z0-9]/gi, "").trim();
+            let chaveDepara = triturarAlfa(nomeExame);
+            
+            let deparaEntry = deparaMap.get(chaveDepara);
+            let deparaCod = deparaEntry ? (typeof deparaEntry === 'object' ? deparaEntry.cod : deparaEntry) : undefined;
+            
+            let exameFinal = deparaCod ? deparaCod : codExameLimpo;
+            let cartStr = String(carteirinha || "").replace(/\D/g, "");
+            let cartBase = cartStr;
+            if (cartStr.length >= 10) {
+                let esquerda = cartStr.substring(0, 3);
+                let meio = cartStr.substr(cartStr.length - 8, 2); 
+                let direita = cartStr.slice(-3); 
+                cartBase = esquerda + meio + direita;
+            }
+            return `${nomeBase}${exameFinal}${cartBase}`;
+        }
+
+        function extrairData(texto) {
+            if (!texto) return "DATA_VAZIA";
+            let textoSemHora = String(texto).trim().split(' ')[0];
+            let limpo = textoSemHora.replace(/[^0-9\/\-]/g, ''); 
+            if (/^\d{5}$/.test(limpo)) { 
+                let d = new Date(Math.round((parseFloat(limpo) - 25569) * 86400 * 1000));
+                return `${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${d.getUTCFullYear()}`;
+            }
+            let matchBR = limpo.match(/(\d{2})[\/\-](\d{2})[\/\-](\d{4})/);
+            if (matchBR) return `${matchBR[1]}/${matchBR[2]}/${matchBR[3]}`;
+            let matchEN = limpo.match(/(\d{4})[\/\-](\d{2})[\/\-](\d{2})/);
+            if (matchEN) return `${matchEN[3]}/${matchEN[2]}/${matchEN[1]}`;
+            return "DATA_INVALIDA";
+        }
+
+        function dataParaTimestamp(dataStr) {
+            if(!dataStr || dataStr === "DATA_VAZIA" || dataStr === "DATA_INVALIDA") return 0;
+            let partes = dataStr.split('/');
+            if(partes.length === 3) {
+                let ts = new Date(partes[2], partes[1] - 1, partes[0]).getTime();
+                return isNaN(ts) ? 0 : ts;
+            }
+            return 0;
+        }
+
+        // ==========================================
+        // 🪓 GUILHOTINA DE CABEÇALHO PARA KORUS/ORIZON
+        // ==========================================
+        async function lerMultiplasBases(filesArray, nome) {
+            if (!filesArray || filesArray.length === 0) throw new Error(`Nenhum arquivo válido de ${nome} foi selecionado.`);
+            let todosDados = [];
+            for (let i = 0; i < filesArray.length; i++) {
+                let file = filesArray[i];
+                let dadosArquivo = await new Promise((resolve, reject) => {
+                    if (file.name.toLowerCase().endsWith('.csv')) {
+                        Papa.parse(file, { 
+                            header: true, 
+                            skipEmptyLines: true, 
+                            encoding: "ISO-8859-1",
+                            beforeFirstChunk: function(chunk) {
+                                let lines = chunk.split(/\r\n|\n|\r/);
+                                let headerIndex = 0;
+                                for(let j = 0; j < lines.length && j < 20; j++) {
+                                    let upper = lines[j].toUpperCase();
+                                    if(upper.includes('NUMATENDIMENTO') || upper.includes('NOMEPACIENTE') || upper.includes('BENEFICIARIO') || upper.includes('SITUACAO') || upper.includes('TIPODETRANSACAO')) {
+                                        headerIndex = j;
+                                        break;
+                                    }
+                                }
+                                return lines.slice(headerIndex).join("\n");
+                            },
+                            complete: r => resolve(r.data),
+                            error: e => reject(e)
+                        });
+                    } else {
+                        let reader = new FileReader();
+                        reader.onload = e => {
+                            try {
+                                let wb = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
+                                let sheet = wb.Sheets[wb.SheetNames[0]];
+                                let rawData = XLSX.utils.sheet_to_json(sheet, {header: 1});
+                                
+                                let headerIndex = 0;
+                                for(let j = 0; j < rawData.length && j < 20; j++) {
+                                    let rowStr = (rawData[j] || []).join(" ").toUpperCase();
+                                    if(rowStr.includes('NUMATENDIMENTO') || rowStr.includes('NOMEPACIENTE') || rowStr.includes('BENEFICIARIO') || rowStr.includes('SITUACAO') || rowStr.includes('TIPODETRANSACAO')) {
+                                        headerIndex = j;
+                                        break;
+                                    }
+                                }
+                                
+                                let finalData = XLSX.utils.sheet_to_json(sheet, {range: headerIndex, raw: false});
+                                resolve(finalData);
+                            } catch(err) { reject(err); }
+                        };
+                        reader.readAsArrayBuffer(file);
+                    }
+                });
+                todosDados = todosDados.concat(dadosArquivo);
+            }
+            return todosDados;
+        }
+
         async function iniciarVarredura() {
+            divergenciasEncontradas = []; 
+            relatorioCompleto = []; 
+            todosAtendimentosGlobais = [];
+            numControleInterface = 1;
+            idExportacao = 250;
+            
+            let alertasRecemNascidos = new Set();
+            let alertasSemDepara = new Set(); 
+
+            document.getElementById('resultados-container').innerHTML = '<div style="text-align:center; padding:40px; font-weight:600; color:#64748b;">Lendo Arquivos e Cruzando Lotes Financeiros...</div>';
+            
             try {
-                await atualizarProgresso(10, "Lendo arquivos...");
-                let korusRaw = await lerMultiplasBases(arquivosKorus, 'KORUS');
-                let orizonRaw = await lerMultiplasBases(arquivosOrizon, 'ORIZON');
+                let korus = await lerMultiplasBases(arquivosKorus, 'KORUS');
+                let orizon = await lerMultiplasBases(arquivosOrizon, 'OPERADORA');
 
                 let orizonMap = new Map();
-                orizonRaw.forEach(r => {
-                    let id = gerarIdOrizon(buscarColuna(r,['BENEFICIARIO','NOME']), buscarColuna(r,['PROCEDIMENTO','CODIGO']), buscarColuna(r,['NUMERO','CARTAO']));
-                    if(!orizonMap.has(id)) orizonMap.set(id, []);
-                    orizonMap.get(id).push({
-                        data: extrairData(buscarColuna(r,['DATA'])),
-                        auth: triturarAlfa(buscarColuna(r,['SENHAEXTERNA'])),
-                        qtde: parseFloat(buscarColuna(r,['QUANTIDADE'])) || 0,
-                        status: padronizarTexto(buscarColuna(r,['SITUACAO']))
-                    });
+                orizon.forEach(row => {
+                    let nome = buscarColuna(row, ['BENEFICIARIO', 'NOME']);
+                    let cod = buscarColuna(row, ['PROCEDIMENTO', 'CODIGO']);
+                    let cart = buscarColuna(row, ['NUMERO', 'CARTAO']);
+                    let status = padronizarTexto(buscarColuna(row, ['SITUACAO', 'STATUS']));
+                    let trans = padronizarTexto(buscarColuna(row, ['TIPODETRANSACAO', 'TIPOTRANSACAO', 'TRANSACAO'])); 
+                    let descOrizon = padronizarTexto(buscarColuna(row, ['DESCRICAO', 'MOTIVO'])); 
+                    
+                    let dataCrua = buscarColuna(row, ['DATA']); 
+                    let qtde = parseFloat(buscarColuna(row, ['QUANTIDADE', 'QTDE'])) || 0;
+                    let auth = padronizarTexto(buscarColuna(row, ['SENHAEXTERNA']));
+                    
+                    if(!nome) return;
+                    let id = gerarIdOrizon(nome, cod, cart);
+                    let dataLimpa = extrairData(dataCrua);
+                    
+                    if (!orizonMap.has(id)) orizonMap.set(id, []);
+                    orizonMap.get(id).push({ dataLimpa, dataCrua: dataCrua, ts: dataParaTimestamp(dataLimpa), status, trans, descOrizon, qtde, auth, rowOriginal: row });
                 });
 
                 let korusAgrupado = new Map();
-                korusRaw.forEach(r => {
-                    let atend = triturarAlfa(buscarColuna(r,['NUMATENDIMENTO']));
-                    if(!atend) return;
-                    if(!korusAgrupado.has(atend)) korusAgrupado.set(atend, {
-                        atend, unid: padronizarTexto(buscarColuna(r,['NOMEPOSTO'])), 
-                        pac: padronizarTexto(buscarColuna(r,['NOMEPACIENTE'])),
-                        cart: triturarAlfa(buscarColuna(r,['MATRICULA'])),
-                        senhas: new Set(), exames: [], exigeSenhaNaGuia: false
-                    });
-                    
-                    let nomeEx = buscarColuna(r,['NOMEEXAMEANEXO']);
-                    let deparaEntry = deparaMap.get(triturarAlfa(nomeEx));
-                    let o = korusAgrupado.get(atend);
-                    
-                    if(deparaEntry && deparaEntry.reqAuth) o.exigeSenhaNaGuia = true;
-                    let auth = triturarAlfa(buscarColuna(r,['AUTORIZACAO']));
-                    if(auth) o.senhas.add(auth);
+                let unidadesUnicas = new Set(); 
+                let datasUnicas = new Set();
+                let conveniosUnicos = new Set(); 
+                let listaAtendimentosPuros = new Set();
 
-                    o.exames.push({
-                        nome: nomeEx, cod: buscarColuna(r,['CODIGOAMB']),
-                        data: extrairData(buscarColuna(r,['DATAENTRADA'])),
-                        auth, valor: extrairValor(buscarColuna(r,['VALORCONVENIO'])),
-                        idK: gerarIdKorus(o.pac, buscarColuna(r,['CODIGOAMB']), nomeEx, o.cart),
-                        reqAuth: deparaEntry ? deparaEntry.reqAuth : false
+                korus.forEach(row => {
+                    let matriculaRaw = buscarColuna(row, ['MATRICULA', 'CARTEIRINHA']);
+                    if (String(matriculaRaw).toUpperCase().includes('E+')) throw new Error("Korus corrompido (E+). Importe o CSV bruto.");
+
+                    let nomeRaw = padronizarTexto(buscarColuna(row, ['NOMEPACIENTE', 'PACIENTE'])); 
+                    let atend = triturarAlfa(buscarColuna(row, ['NUMATENDIMENTO', 'ATENDIMENTO']));
+                    
+                    let dataNascRaw = buscarColuna(row, ['DATANASC', 'NASCIMENTO']);
+                    let dataNascLimpa = extrairData(dataNascRaw);
+
+                    if (!nomeRaw || !matriculaRaw || !atend) return;
+
+                    listaAtendimentosPuros.add(atend);
+
+                    let unidadeRaw = padronizarTexto(buscarColuna(row, ['IDPOSTO', 'NUMEROUNIDADE', 'POSTO', 'UNIDADE', 'UNID'])) || "NÃO INFORMADA";
+                    unidadesUnicas.add(unidadeRaw);
+
+                    let convenioRaw = padronizarTexto(buscarColuna(row, ['NOMECONVENIO', 'CONVENIO'])) || "NÃO INFORMADO";
+                    conveniosUnicos.add(convenioRaw);
+                    let planoRaw = padronizarTexto(buscarColuna(row, ['NOMEPLANO', 'PLANO'])) || "NÃO INFORMADO";
+
+                    let codAmb = buscarColuna(row, ['CODIGOAMB', 'CODIGOEXAME']);
+                    let nomeExame = padronizarTexto(buscarColuna(row, ['NOMEEXAME', 'EXAMEANEXO'])); 
+                    let dataKorusRaw = buscarColuna(row, ['DATAENTRADA', 'DATAFATURA', 'DATA']);
+                    let authKorus = padronizarTexto(buscarColuna(row, ['AUTORIZACAO']));
+                    
+                    let qtdeKorusRaw = buscarColuna(row, ['QUANTIDADE', 'QTDE']);
+                    let qtdeKorusLinha = qtdeKorusRaw ? parseFloat(qtdeKorusRaw) || 1 : 1;
+
+                    let valorRaw = buscarColuna(row, ['VALORCONVENIO', 'VALOR']);
+                    let valorNum = extrairValor(valorRaw);
+                    
+                    let chaveDepara = triturarAlfa(nomeExame);
+                    
+                    let deparaEntry = deparaMap.get(chaveDepara);
+                    let deparaCod = deparaEntry ? (typeof deparaEntry === 'object' ? deparaEntry.cod : deparaEntry) : undefined;
+                    // CHECA SE EXIGE SENHA NO NOVO FORMATO
+                    let deparaRequerSenha = deparaEntry ? (typeof deparaEntry === 'object' ? deparaEntry.reqAuth : false) : false;
+
+                    let codExameLimpo = String(codAmb).replace(/\D/g, "");
+                    let codExibicao = deparaCod ? deparaCod : codExameLimpo;
+
+                    let idGerado = gerarIdKorus(nomeRaw, codAmb, nomeExame, matriculaRaw);
+                    let dataKorusLimpa = extrairData(dataKorusRaw);
+                    
+                    if(dataKorusLimpa !== "DATA_VAZIA" && dataKorusLimpa !== "DATA_INVALIDA") datasUnicas.add(dataKorusLimpa);
+
+                    if (!korusAgrupado.has(atend)) {
+                        korusAgrupado.set(atend, { 
+                            atend: atend, unid: unidadeRaw, pac: nomeRaw, cart: padronizarTexto(matriculaRaw).replace(/\D/g, ""), 
+                            dataNasc: dataNascLimpa, convenio: convenioRaw, planos: new Set(), senhas: new Set(), 
+                            precisaDeSenhaNoAtendimento: false,
+                            exames: new Map() 
+                        });
+                    }
+                    
+                    let objAtend = korusAgrupado.get(atend);
+                    objAtend.planos.add(planoRaw); 
+                    
+                    // SE ALGUM EXAME EXIGIR, A GUIA TODA EXIGE
+                    if (deparaRequerSenha) {
+                        objAtend.precisaDeSenhaNoAtendimento = true;
+                    }
+
+                    let authLimpaParaSet = triturarAlfa(authKorus);
+                    if (authLimpaParaSet !== "") {
+                        objAtend.senhas.add(authLimpaParaSet);
+                    }
+                    
+                    let chaveExameUnico = idGerado + "_" + dataKorusLimpa + "_" + authKorus;
+                    
+                    if (!objAtend.exames.has(chaveExameUnico)) {
+                        objAtend.exames.set(chaveExameUnico, { 
+                            exame: nomeExame, cod: codExibicao, dataK: dataKorusLimpa, authK: authKorus, 
+                            reqAuth: deparaRequerSenha, // SALVA NO EXAME
+                            qtdeK: 0, valorK: 0, valorRawK: valorRaw, idBuscado: idGerado 
+                        });
+                    }
+                    objAtend.exames.get(chaveExameUnico).qtdeK += qtdeKorusLinha;
+                    objAtend.exames.get(chaveExameUnico).valorK += valorNum; 
+                });
+
+                todosAtendimentosGlobais = Array.from(korusAgrupado.values());
+
+                let comboUnid = document.getElementById('filtroUnid');
+                comboUnid.innerHTML = '<option value="ALL">Todas as Unidades</option>';
+                Array.from(unidadesUnicas).sort().forEach(u => {
+                    let opt = document.createElement('option'); opt.value = u; opt.textContent = u; comboUnid.appendChild(opt);
+                });
+
+                let comboData = document.getElementById('filtroData');
+                comboData.innerHTML = '<option value="ALL">Todas as Datas Registradas</option>';
+                Array.from(datasUnicas).sort((a,b) => dataParaTimestamp(a) - dataParaTimestamp(b)).forEach(d => {
+                    let opt = document.createElement('option'); opt.value = d; opt.textContent = d; comboData.appendChild(opt);
+                });
+
+                let comboConvenio = document.getElementById('filtroConvenio');
+                comboConvenio.innerHTML = '<option value="ALL">Todos os Convênios</option>';
+                Array.from(conveniosUnicos).sort().forEach(c => {
+                    let opt = document.createElement('option'); opt.value = c; opt.textContent = c; comboConvenio.appendChild(opt);
+                });
+
+                let datalistAtend = document.getElementById('listaAtend');
+                datalistAtend.innerHTML = '';
+                Array.from(listaAtendimentosPuros).sort().forEach(a => {
+                    let opt = document.createElement('option'); opt.value = a; datalistAtend.appendChild(opt);
+                });
+
+                let atendimentosFinais = new Map();
+
+                todosAtendimentosGlobais.forEach(atendimento => {
+                    let temMultiplosPlanos = atendimento.planos.size > 1;
+                    let temMultiplasSenhas = atendimento.senhas.size > 1;
+
+                    atendimento.exames.forEach(exKorus => {
+                        let historico = orizonMap.get(exKorus.idBuscado);
+                        let msgIncorreto = [];
+                        let tipoInc = [];
+                        
+                        let isAltoCusto = exKorus.valorK >= 500;
+                        if(isAltoCusto) tipoInc.push('ALTO_CUSTO');
+
+                        if(temMultiplosPlanos) {
+                            msgIncorreto.push("Múltiplos Planos na Guia");
+                            tipoInc.push('DIVERGENCIA_PLANO');
+                        }
+
+                        if(temMultiplasSenhas) {
+                            msgIncorreto.push("Múltiplas Senhas na Guia");
+                            tipoInc.push('MULTIPLAS_SENHAS');
+                        }
+
+                        if (String(exKorus.cod).startsWith('8')) {
+                            msgIncorreto.push(`Possível Código Sem Depara`);
+                            tipoInc.push('SEM_DEPARA');
+                            alertasSemDepara.add(`Atend: ${atendimento.atend} | Paciente: ${atendimento.pac} | Cód: ${exKorus.cod}`);
+                        }
+
+                        let oData = "N/A", oDataCrua = "N/A", oQtde = "N/A", oAuth = "N/A", oStatus = "N/A", oTrans = "N/A", oDesc = "N/A";
+
+                        let authK_limpa = triturarAlfa(exKorus.authK);
+                        let authO_limpa = "";
+
+                        if (!historico) {
+                            msgIncorreto.push("Não Localizado na Operadora");
+                            tipoInc.push('NAO_LOCALIZADO');
+                        } else {
+                            let tsKorus = dataParaTimestamp(exKorus.dataK);
+                            
+                            let melhor = null;
+                            let melhorScore = -999999;
+
+                            historico.forEach(reg => {
+                                let score = 0;
+                                let sTrans = String(reg.trans).toUpperCase();
+                                let sStatus = String(reg.status).toUpperCase();
+                                let sDesc = String(reg.descOrizon).toUpperCase();
+                                let sFull = Object.values(reg.rowOriginal).join(" ").toUpperCase();
+                                
+                                let isCancelado = sTrans.includes('CANCEL') || sStatus.includes('CANCEL') || sDesc.includes('CANCEL') || sFull.includes('CANCELAMENTO');
+                                let isNegado = sStatus.includes('NEGAD') || sStatus.includes('RECUSAD') || sStatus.includes('GLOSA');
+                                let isAutorizado = !isCancelado && !isNegado && (sStatus.includes('AUTORIZAD') || sStatus.includes('JUSTIFICAD') || sStatus.includes('PAG') || sStatus.includes('LIBERAD') || sStatus.includes('APROV'));
+                                
+                                if (isAutorizado) score += 100000;
+                                else if (isNegado) score += 10000; 
+                                else if (isCancelado) score -= 50000; 
+                                else score += 5000; 
+                                
+                                if (reg.qtde === exKorus.qtdeK && exKorus.qtdeK > 0) score += 5000;
+                                if (reg.qtde === 0) score -= 2000; 
+                                
+                                let diffDias = Math.abs(reg.ts - tsKorus) / (1000 * 3600 * 24);
+                                score -= (diffDias * 10); 
+                                
+                                if (score > melhorScore) {
+                                    melhorScore = score;
+                                    melhor = reg;
+                                }
+                            });
+
+                            oData = melhor.dataLimpa;
+                            oDataCrua = melhor.dataCrua || "-";
+                            oQtde = melhor.qtde;
+                            oAuth = melhor.auth || "-";
+                            oStatus = melhor.status || "-";
+                            oTrans = melhor.trans || "-";
+                            oDesc = melhor.descOrizon || "-";
+
+                            let strTransM = String(melhor.trans).toUpperCase();
+                            let strStatusM = String(melhor.status).toUpperCase();
+                            let strDescM = String(melhor.descOrizon).toUpperCase();
+                            let strFullM = Object.values(melhor.rowOriginal).join(" ").toUpperCase();
+                            
+                            let ehCancelado = strTransM.includes('CANCEL') || strStatusM.includes('CANCEL') || strDescM.includes('CANCEL') || strFullM.includes('CANCELAMENTO');
+                            let ehNegado = strStatusM.includes('NEGAD') || strStatusM.includes('RECUSAD') || strStatusM.includes('GLOSA');
+                            let ehAutorizado = !ehCancelado && !ehNegado && (strStatusM.includes('AUTORIZAD') || strStatusM.includes('JUSTIFICAD') || strStatusM.includes('PAG') || strStatusM.includes('LIBERAD') || strStatusM.includes('APROV'));
+                            
+                            if (ehCancelado) {
+                                msgIncorreto.push("Cancelado na Operadora");
+                                tipoInc.push('STATUS_INVALIDO');
+                            } else if (ehNegado) {
+                                msgIncorreto.push("Recusado/Negada");
+                                tipoInc.push('STATUS_INVALIDO');
+                            } else if (!ehAutorizado) {
+                                msgIncorreto.push("Status Pendente");
+                                tipoInc.push('STATUS_INVALIDO');
+                            }
+                            
+                            if (melhor.qtde === 0) {
+                                msgIncorreto.push(`Qtde Operadora Zerada`);
+                                tipoInc.push('DIVERGENCIA_QTDE');
+                            } else if (exKorus.qtdeK !== melhor.qtde) {
+                                msgIncorreto.push(`Qtde K:${exKorus.qtdeK} vs O:${melhor.qtde}`);
+                                tipoInc.push('DIVERGENCIA_QTDE');
+                            }
+
+                            if (melhor.ts !== tsKorus) { 
+                                msgIncorreto.push(`Data K:${exKorus.dataK} vs O:${melhor.dataLimpa}`);
+                                tipoInc.push('DIVERGENCIA_DATA');
+                            }
+
+                            authO_limpa = triturarAlfa(melhor.auth);
+                            
+                            // ==========================================
+                            // 🚨 REGRAS INTELIGENTES DE SENHA ATUALIZADAS
+                            // ==========================================
+                            if (exKorus.reqAuth) {
+                                if (authO_limpa === "") {
+                                    msgIncorreto.push("Senha em branco na Orizon");
+                                    tipoInc.push('SENHA_INVENTADA');
+                                } else if (authK_limpa !== "" && authK_limpa !== authO_limpa) {
+                                    msgIncorreto.push(`Senha K:${exKorus.authK} vs O:${melhor.auth}`);
+                                    tipoInc.push('DIVERGENCIA_AUTH');
+                                }
+                            } else {
+                                if (authK_limpa !== "" && authO_limpa !== "" && authK_limpa !== authO_limpa) {
+                                    msgIncorreto.push(`Senha K:${exKorus.authK} vs O:${melhor.auth}`);
+                                    tipoInc.push('DIVERGENCIA_AUTH');
+                                } else if (!atendimento.precisaDeSenhaNoAtendimento && authK_limpa !== "" && authO_limpa === "") {
+                                    msgIncorreto.push("Sem necessidade de autorização");
+                                    tipoInc.push('SENHA_INVENTADA');
+                                }
+                            }
+                        }
+
+                        if (atendimento.dataNasc !== "DATA_VAZIA" && atendimento.dataNasc !== "DATA_INVALIDA") {
+                            let tsNasc = dataParaTimestamp(atendimento.dataNasc);
+                            let tsExame = dataParaTimestamp(exKorus.dataK);
+                            let idadeAnos = (tsExame - tsNasc) / (1000 * 3600 * 24 * 365.25);
+                            
+                            if (idadeAnos < 1) {
+                                msgIncorreto.push(`Aviso: Recém-Nascido`);
+                                tipoInc.push('IDADE_INVALIDA');
+                                alertasRecemNascidos.add(`Atend: ${atendimento.atend} | Paciente: ${atendimento.pac}`); 
+                            }
+                        }
+
+                        let temErroReal = msgIncorreto.length > 0;
+                        let statusGeral = temErroReal ? msgIncorreto.join(' | ') : "CONCILIADO - OK";
+                        let conciliado = temErroReal ? "NÃO" : "OK";
+
+                        let arrPlanos = Array.from(atendimento.planos).join(', ');
+                        
+                        let varIsSenhaInventada = tipoInc.includes('SENHA_INVENTADA') ? "SIM" : "NAO";
+                        let varIsMultiplasSenhas = temMultiplasSenhas ? "SIM" : "NAO";
+
+                        relatorioCompleto.push({
+                            idExport: idExportacao++,
+                            convenio: atendimento.convenio, planos: arrPlanos,
+                            unid: atendimento.unid, atend: atendimento.atend, pac: atendimento.pac, cart: atendimento.cart, dataNasc: atendimento.dataNasc,
+                            codK: exKorus.cod, exameK: exKorus.exame, dataK: exKorus.dataK, qtdeK: exKorus.qtdeK, valorK: exKorus.valorK, valorRawK: exKorus.valorRawK, authK: exKorus.authK,
+                            dataO: oDataCrua, qtdeO: oQtde, authO: oAuth, statusO: oStatus, transO: oTrans, descO: oDesc,
+                            conciliado: conciliado, motivo: statusGeral,
+                            isSenhaInventada: varIsSenhaInventada,
+                            isMultiplasSenhas: varIsMultiplasSenhas
+                        });
+
+                        if (temErroReal || isAltoCusto) {
+                            if (!atendimentosFinais.has(atendimento.atend)) {
+                                atendimentosFinais.set(atendimento.atend, { 
+                                    idControle: numControleInterface++, unid: atendimento.unid, atend: atendimento.atend, 
+                                    pac: atendimento.pac, cart: atendimento.cart, dataNasc: atendimento.dataNasc, 
+                                    convenio: atendimento.convenio, planos: arrPlanos, incorretos: [] 
+                                });
+                            }
+                            atendimentosFinais.get(atendimento.atend).incorretos.push({ 
+                                exame: exKorus.exame, cod: exKorus.cod, dataK: exKorus.dataK, qtde: exKorus.qtdeK, valor: exKorus.valorK, authK: exKorus.authK,
+                                desc: statusGeral, qtdeIncorreta: exKorus.qtdeK, tipo: tipoInc.join(','), isErro: temErroReal,
+                                statusOrizon: oStatus, transOrizon: oTrans, descOrizon: oDesc 
+                            });
+                        }
                     });
                 });
 
-                await atualizarProgresso(60, "Cruzando dados...");
-                relatorioCompleto = []; divergenciasEncontradas = [];
-                let count = 0;
-                let total = korusAgrupado.size;
+                divergenciasEncontradas = Array.from(atendimentosFinais.values());
+                renderizarResultados(); 
+                
+                let mostrarModal = false;
+                let htmlAlertas = "";
 
-                for(let [atendId, guia] of korusAgrupado) {
-                    count++;
-                    if(count % 50 === 0) await atualizarProgresso(60 + (count/total)*30, "Processando guia " + count + "/" + total);
-                    
-                    let temMultSenha = guia.senhas.size > 1;
-                    let examesIncorretosGuia = [];
-
-                    guia.exames.forEach(ex => {
-                        let matches = orizonMap.get(ex.idK) || [];
-                        let m = matches[0]; 
-                        let msg = []; let tipo = [];
-
-                        if(!m) { msg.push("Não Localizado na Operadora"); tipo.push("NAO_LOCALIZADO"); }
-                        else {
-                            if(ex.reqAuth && !m.auth) { msg.push("Senha em branco na Orizon"); tipo.push("SENHA_INVENTADA"); }
-                            else if(!ex.reqAuth && ex.auth && !m.auth && !guia.exigeSenhaNaGuia) { msg.push("Sem necessidade de autorização"); tipo.push("SENHA_INVENTADA"); }
-                            else if(ex.auth && m.auth && ex.auth !== m.auth) { msg.push("Senha Divergente"); tipo.push("DIVERGENCIA_AUTH"); }
-                            
-                            if(m.status.includes("CANCEL") || m.status.includes("NEGAD")) { msg.push("Recusado na Operadora"); tipo.push("STATUS_INVALIDO"); }
-                        }
-                        if(temMultSenha) { msg.push("Múltiplas Senhas na Guia"); tipo.push("MULTIPLAS_SENHAS"); }
-                        if(String(ex.cod).startsWith("8")) { msg.push("Possível Cód. Sem Depara"); tipo.push("SEM_DEPARA"); }
-
-                        let erro = msg.length > 0;
-                        let itemRel = { 
-                            unid: guia.unid, atend: guia.atend, pac: guia.pac, cod: ex.cod, exame: ex.nome,
-                            valor: ex.valor, conciliado: erro ? "NÃO" : "SIM", motivo: msg.join(" | "),
-                            isMult: temMultSenha ? "SIM" : "NAO", isSenhaInv: tipo.includes("SENHA_INVENTADA") ? "SIM" : "NAO",
-                            tipo: tipo.join(",")
-                        };
-                        relatorioCompleto.push(itemRel);
-                        if(erro) examesIncorretosGuia.push({ ...ex, erroMsg: itemRel.motivo, tipo: itemRel.tipo });
+                if(alertasRecemNascidos.size > 0) {
+                    htmlAlertas += `<div style="padding: 12px; background: #fef2f2; border-left: 4px solid #ef4444; margin-bottom: 12px; border-radius: 4px;">
+                                        <h4 style="margin:0 0 8px 0; color:#b91c1c;">👶 Recém-Nascidos (< 1 ano)</h4>`;
+                    alertasRecemNascidos.forEach(a => {
+                        let textoLimpo = a.replace(/%/g, ' ').replace(/\s+/g, ' ');
+                        htmlAlertas += `<div style="font-size:0.85em; color:#7f1d1d; margin-bottom:4px; font-weight:600;">• ${textoLimpo}</div>`;
                     });
-
-                    if(examesIncorretosGuia.length > 0) {
-                        divergenciasEncontradas.push({ ...guia, incorretos: examesIncorretosGuia });
-                    }
+                    htmlAlertas += `</div>`;
+                    mostrarModal = true;
                 }
 
-                renderizarResultados();
-                await atualizarProgresso(100, "Concluído!");
-                setTimeout(() => document.getElementById('barra-progresso-container').style.display='none', 1000);
+                if(alertasSemDepara.size > 0) {
+                    htmlAlertas += `<div style="padding: 12px; background: #fffbeb; border-left: 4px solid #f59e0b; margin-bottom: 10px; border-radius: 4px;">
+                                        <h4 style="margin:0 0 8px 0; color:#b45309;">⚠️ Códigos Sem Depara (Inicia com 8)</h4>`;
+                    alertasSemDepara.forEach(a => {
+                        let textoLimpo = a.replace(/%/g, ' ').replace(/\s+/g, ' ');
+                        htmlAlertas += `<div style="font-size:0.85em; color:#92400e; margin-bottom:4px; font-weight:600;">• ${textoLimpo}</div>`;
+                    });
+                    htmlAlertas += `</div>`;
+                    mostrarModal = true;
+                }
 
-            } catch(e) { alert("Erro: " + e.message); }
+                if(mostrarModal) {
+                    document.getElementById('listaAlertasUI').innerHTML = htmlAlertas;
+                    setTimeout(() => { document.getElementById('modalAlerta').style.display = 'flex'; }, 500);
+                }
+
+            } catch (err) {
+                document.getElementById('resultados-container').innerHTML = `<div style="padding: 20px; background: #fee2e2; color: #b91c1c; border-radius: 8px; border: 1px solid #f87171;"><strong>ERRO CRÍTICO:</strong> ${err.message}</div>`;
+            }
         }
 
         function renderizarResultados() {
             let container = document.getElementById('resultados-container');
-            let html = "";
-            let stats = { incNaoLoc: 0, incStatus: 0, incData: 0, incQtde: 0, incAuth: 0, incSenhaInv: 0, incMult: 0, incDepara: 0, valor: 0 };
+            
+            let filtroCombo = document.getElementById('filtroTipo').value;
+            let filtroUnid = document.getElementById('filtroUnid').value;
+            let filtroData = document.getElementById('filtroData').value;
+            let filtroConv = document.getElementById('filtroConvenio').value;
+            let termoBusca = triturarAlfa(document.getElementById('filtroBusca').value);
             
             let dbStatus = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
-            let filtroStatus = document.getElementById('filtroStatus').value;
 
-            divergenciasEncontradas.forEach(g => {
-                let chaveUnicaStatusSegura = triturarAlfa(g.unid) + "_" + triturarAlfa(g.atend);
-                let statusSalvo = dbStatus[chaveUnicaStatusSegura] || 'DEFAULT';
-                
-                if (filtroStatus !== 'ALL' && statusSalvo !== filtroStatus) return;
+            let filtrados = [];
+            let valorTotalGeral = 0;
+            let examesTotalGeral = 0;
+            let atendTotalGeral = 0;
 
-                let htmlSeletorStatus = '<select class="status-badge status-' + statusSalvo + '" onclick="event.stopPropagation()" onchange="alterarStatusAuditoria(\'' + chaveUnicaStatusSegura + '\', this)">' +
-                        '<option value="DEFAULT" ' + (statusSalvo === 'DEFAULT' ? 'selected' : '') + '>STATUS</option>' +
-                        '<option value="AUSENTE" ' + (statusSalvo === 'AUSENTE' ? 'selected' : '') + '>Ausente</option>' +
-                        '<option value="PENDENTE" ' + (statusSalvo === 'PENDENTE' ? 'selected' : '') + '>Pendente</option>' +
-                        '<option value="CORRIGIDA" ' + (statusSalvo === 'CORRIGIDA' ? 'selected' : '') + '>Corrigida</option>' +
-                    '</select>';
-
-                let cardsHtml = g.incorretos.map(i => {
-                    stats.valor += i.valor;
-                    if(i.tipo.includes("NAO_LOCALIZADO")) stats.incNaoLoc++;
-                    if(i.tipo.includes("SENHA_INVENTADA")) stats.incSenhaInv++;
-                    if(i.tipo.includes("MULTIPLAS_SENHAS")) stats.incMult++;
+            if (filtroCombo === 'ALL') {
+                todosAtendimentosGlobais.forEach(atend => {
+                    let passaUnid = filtroUnid === 'ALL' || String(atend.unid).trim() === String(filtroUnid).trim();
+                    let passaConv = filtroConv === 'ALL' || String(atend.convenio).trim() === String(filtroConv).trim();
+                    let passaBusca = termoBusca === '' || atend.atend.includes(termoBusca);
                     
-                    return '<tr><td>' + i.cod + '</td><td>' + i.nome + '</td><td>' + formatarMoeda(i.valor) + '</td><td><span class="tag tag-danger">' + i.erroMsg + '</span></td></tr>';
+                    if (passaUnid && passaBusca && passaConv) {
+                        let examesValidosNaData = Array.from(atend.exames.values()).filter(ex => filtroData === 'ALL' || ex.dataK === filtroData);
+                        if (examesValidosNaData.length > 0) {
+                            atendTotalGeral++;
+                            examesValidosNaData.forEach(ex => {
+                                examesTotalGeral += ex.qtdeK;
+                                valorTotalGeral += ex.valorK;
+                            });
+                        }
+                    }
+                });
+            }
+
+            divergenciasEncontradas.forEach(atend => {
+                let incorretosFiltrados = atend.incorretos.filter(e => {
+                    let passaCombo = false;
+                    if(filtroCombo === 'ALL') passaCombo = e.isErro;
+                    else passaCombo = e.tipo.includes(filtroCombo);
+                    
+                    let passaData = filtroData === 'ALL' || e.dataK === filtroData;
+                    return passaCombo && passaData;
+                });
+
+                let passaUnid = filtroUnid === 'ALL' || String(atend.unid).trim() === String(filtroUnid).trim();
+                let passaConv = filtroConv === 'ALL' || String(atend.convenio).trim() === String(filtroConv).trim();
+                let passaBusca = termoBusca === '' || atend.atend.includes(termoBusca);
+
+                if (incorretosFiltrados.length > 0 && passaUnid && passaBusca && passaConv) {
+                    filtrados.push({ ...atend, incorretos: incorretosFiltrados });
+                }
+            });
+
+            let dynStats = { incNaoLoc: 0, incData: 0, incQtde: 0, incStatus: 0, incAuth: 0, incCancel: 0, incIdade: 0, incPlano: 0, incSemDepara: 0, incSenhaInv: 0, incMultSenha: 0, atendInc: 0, examesInc: 0, valorEmRisco: 0 };
+            
+            filtrados.forEach(atend => {
+                let temErroNesteAtend = false;
+                atend.incorretos.forEach(e => {
+                    let passaCombo = filtroCombo === 'ALL' ? e.isErro : e.tipo.includes(filtroCombo);
+                    
+                    if (passaCombo) {
+                        dynStats.examesInc += e.qtdeIncorreta;
+                        dynStats.valorEmRisco += e.valor;
+                        temErroNesteAtend = true;
+                        
+                        if(e.tipo.includes('NAO_LOCALIZADO')) dynStats.incNaoLoc += e.qtdeIncorreta;
+                        if(e.tipo.includes('DIVERGENCIA_DATA')) dynStats.incData += e.qtdeIncorreta;
+                        if(e.tipo.includes('DIVERGENCIA_QTDE')) dynStats.incQtde += e.qtdeIncorreta;
+                        if(e.tipo.includes('DIVERGENCIA_AUTH')) dynStats.incAuth += e.qtdeIncorreta;
+                        if(e.tipo.includes('STATUS_INVALIDO')) dynStats.incStatus += e.qtdeIncorreta;
+                        if(e.tipo.includes('IDADE_INVALIDA')) dynStats.incIdade += e.qtdeIncorreta;
+                        if(e.tipo.includes('DIVERGENCIA_PLANO')) dynStats.incPlano += e.qtdeIncorreta;
+                        if(e.tipo.includes('SEM_DEPARA')) dynStats.incSemDepara += e.qtdeIncorreta;
+                        if(e.tipo.includes('SENHA_INVENTADA')) dynStats.incSenhaInv += e.qtdeIncorreta;
+                        if(e.tipo.includes('MULTIPLAS_SENHAS')) dynStats.incMultSenha += e.qtdeIncorreta;
+                    }
+                });
+                if(temErroNesteAtend) dynStats.atendInc++;
+            });
+
+            if (filtroCombo !== 'ALL') {
+                atendTotalGeral = dynStats.atendInc;
+                examesTotalGeral = dynStats.examesInc;
+                valorTotalGeral = dynStats.valorEmRisco;
+            }
+
+            document.getElementById('kpi-atend-total').innerText = atendTotalGeral;
+            document.getElementById('kpi-exame-total').innerText = examesTotalGeral;
+            document.getElementById('kpi-valor-total').innerText = formatarMoeda(valorTotalGeral);
+            
+            document.getElementById('kpi-atend-inc').innerText = dynStats.atendInc;
+            document.getElementById('kpi-exame-inc').innerText = dynStats.examesInc;
+            document.getElementById('kpi-valor-inc').innerText = formatarMoeda(dynStats.valorEmRisco);
+            
+            desenharGrafico(dynStats);
+
+            container.innerHTML = '';
+            if(filtrados.length === 0) { 
+                container.innerHTML = '<div style="text-align:center; padding: 40px; color:#64748b; font-weight:600;">Nenhuma inconsistência encontrada com os filtros selecionados.</div>'; 
+                return; 
+            }
+
+            filtrados.forEach(d => {
+                let chaveUnicaStatusSegura = triturarAlfa(d.unid) + "_" + triturarAlfa(d.atend);
+                let statusSalvo = dbStatus[chaveUnicaStatusSegura] || 'DEFAULT';
+
+                let htmlSeletorStatus = `
+                    <select class="status-badge status-${statusSalvo}" onclick="event.stopPropagation()" onchange="alterarStatusAuditoria('${chaveUnicaStatusSegura}', this)">
+                        <option value="DEFAULT" ${statusSalvo === 'DEFAULT' ? 'selected' : ''}>STATUS</option>
+                        <option value="AUSENTE" ${statusSalvo === 'AUSENTE' ? 'selected' : ''}>Ausente</option>
+                        <option value="PENDENTE" ${statusSalvo === 'PENDENTE' ? 'selected' : ''}>Pendente</option>
+                        <option value="CORRIGIDA" ${statusSalvo === 'CORRIGIDA' ? 'selected' : ''}>Corrigida</option>
+                    </select>
+                `;
+
+                let detalhesHTML = d.incorretos.map(e => {
+                    let corTag = 'tag-warning';
+                    if (!e.isErro) corTag = 'tag-success';
+                    else if (e.tipo.includes('NAO_LOCALIZADO') || e.tipo.includes('STATUS_INVALIDO') || e.tipo.includes('IDADE_INVALIDA') || e.tipo.includes('DIVERGENCIA_PLANO') || e.tipo.includes('SEM_DEPARA') || e.tipo.includes('SENHA_INVENTADA') || e.tipo.includes('MULTIPLAS_SENHAS')) corTag = 'tag-danger';
+
+                    return `
+                    <tr><td>${e.cod}</td><td>${e.exame}</td><td>${e.dataK}</td><td>${e.qtdeIncorreta}</td>
+                    <td style="font-weight:bold; color: ${e.valor >= 500 ? 'var(--bradesco-dark)' : '#334155'};">${formatarMoeda(e.valor)}</td>
+                    <td><div style="font-weight:bold; color:var(--primary)">${e.statusOrizon || '-'}</div><div style="font-size:0.85em; color:#94a3b8;">${e.transOrizon || ''}</div></td>
+                    <td class="desc-texto" title="${e.descOrizon}">${e.descOrizon || '-'}</td>
+                    <td><span class="tag ${corTag}">${e.desc}</span></td></tr>
+                    `;
                 }).join('');
 
-                html += '<details><summary><div class="summary-title">' + htmlSeletorStatus + ' ' + g.unid + ' | Atend: ' + g.atend + ' <span class="copy-btn" onclick="copiarTexto(\'' + g.atend + '\'); event.stopPropagation();" title="Copiar Atendimento">📋</span> | ' + g.pac + '</div></summary>' +
-                         '<div class="details-content"><table><thead><tr><th>Cód</th><th>Exame</th><th>Valor</th><th>Motivo</th></tr></thead>' +
-                         '<tbody>' + cardsHtml + '</tbody></table></div></details>';
+                container.innerHTML += `
+                    <details>
+                        <summary>
+                            <div class="summary-title">
+                                ${htmlSeletorStatus}
+                                ${d.unid} [Atend: ${d.atend}] | Paciente: ${d.pac.replace(/%/g, ' ')}
+                            </div>
+                            <div style="color: #94a3b8; font-weight:bold;">[+] Expandir</div>
+                        </summary>
+                        <div class="details-content">
+                            <div class="info-row">
+                                <span><strong>Carteirinha:</strong> ${d.cart} | <strong>Nasc:</strong> ${d.dataNasc || '-'}</span>
+                                <span><strong>Convênio:</strong> ${d.convenio}</span>
+                                <span><strong>Plano(s):</strong> ${d.planos}</span>
+                            </div>
+                            <table>
+                                <thead><tr><th>Cód. Exame</th><th>Descrição Korus</th><th>Data Korus</th><th>Qtde</th><th>Valor (R$)</th><th>Status Operadora</th><th>Desc. Operadora</th><th>Status Auditoria</th></tr></thead>
+                                <tbody>${detalhesHTML}</tbody>
+                            </table>
+                        </div>
+                    </details>
+                `;
             });
-
-            container.innerHTML = html || '<div style="text-align:center; padding:50px;">Nenhuma guia encontrada para esse filtro!</div>';
-            document.getElementById('kpi-atend-total').innerText = todosAtendimentosGlobais.length;
-            document.getElementById('kpi-atend-inc').innerText = divergenciasEncontradas.length;
-            document.getElementById('kpi-valor-inc').innerText = formatarMoeda(stats.valor);
-            desenharGrafico(stats);
         }
 
-        function desenharGrafico(s) {
+        function desenharGrafico(dynStats) {
             let ctx = document.getElementById('errorChart').getContext('2d');
-            if(chartInstance) chartInstance.destroy();
-            chartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Não Localiz.', 'Senha Branco/Desn.', 'Múltiplas Senhas', 'Recusados'],
-                    datasets: [{
-                        data: [s.incNaoLoc, s.incSenhaInv, s.incMult, s.incStatus],
-                        backgroundColor: ['#cc092f', '#f59e0b', '#2563eb', '#1e293b']
-                    }]
-                },
-                options: { plugins: { legend: {display:false}, datalabels: {color:'#475569', font:{weight:'bold'}}} }
-            });
+            
+            if(chartInstance) {
+                chartInstance.data.labels = ['Não Localizado', 'Data Inc.', 'Qtde Inc.', 'Divergência Senha', 'Senha Branco / Desnecessária', 'Múltiplas Senhas', 'Recus./Cancel.', 'Idade Inc.', 'Múltiplos Planos', 'Sem Depara'];
+                chartInstance.data.datasets[0].data = [dynStats.incNaoLoc, dynStats.incData, dynStats.incQtde, dynStats.incAuth, dynStats.incSenhaInv, dynStats.incMultSenha, dynStats.incStatus, dynStats.incIdade, dynStats.incPlano, dynStats.incSemDepara];
+                chartInstance.update();
+            } else {
+                chartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Não Localizado', 'Data Inc.', 'Qtde Inc.', 'Divergência Senha', 'Senha Branco / Desnecessária', 'Múltiplas Senhas', 'Recus./Cancel.', 'Idade Inc.', 'Múltiplos Planos', 'Sem Depara'],
+                        datasets: [{
+                            data: [dynStats.incNaoLoc, dynStats.incData, dynStats.incQtde, dynStats.incAuth, dynStats.incSenhaInv, dynStats.incMultSenha, dynStats.incStatus, dynStats.incIdade, dynStats.incPlano, dynStats.incSemDepara],
+                            backgroundColor: ['#cc092f', '#d97706', '#d97706', '#d97706', '#ef4444', '#b91c1c', '#cc092f', '#8b5cf6', '#1e293b', '#f59e0b'],
+                            borderWidth: 0,
+                            borderRadius: { topLeft: 4, topRight: 4 }
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: { padding: { top: 30 } }, 
+                        plugins: {
+                            legend: { display: false },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'top',
+                                color: '#475569',
+                                font: { weight: 'bold', size: 14, family: 'Inter' }
+                            }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, display: false }, 
+                            x: { grid: { display: false }, ticks: { font: { family: 'Inter', weight: 600 } } }
+                        }
+                    }
+                });
+            }
         }
 
         function forcarTexto(val) {
             if(val === undefined || val === null || val === "" || val === "-") return "";
-            return '="' + val + '"';
+            return `="${val}"`;
         }
 
-        function exportarCSVCompleto() { gerarCSV(relatorioCompleto, "Relatorio_Auditoria_Completo.csv"); }
-        function exportarCSVIncorretos() { 
-            let err = relatorioCompleto.filter(r => r.conciliado === "NÃO");
-            if(err.length === 0) return alert("Nenhuma inconsistência.");
-            gerarCSV(err, "Relatorio_Inconsistencias.csv"); 
+        function exportarCSVCompleto() {
+            gerarCSV(relatorioCompleto, "Relatorio_Forense_Completo.csv");
         }
 
-        function gerarCSV(dados, nome) {
-            let csv = "Unidade;Atendimento;Paciente;Exame;Valor;Conciliado;Motivo;Multiplas Senhas;Senha Branco\n";
+        function exportarCSVIncorretos() {
+            let apenasErros = relatorioCompleto.filter(r => r.conciliado === "NÃO");
+            if(apenasErros.length === 0) return alert("Nenhuma inconsistência para exportar.");
+            gerarCSV(apenasErros, "Relatorio_Apenas_Incorretos.csv");
+        }
+
+        function gerarCSV(dados, nomeArquivo) {
+            if(dados.length === 0) return alert("Nenhum dado processado para exportar.");
+            
+            let dbStatus = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
+            
+            let csv = "ID Controle;Convênio;Plano(s);Unidade;Atendimento;Nome Paciente;Data Nasc.;Carteirinha;Cod Exame;Exame Korus;Data Korus;Qtde Korus;Valor Bruto Korus (Debug);Valor Final (R$);Auth Korus;Data Operadora;Qtde Operadora;Auth Operadora;Status Operadora;Transacao Operadora;Descricao Operadora;Conciliado;Motivo Inconsistencia;Status Correcao (Kanban);Senha Inventada (Korus Sim / Orizon Nao);Multiplas Senhas no Atendimento\n";
+            
             dados.forEach(r => {
-                csv += r.unid + ";" + r.atend + ";" + r.pac + ";" + r.exame + ";" + r.valor.toFixed(2).replace('.',',') + ";" + r.conciliado + ";" + r.motivo + ";" + r.isMult + ";" + r.isSenhaInv + "\n";
+                let chaveUnicaStatusSegura = triturarAlfa(r.unid) + "_" + triturarAlfa(r.atend);
+                let statusMemoria = dbStatus[chaveUnicaStatusSegura] || "SEM STATUS";
+                
+                csv += `${r.idExport};${r.convenio};${r.planos};${r.unid};${r.atend};${r.pac.replace(/%/g, ' ')};${r.dataNasc};${forcarTexto(r.cart)};${r.codK};${r.exameK};${r.dataK};${r.qtdeK};${forcarTexto(r.valorRawK)};${r.valorK.toFixed(2).replace('.',',')};${forcarTexto(r.authK)};${r.dataO};${r.qtdeO};${forcarTexto(r.authO)};${r.statusO};${forcarTexto(r.transO)};${forcarTexto(r.descO)};${r.conciliado};${r.motivo};${statusMemoria};${r.isSenhaInventada};${r.isMultiplasSenhas}\n`;
             });
+            
             let link = document.createElement("a");
-            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' }));
-            link.download = nome;
+            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' })); 
+            link.download = nomeArquivo;
             link.click();
         }
     </script>
