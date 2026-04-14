@@ -139,7 +139,7 @@
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
         }
 
-        /* FILTROS E LUPA */
+        /* FILTROS, LUPA E BOTÃO COPIAR */
         .filters-container { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .filter-input { padding: 10px 12px; border-radius: 4px; border: 1px solid #cbd5e1; font-weight: 600; color: #334155; font-size: 0.85em; flex: 1; min-width: 140px; outline: none; font-family: inherit; transition: 0.2s;}
         .filter-input:focus { border-color: var(--bradesco); }
@@ -149,6 +149,9 @@
         .search-bar:focus { border-color: var(--bradesco); }
         .btn-search { background: var(--primary); color: white; border: none; padding: 0 18px; border-radius: 0 4px 4px 0; cursor: pointer; font-size: 1.1em; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .btn-search:hover { background: #0f172a; }
+
+        .copy-btn { cursor: pointer; background: none; border: none; font-size: 1em; color: #94a3b8; transition: 0.2s; padding: 0 4px; vertical-align: middle; }
+        .copy-btn:hover { color: var(--accent); transform: scale(1.1); }
         
         /* RESULTADOS */
         details { background: white; margin-bottom: 10px; border-radius: 6px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
@@ -202,21 +205,17 @@
         <div class="modal-content" style="border-top: 5px solid var(--accent);">
             
             <div class="modal-header">
-                <h2>🚀 Novidades da Versão 2.3</h2>
+                <h2>🚀 Novidades da Versão 2.4</h2>
                 <button class="close-btn" onclick="fecharUpdate()">×</button>
             </div>
             <div class="release-list">
                 <div class="release-item">
-                    <h4>Primeiro acesso já vem com depara</h4>
-                    <p> O sistema agora carrega uma base DEPARA de fábrica no primeiro acesso.</p>
+                    <h4>Filtro de Correção</h4>
+                    <p>Agora você pode filtrar a tela no menu superior para mostrar apenas os atendimentos "Pendentes", "Ausentes" ou "Corrigidos", ajudando a limpar o lote mais rápido.</p>
                 </div>
                 <div class="release-item">
-                    <h4>Baixar e Atualizar o DEPARA</h4>
-                    <p>Adicionado o botão "Baixar Base Atual" nas configurações. Agora você pode extrair o que o robô sabe no formato exato (Exame;Codigo;SIM/NAO), editar no Excel e subir de volta.</p>
-                </div>
-                <div class="release-item">
-                    <h4>Regras Inteligentes de Senha</h4>
-                    <p>O motor usa a 3ª coluna do DEPARA (SIM/NAO). Se um exame exige senha e a Orizon vem vazia, ele acusa "Senha em branco na Orizon". Se nenhum exame da guia exige senha, mas foi enviado preenchido, ele acusa "Sem necessidade de autorização".</p>
+                    <h4>Cópia Rápida 📋</h4>
+                    <p>Adicionamos um ícone de prancheta ao lado do Atendimento e da Carteirinha. Basta clicar nele para copiar o número direto para a memória do seu computador.</p>
                 </div>
             </div>
             <button class="btn" style="background: var(--accent); color: white; border: none; padding: 12px; margin-top: 10px;" onclick="fecharUpdate()">Ciente das Novidades</button>
@@ -325,6 +324,14 @@
     </div>
 
     <div class="filters-container">
+        <select id="filtroStatus" class="filter-input" onchange="renderizarResultados()">
+            <option value="ALL">Todos os Status</option>
+            <option value="DEFAULT">Sem Status</option>
+            <option value="PENDENTE">Pendente</option>
+            <option value="AUSENTE">Ausente</option>
+            <option value="CORRIGIDA">Corrigida</option>
+        </select>
+
         <select id="filtroConvenio" class="filter-input" onchange="renderizarResultados()">
             <option value="ALL">Todos os Convênios</option>
         </select>
@@ -389,12 +396,10 @@
             }
         })();
 
-        const VERSAO_SISTEMA = "2.3";
+        const VERSAO_SISTEMA = "2.4";
         
-        // ==========================================
-        // BASE DEPARA EMBUTIDA DE FÁBRICA
-        // ==========================================
-        const DEPARA_EMBUTIDO = `exame;str_codigo;autorizacao
+        // BASE DEPARA EMBUTIDA PARA QUANDO A MEMÓRIA ESTIVER VAZIA
+        const DEPARA_EMBUTIDO = `exame;str_codigo_amb_autorizacao;autorizacao
 USG DE TIREOIDE;40901203;NÃO
 USG DE ABDOMEN TOTAL;40901122;NÃO
 USG DE MAMAS;40901114;NÃO
@@ -563,7 +568,7 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                 deparaMap = new Map(JSON.parse(salvo)); 
                 atualizarUIConfig();
             } else {
-                // CARREGA A BASE PADRÃO EMBUTIDA NO CÓDIGO
+                // Carrega a base padrão embutida no código para não ficar vazio
                 Papa.parse(DEPARA_EMBUTIDO, {
                     skipEmptyLines: true,
                     complete: res => {
@@ -571,7 +576,7 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                             let partes = row.join(";").split(/[;,]/);
                             if(partes.length >= 2) {
                                 let chave = triturarAlfa(partes[0]);
-                                if(chave === "EXAME") return; // Ignora o cabeçalho
+                                if(chave === "EXAME") return; // Ignora o cabeçalho da base embutida
                                 
                                 let valor = String(partes[1]).replace(/\D/g, "").trim();
                                 let exigeSenha = partes[2] ? padronizarTexto(partes[2]).includes("SIM") : false;
@@ -590,11 +595,27 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             document.getElementById('modalUpdate').style.display = 'none';
         }
 
+        // PROGRESSO ASSINCRONO PARA NÃO TRAVAR A TELA
         async function atualizarProgresso(percentual, texto) {
             document.getElementById('barra-progresso-container').style.display = 'flex';
             document.getElementById('progresso-fill').style.width = percentual + '%';
             document.getElementById('progresso-texto').innerText = texto;
-            await new Promise(r => setTimeout(r, 15));
+            await new Promise(resolve => requestAnimationFrame(resolve));
+            await new Promise(resolve => setTimeout(resolve, 10));
+        }
+
+        // FUNÇÃO DE CÓPIA RÁPIDA (ÁREA DE TRANSFERÊNCIA)
+        function copiarTexto(texto) {
+            if(navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(texto);
+            } else {
+                let tempInput = document.createElement("textarea");
+                tempInput.value = texto;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+            }
         }
 
         let arquivosKorus = [];
@@ -640,21 +661,68 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
         let divergenciasEncontradas = [];
         let relatorioCompleto = []; 
         let todosAtendimentosGlobais = []; 
-        let numControleInterface = 1; 
-        let idExportacao = 250; 
         let chartInstance = null;
 
-        function alterarStatusAuditoria(chaveAtendimentoSegura, elementoSelect) {
-            let dbFresco = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
-            dbFresco[chaveAtendimentoSegura] = elementoSelect.value;
-            localStorage.setItem('statusAuditoriaCoutinho', JSON.stringify(dbFresco));
-            
-            elementoSelect.className = `status-badge status-${elementoSelect.value}`;
+        function triturarAlfa(t) { return String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z0-9]/gi, "").toUpperCase(); }
+        function formatarMoeda(v) { return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+        function extrairValor(t) { return parseFloat(String(t || 0).replace(/[^0-9\,\-]/g, '').replace(',', '.')) || 0; }
+        function padronizarTexto(t) { return String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim(); }
+
+        function baixarDeparaAtual() {
+            if(deparaMap.size === 0) return alert("A base DEPARA está vazia.");
+            let csv = "exame;str_codigo_amb_autorizacao;autorizacao\n";
+            for (let [chave, obj] of deparaMap.entries()) {
+                let cod = typeof obj === 'object' ? obj.cod : obj;
+                let req = (typeof obj === 'object' && obj.reqAuth) ? "SIM" : "NAO";
+                csv += `${chave};${cod};${req}\n`;
+            }
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' })); 
+            link.download = "depara_atual.csv";
+            link.click();
         }
 
-        function abrirConfig() { document.getElementById('modalConfig').style.display = 'flex'; }
-        function fecharConfig() { document.getElementById('modalConfig').style.display = 'none'; }
-        
+        function processarUploadDepara(input) {
+            let file = input.files[0];
+            if (!file) return;
+            Papa.parse(file, { skipEmptyLines: true, complete: res => {
+                let novos = 0, atualizados = 0;
+                res.data.forEach(row => {
+                    let partes = row.join(";").split(/[;,]/);
+                    if(partes.length >= 2) {
+                        let chave = triturarAlfa(partes[0]);
+                        if(chave === "EXAME") return; 
+                        
+                        let valor = String(partes[1]).replace(/\D/g, "").trim();
+                        let exigeSenha = false;
+                        if(partes.length > 2) {
+                            let textoAuth = padronizarTexto(partes[2]);
+                            if(textoAuth === "SIM" || textoAuth === "S" || textoAuth === "TRUE") exigeSenha = true;
+                        }
+
+                        if(chave && valor) {
+                            let objNovo = { cod: valor, reqAuth: exigeSenha };
+
+                            if(deparaMap.has(chave)) { 
+                                let oldEntry = deparaMap.get(chave);
+                                let oldCod = typeof oldEntry === 'object' ? oldEntry.cod : oldEntry;
+                                let oldReq = typeof oldEntry === 'object' ? oldEntry.reqAuth : false;
+                                if(oldCod !== valor || oldReq !== exigeSenha) atualizados++; 
+                            } else { 
+                                novos++; 
+                            }
+                            deparaMap.set(chave, objNovo);
+                        }
+                    }
+                });
+                localStorage.setItem('deparaFinalCoutinhoMemoria', JSON.stringify(Array.from(deparaMap.entries())));
+                atualizarUIConfig();
+                alert(`✅ Base DEPARA Atualizada!\n\nNovos Códigos Adicionados: ${novos}\nCódigos Atualizados: ${atualizados}\nTotal em Memória: ${deparaMap.size}`);
+                input.value = "";
+                input.nextElementSibling.innerHTML = "➕ Atualizar Base (CSV)";
+            }});
+        }
+
         function atualizarUIConfig() {
             document.getElementById('deparaCount').innerText = deparaMap.size;
             let listHTML = '';
@@ -672,21 +740,6 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             document.getElementById('deparaListUI').innerHTML = listHTML;
         }
 
-        // DOWNLOAD DA BASE ATUAL CORRIGIDO
-        function baixarDeparaAtual() {
-            if(deparaMap.size === 0) return alert("A base DEPARA está vazia.");
-            let csv = "exame;str_codigo;autorizacao\n";
-            for (let [chave, obj] of deparaMap.entries()) {
-                let cod = typeof obj === 'object' ? obj.cod : obj;
-                let req = (typeof obj === 'object' && obj.reqAuth) ? "SIM" : "NAO";
-                csv += `${chave};${cod};${req}\n`;
-            }
-            let link = document.createElement("a");
-            link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' })); 
-            link.download = "depara_atual.csv";
-            link.click();
-        }
-
         function limparDeparaMemoria() {
             if(confirm("Tem certeza que deseja APAGAR toda a base DEPARA do navegador?")) {
                 deparaMap.clear();
@@ -696,68 +749,52 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             }
         }
 
-        function processarUploadDepara(input) {
-            let file = input.files[0];
-            if (!file) return;
-            Papa.parse(file, { 
-                skipEmptyLines: true, 
-                complete: res => {
-                    let novos = 0, atualizados = 0;
-                    res.data.forEach(row => {
-                        let partes = row.join(";").split(/[;,]/);
-                        if(partes.length >= 2) {
-                            let chave = triturarAlfa(partes[0]);
-                            if(chave === "EXAME") return; // Ignora cabeçalho ao importar
-                            
-                            let valor = String(partes[1]).replace(/\D/g, "").trim();
-                            let exigeSenha = false;
-                            if(partes.length > 2) {
-                                let textoAuth = padronizarTexto(partes[2]);
-                                if(textoAuth === "SIM" || textoAuth === "S" || textoAuth === "TRUE") exigeSenha = true;
-                            }
+        function abrirConfig() { document.getElementById('modalConfig').style.display = 'flex'; }
+        function fecharConfig() { document.getElementById('modalConfig').style.display = 'none'; }
 
-                            if(chave && valor) {
-                                let objNovo = { cod: valor, reqAuth: exigeSenha };
-
-                                if(deparaMap.has(chave)) { 
-                                    let oldEntry = deparaMap.get(chave);
-                                    let oldCod = typeof oldEntry === 'object' ? oldEntry.cod : oldEntry;
-                                    let oldReq = typeof oldEntry === 'object' ? oldEntry.reqAuth : false;
-                                    if(oldCod !== valor || oldReq !== exigeSenha) atualizados++; 
-                                } else { 
-                                    novos++; 
-                                }
-                                deparaMap.set(chave, objNovo);
-                            }
-                        }
-                    });
-                    localStorage.setItem('deparaFinalCoutinhoMemoria', JSON.stringify(Array.from(deparaMap.entries())));
-                    atualizarUIConfig();
-                    alert(`✅ Base DEPARA Atualizada!\n\nNovos Códigos Adicionados: ${novos}\nCódigos Atualizados: ${atualizados}\nTotal em Memória: ${deparaMap.size}`);
-                    input.value = "";
-                    input.nextElementSibling.innerHTML = "➕ Atualizar Base (CSV)";
-                }
-            });
+        function alterarStatusAuditoria(chaveAtendimentoSegura, elementoSelect) {
+            let dbFresco = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
+            dbFresco[chaveAtendimentoSegura] = elementoSelect.value;
+            localStorage.setItem('statusAuditoriaCoutinho', JSON.stringify(dbFresco));
+            elementoSelect.className = `status-badge status-${elementoSelect.value}`;
         }
 
-        function formatarMoeda(valor) { return (valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
-
-        function extrairValor(texto) {
-            if (texto === undefined || texto === null) return 0;
-            let str = String(texto).replace(/[^0-9\,\.\-]/g, ''); 
-            if (str.includes(',') && str.includes('.')) { str = str.replace(/\./g, '').replace(',', '.'); } 
-            else if (str.includes(',')) { str = str.replace(',', '.'); }
-            return parseFloat(str) || 0;
+        function gerarIdOrizon(nome, cod, cart) {
+            return triturarAlfa(nome).substring(0,3) + triturarAlfa(cod) + triturarAlfa(cart);
         }
 
-        function padronizarTexto(texto) {
-            if (!texto) return "";
-            return String(texto).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/["']/g, "").replace(/\s+/g, ' ').toUpperCase().trim();
+        function gerarIdKorus(nome, cod, nomeExame, cart) {
+            let entry = deparaMap.get(triturarAlfa(nomeExame));
+            let codFinal = entry ? (typeof entry === 'object' ? entry.cod : entry) : triturarAlfa(cod);
+            return triturarAlfa(nome).substring(0,3) + codFinal + triturarAlfa(cart);
         }
 
-        function triturarAlfa(texto) {
-            if (!texto) return "";
-            return padronizarTexto(texto).replace(/[^A-Z0-9]/g, "");
+        async function lerMultiplasBases(files, nome) {
+            let d = [];
+            for (let f of files) {
+                let res = await new Promise(resolve => {
+                    if (f.name.endsWith('.csv')) Papa.parse(f, {header:true, skipEmptyLines:true, encoding:"ISO-8859-1", complete: r => resolve(r.data)});
+                    else {
+                        let r = new FileReader();
+                        r.onload = e => {
+                            let wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
+                            resolve(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {raw:false}));
+                        };
+                        r.readAsArrayBuffer(f);
+                    }
+                });
+                d = d.concat(res);
+            }
+            return d;
+        }
+
+        function extrairData(t) {
+            let limpo = String(t || "").split(' ')[0].replace(/[^0-9\/\-]/g, '');
+            if(/^\d{5}$/.test(limpo)) {
+                let d = new Date(Math.round((parseFloat(limpo)-25569)*86400*1000));
+                return `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}/${d.getUTCFullYear()}`;
+            }
+            return limpo || "N/A";
         }
 
         function buscarColuna(row, palavrasChave) {
@@ -774,120 +811,23 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             return "";
         }
 
-        function gerarIdOrizon(nome, codigoExame, carteirinha) {
-            let nomeBase = padronizarTexto(nome).replace(/[^A-Z]/g, "").substring(0, 3);
-            let cartBase = String(carteirinha || "").replace(/\D/g, "");
-            let codExameLimpo = String(codigoExame || "").replace(/[^A-Z0-9]/gi, "").trim();
-            return `${nomeBase}${codExameLimpo}${cartBase}`;
-        }
-
-        function gerarIdKorus(nome, codigoExame, nomeExame, carteirinha) {
-            let nomeBase = padronizarTexto(nome).replace(/[^A-Z]/g, "").substring(0, 3);
-            let codExameLimpo = String(codigoExame || "").replace(/[^A-Z0-9]/gi, "").trim();
-            let chaveDepara = triturarAlfa(nomeExame);
-            
-            let deparaEntry = deparaMap.get(chaveDepara);
-            let deparaCod = deparaEntry ? (typeof deparaEntry === 'object' ? deparaEntry.cod : deparaEntry) : undefined;
-            
-            let exameFinal = deparaCod ? deparaCod : codExameLimpo;
-            let cartStr = String(carteirinha || "").replace(/\D/g, "");
-            let cartBase = cartStr;
-            if (cartStr.length >= 10) {
-                let esquerda = cartStr.substring(0, 3);
-                let meio = cartStr.substr(cartStr.length - 8, 2); 
-                let direita = cartStr.slice(-3); 
-                cartBase = esquerda + meio + direita;
-            }
-            return `${nomeBase}${exameFinal}${cartBase}`;
-        }
-
-        function extrairData(texto) {
-            if (!texto) return "DATA_VAZIA";
-            let textoSemHora = String(texto).trim().split(' ')[0];
-            let limpo = textoSemHora.replace(/[^0-9\/\-]/g, ''); 
-            if (/^\d{5}$/.test(limpo)) { 
-                let d = new Date(Math.round((parseFloat(limpo) - 25569) * 86400 * 1000));
-                return `${String(d.getUTCDate()).padStart(2, '0')}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${d.getUTCFullYear()}`;
-            }
-            let matchBR = limpo.match(/(\d{2})[\/\-](\d{2})[\/\-](\d{4})/);
-            if (matchBR) return `${matchBR[1]}/${matchBR[2]}/${matchBR[3]}`;
-            let matchEN = limpo.match(/(\d{4})[\/\-](\d{2})[\/\-](\d{2})/);
-            if (matchEN) return `${matchEN[3]}/${matchEN[2]}/${matchEN[1]}`;
-            return "DATA_INVALIDA";
-        }
-
-        function dataParaTimestamp(dataStr) {
-            if(!dataStr || dataStr === "DATA_VAZIA" || dataStr === "DATA_INVALIDA") return 0;
-            let partes = dataStr.split('/');
-            if(partes.length === 3) {
-                let ts = new Date(partes[2], partes[1] - 1, partes[0]).getTime();
-                return isNaN(ts) ? 0 : ts;
-            }
-            return 0;
-        }
-
-        async function lerMultiplasBases(filesArray, nome) {
-            if (!filesArray || filesArray.length === 0) throw new Error(`Nenhum arquivo válido de ${nome} foi selecionado.`);
-            let todosDados = [];
-            for (let i = 0; i < filesArray.length; i++) {
-                let file = filesArray[i];
-                let dadosArquivo = await new Promise((resolve, reject) => {
-                    if (file.name.toLowerCase().endsWith('.csv')) {
-                        Papa.parse(file, { header: true, skipEmptyLines: true, encoding: "ISO-8859-1", complete: r => resolve(r.data) });
-                    } else {
-                        let reader = new FileReader();
-                        reader.onload = e => {
-                            let wb = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
-                            resolve(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {raw:false}));
-                        };
-                        reader.readAsArrayBuffer(file);
-                    }
-                });
-                todosDados = todosDados.concat(dadosArquivo);
-            }
-            return todosDados;
-        }
-
         async function iniciarVarredura() {
-            divergenciasEncontradas = []; 
-            relatorioCompleto = []; 
-            todosAtendimentosGlobais = [];
-            numControleInterface = 1;
-            idExportacao = 250;
-            
-            let alertasRecemNascidos = new Set();
-            let alertasSemDepara = new Set();
-
-            document.getElementById('resultados-container').innerHTML = '';
-            
             try {
-                await atualizarProgresso(10, 'Lendo arquivos Operadora...');
-                let orizon = await lerMultiplasBases(arquivosOrizon, 'OPERADORA');
+                await atualizarProgresso(10, "Lendo arquivos...");
+                let korusRaw = await lerMultiplasBases(arquivosKorus, 'KORUS');
+                let orizonRaw = await lerMultiplasBases(arquivosOrizon, 'ORIZON');
 
-                await atualizarProgresso(30, 'Mapeando Dados Orizon...');
                 let orizonMap = new Map();
-                orizon.forEach(row => {
-                    let nome = buscarColuna(row, ['BENEFICIARIO', 'NOME']);
-                    let cod = buscarColuna(row, ['PROCEDIMENTO', 'CODIGO']);
-                    let cart = buscarColuna(row, ['NUMERO', 'CARTAO']);
-                    let status = padronizarTexto(buscarColuna(row, ['SITUACAO', 'STATUS']));
-                    let trans = padronizarTexto(buscarColuna(row, ['TIPODETRANSACAO', 'TIPOTRANSACAO', 'TRANSACAO'])); 
-                    let descOrizon = padronizarTexto(buscarColuna(row, ['DESCRICAO', 'MOTIVO'])); 
-                    
-                    let dataCrua = buscarColuna(row, ['DATA']); 
-                    let qtde = parseFloat(buscarColuna(row, ['QUANTIDADE', 'QTDE'])) || 0;
-                    let auth = padronizarTexto(buscarColuna(row, ['SENHAEXTERNA']));
-                    
-                    if(!nome) return;
-                    let id = gerarIdOrizon(nome, cod, cart);
-                    let dataLimpa = extrairData(dataCrua);
-                    
-                    if (!orizonMap.has(id)) orizonMap.set(id, []);
-                    orizonMap.get(id).push({ dataLimpa, dataCrua: dataCrua, ts: dataParaTimestamp(dataLimpa), status, trans, descOrizon, qtde, auth, rowOriginal: row });
+                orizonRaw.forEach(r => {
+                    let id = gerarIdOrizon(buscarColuna(r,['BENEFICIARIO','NOME']), buscarColuna(r,['PROCEDIMENTO','CODIGO']), buscarColuna(r,['NUMERO','CARTAO']));
+                    if(!orizonMap.has(id)) orizonMap.set(id, []);
+                    orizonMap.get(id).push({
+                        data: extrairData(buscarColuna(r,['DATA'])),
+                        auth: triturarAlfa(buscarColuna(r,['SENHAEXTERNA'])),
+                        qtde: parseFloat(buscarColuna(r,['QUANTIDADE'])) || 0,
+                        status: padronizarTexto(buscarColuna(r,['SITUACAO']))
+                    });
                 });
-
-                await atualizarProgresso(50, 'Lendo arquivos Korus...');
-                let korus = await lerMultiplasBases(arquivosKorus, 'KORUS');
 
                 let korusAgrupado = new Map();
                 let unidadesUnicas = new Set(); 
@@ -895,344 +835,144 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                 let conveniosUnicos = new Set(); 
                 let listaAtendimentosPuros = new Set();
 
-                await atualizarProgresso(60, 'Cruzando Dados dos Hospitais...');
-                korus.forEach(row => {
-                    let matriculaRaw = buscarColuna(row, ['MATRICULA', 'CARTEIRINHA']);
-                    if (String(matriculaRaw).toUpperCase().includes('E+')) throw new Error("Korus corrompido (E+). Importe o CSV bruto.");
+                korusRaw.forEach(r => {
+                    let atend = triturarAlfa(buscarColuna(r,['NUMATENDIMENTO']));
+                    if(!atend) return;
 
-                    let nomeRaw = padronizarTexto(buscarColuna(row, ['NOMEPACIENTE', 'PACIENTE'])); 
-                    let atend = triturarAlfa(buscarColuna(row, ['NUMATENDIMENTO', 'ATENDIMENTO']));
-                    
-                    let dataNascRaw = buscarColuna(row, ['DATANASC', 'NASCIMENTO']);
-                    let dataNascLimpa = extrairData(dataNascRaw);
-
-                    if (!nomeRaw || !matriculaRaw || !atend) return;
+                    let matriculaRaw = buscarColuna(r, ['MATRICULA', 'CARTEIRINHA']);
+                    let nomeRaw = padronizarTexto(buscarColuna(r, ['NOMEPACIENTE', 'PACIENTE']));
+                    let unidadeRaw = padronizarTexto(buscarColuna(r, ['IDPOSTO', 'NUMEROUNIDADE', 'POSTO', 'UNIDADE', 'UNID'])) || "NÃO INFORMADA";
+                    let convenioRaw = padronizarTexto(buscarColuna(r, ['NOMECONVENIO', 'CONVENIO'])) || "NÃO INFORMADO";
+                    let planoRaw = padronizarTexto(buscarColuna(r, ['NOMEPLANO', 'PLANO'])) || "NÃO INFORMADO";
 
                     listaAtendimentosPuros.add(atend);
-
-                    let unidadeRaw = padronizarTexto(buscarColuna(row, ['IDPOSTO', 'NUMEROUNIDADE', 'POSTO', 'UNIDADE', 'UNID'])) || "NÃO INFORMADA";
                     unidadesUnicas.add(unidadeRaw);
-
-                    let convenioRaw = padronizarTexto(buscarColuna(row, ['NOMECONVENIO', 'CONVENIO'])) || "NÃO INFORMADO";
                     conveniosUnicos.add(convenioRaw);
-                    let planoRaw = padronizarTexto(buscarColuna(row, ['NOMEPLANO', 'PLANO'])) || "NÃO INFORMADO";
 
-                    let codAmb = buscarColuna(row, ['CODIGOAMB', 'CODIGOEXAME']);
-                    let nomeExame = padronizarTexto(buscarColuna(row, ['NOMEEXAME', 'EXAMEANEXO'])); 
-                    let dataKorusRaw = buscarColuna(row, ['DATAENTRADA', 'DATAFATURA', 'DATA']);
-                    let authKorus = padronizarTexto(buscarColuna(row, ['AUTORIZACAO']));
+                    if(!korusAgrupado.has(atend)) korusAgrupado.set(atend, {
+                        atend, unid: unidadeRaw, 
+                        pac: nomeRaw,
+                        cart: triturarAlfa(matriculaRaw),
+                        dataNasc: extrairData(buscarColuna(r, ['DATANASC', 'NASCIMENTO'])),
+                        convenio: convenioRaw,
+                        planos: new Set(),
+                        senhas: new Set(), exames: [], exigeSenhaNaGuia: false
+                    });
                     
-                    let qtdeKorusRaw = buscarColuna(row, ['QUANTIDADE', 'QTDE']);
-                    let qtdeKorusLinha = qtdeKorusRaw ? parseFloat(qtdeKorusRaw) || 1 : 1;
-
-                    let valorRaw = buscarColuna(row, ['VALORCONVENIO', 'VALOR']);
-                    let valorNum = extrairValor(valorRaw);
+                    let nomeEx = padronizarTexto(buscarColuna(r,['NOMEEXAMEANEXO', 'NOMEANEXO', 'NOMEEXAME']));
+                    let deparaEntry = deparaMap.get(triturarAlfa(nomeEx));
+                    let o = korusAgrupado.get(atend);
                     
-                    let chaveDepara = triturarAlfa(nomeExame);
+                    o.planos.add(planoRaw);
+                    if(deparaEntry && deparaEntry.reqAuth) o.exigeSenhaNaGuia = true;
                     
-                    let deparaEntry = deparaMap.get(chaveDepara);
-                    let deparaCod = deparaEntry ? (typeof deparaEntry === 'object' ? deparaEntry.cod : deparaEntry) : undefined;
-                    let deparaRequerSenha = deparaEntry ? (typeof deparaEntry === 'object' ? deparaEntry.reqAuth : false) : false;
+                    let auth = padronizarTexto(buscarColuna(r,['AUTORIZACAO']));
+                    let authLimpaParaSet = triturarAlfa(auth);
+                    if(authLimpaParaSet !== "") o.senhas.add(authLimpaParaSet);
 
-                    let codExameLimpo = String(codAmb).replace(/\D/g, "");
-                    let codExibicao = deparaCod ? deparaCod : codExameLimpo;
-
-                    let idGerado = gerarIdKorus(nomeRaw, codAmb, nomeExame, matriculaRaw);
+                    let codAmb = buscarColuna(r, ['CODIGOAMB', 'CODIGOEXAME']);
+                    let dataKorusRaw = buscarColuna(r, ['DATAENTRADA', 'DATAFATURA', 'DATA']);
                     let dataKorusLimpa = extrairData(dataKorusRaw);
-                    
                     if(dataKorusLimpa !== "DATA_VAZIA" && dataKorusLimpa !== "DATA_INVALIDA") datasUnicas.add(dataKorusLimpa);
 
-                    if (!korusAgrupado.has(atend)) {
-                        korusAgrupado.set(atend, { 
-                            atend: atend, unid: unidadeRaw, pac: nomeRaw, cart: padronizarTexto(matriculaRaw).replace(/\D/g, ""), 
-                            dataNasc: dataNascLimpa, convenio: convenioRaw, planos: new Set(), senhas: new Set(), 
-                            precisaDeSenhaNoAtendimento: false,
-                            exames: new Map() 
-                        });
-                    }
-                    
-                    let objAtend = korusAgrupado.get(atend);
-                    objAtend.planos.add(planoRaw); 
-                    
-                    if (deparaRequerSenha) {
-                        objAtend.precisaDeSenhaNoAtendimento = true;
-                    }
-
-                    let authLimpaParaSet = triturarAlfa(authKorus);
-                    if (authLimpaParaSet !== "") {
-                        objAtend.senhas.add(authLimpaParaSet);
-                    }
-                    
-                    let chaveExameUnico = idGerado + "_" + dataKorusLimpa + "_" + authKorus;
-                    
-                    if (!objAtend.exames.has(chaveExameUnico)) {
-                        objAtend.exames.set(chaveExameUnico, { 
-                            exame: nomeExame, cod: codExibicao, dataK: dataKorusLimpa, authK: authKorus, 
-                            reqAuth: deparaRequerSenha,
-                            qtdeK: 0, valorK: 0, valorRawK: valorRaw, idBuscado: idGerado 
-                        });
-                    }
-                    objAtend.exames.get(chaveExameUnico).qtdeK += qtdeKorusLinha;
-                    objAtend.exames.get(chaveExameUnico).valorK += valorNum; 
+                    o.exames.push({
+                        nome: nomeEx, cod: codAmb,
+                        data: dataKorusLimpa,
+                        auth, valor: extrairValor(buscarColuna(r,['VALORCONVENIO'])),
+                        qtde: parseFloat(buscarColuna(r, ['QUANTIDADE', 'QTDE', 'QTDANEXO'])) || 1,
+                        idK: gerarIdKorus(o.pac, codAmb, nomeEx, o.cart),
+                        reqAuth: deparaEntry ? deparaEntry.reqAuth : false
+                    });
                 });
 
                 todosAtendimentosGlobais = Array.from(korusAgrupado.values());
 
                 let comboUnid = document.getElementById('filtroUnid');
                 comboUnid.innerHTML = '<option value="ALL">Todas as Unidades</option>';
-                Array.from(unidadesUnicas).sort().forEach(u => {
-                    let opt = document.createElement('option'); opt.value = u; opt.textContent = u; comboUnid.appendChild(opt);
-                });
+                Array.from(unidadesUnicas).sort().forEach(u => { let opt = document.createElement('option'); opt.value = u; opt.textContent = u; comboUnid.appendChild(opt); });
 
                 let comboData = document.getElementById('filtroData');
-                comboData.innerHTML = '<option value="ALL">Todas as Datas Registradas</option>';
-                Array.from(datasUnicas).sort((a,b) => dataParaTimestamp(a) - dataParaTimestamp(b)).forEach(d => {
-                    let opt = document.createElement('option'); opt.value = d; opt.textContent = d; comboData.appendChild(opt);
-                });
+                comboData.innerHTML = '<option value="ALL">Todas as Datas</option>';
+                Array.from(datasUnicas).sort((a,b) => dataParaTimestamp(a) - dataParaTimestamp(b)).forEach(d => { let opt = document.createElement('option'); opt.value = d; opt.textContent = d; comboData.appendChild(opt); });
 
                 let comboConvenio = document.getElementById('filtroConvenio');
                 comboConvenio.innerHTML = '<option value="ALL">Todos os Convênios</option>';
-                Array.from(conveniosUnicos).sort().forEach(c => {
-                    let opt = document.createElement('option'); opt.value = c; opt.textContent = c; comboConvenio.appendChild(opt);
-                });
+                Array.from(conveniosUnicos).sort().forEach(c => { let opt = document.createElement('option'); opt.value = c; opt.textContent = c; comboConvenio.appendChild(opt); });
 
-                let datalistAtend = document.getElementById('listaAtend');
-                datalistAtend.innerHTML = '';
-                Array.from(listaAtendimentosPuros).sort().forEach(a => {
-                    let opt = document.createElement('option'); opt.value = a; datalistAtend.appendChild(opt);
-                });
+                await atualizarProgresso(60, "Cruzando dados...");
+                relatorioCompleto = []; divergenciasEncontradas = [];
+                let count = 0;
+                let total = korusAgrupado.size;
 
-                let atendimentosFinais = new Map();
+                for(let [atendId, guia] of korusAgrupado) {
+                    count++;
+                    if(count % 50 === 0) await atualizarProgresso(60 + (count/total)*30, `Processando guia ${count}/${total}`);
+                    
+                    let temMultSenha = guia.senhas.size > 1;
+                    let examesIncorretosGuia = [];
 
-                await atualizarProgresso(80, 'Calculando Inconsistências Financeiras...');
+                    guia.exames.forEach(ex => {
+                        let matches = orizonMap.get(ex.idK) || [];
+                        let m = matches[0]; 
+                        let msg = []; let tipo = [];
+                        let authK_limpa = triturarAlfa(ex.auth);
+                        let authO_limpa = m ? triturarAlfa(m.auth) : "";
 
-                todosAtendimentosGlobais.forEach(atendimento => {
-                    let temMultiplosPlanos = atendimento.planos.size > 1;
-                    let temMultiplasSenhas = atendimento.senhas.size > 1;
-
-                    atendimento.exames.forEach(exKorus => {
-                        let historico = orizonMap.get(exKorus.idBuscado);
-                        let msgIncorreto = [];
-                        let tipoInc = [];
-                        
-                        let isAltoCusto = exKorus.valorK >= 500;
-                        if(isAltoCusto) tipoInc.push('ALTO_CUSTO');
-
-                        if(temMultiplosPlanos) {
-                            msgIncorreto.push("Múltiplos Planos na Guia");
-                            tipoInc.push('DIVERGENCIA_PLANO');
-                        }
-
-                        if(temMultiplasSenhas) {
-                            msgIncorreto.push("Múltiplas Senhas na Guia");
-                            tipoInc.push('MULTIPLAS_SENHAS');
-                        }
-
-                        if (String(exKorus.cod).startsWith('8')) {
-                            msgIncorreto.push(`Possível Código Sem Depara`);
-                            tipoInc.push('SEM_DEPARA');
-                            alertasSemDepara.add(`Atend: ${atendimento.atend} | Paciente: ${atendimento.pac} | Cód: ${exKorus.cod}`);
-                        }
-
-                        let oData = "N/A", oDataCrua = "N/A", oQtde = "N/A", oAuth = "N/A", oStatus = "N/A", oTrans = "N/A", oDesc = "N/A";
-
-                        let authK_limpa = triturarAlfa(exKorus.authK);
-                        let authO_limpa = "";
-
-                        if (!historico) {
-                            msgIncorreto.push("Não Localizado na Operadora");
-                            tipoInc.push('NAO_LOCALIZADO');
-                        } else {
-                            let tsKorus = dataParaTimestamp(exKorus.dataK);
-                            
-                            let melhor = null;
-                            let melhorScore = -999999;
-
-                            historico.forEach(reg => {
-                                let score = 0;
-                                let sTrans = String(reg.trans).toUpperCase();
-                                let sStatus = String(reg.status).toUpperCase();
-                                let sDesc = String(reg.descOrizon).toUpperCase();
-                                let sFull = Object.values(reg.rowOriginal).join(" ").toUpperCase();
-                                
-                                let isCancelado = sTrans.includes('CANCEL') || sStatus.includes('CANCEL') || sDesc.includes('CANCEL') || sFull.includes('CANCELAMENTO');
-                                let isNegado = sStatus.includes('NEGAD') || sStatus.includes('RECUSAD') || sStatus.includes('GLOSA');
-                                let isAutorizado = !isCancelado && !isNegado && (sStatus.includes('AUTORIZAD') || sStatus.includes('JUSTIFICAD') || sStatus.includes('PAG') || sStatus.includes('LIBERAD') || sStatus.includes('APROV'));
-                                
-                                if (isAutorizado) score += 100000;
-                                else if (isNegado) score += 10000; 
-                                else if (isCancelado) score -= 50000; 
-                                else score += 5000; 
-                                
-                                if (reg.qtde === exKorus.qtdeK && exKorus.qtdeK > 0) score += 5000;
-                                if (reg.qtde === 0) score -= 2000; 
-                                
-                                let diffDias = Math.abs(reg.ts - tsKorus) / (1000 * 3600 * 24);
-                                score -= (diffDias * 10); 
-                                
-                                if (score > melhorScore) {
-                                    melhorScore = score;
-                                    melhor = reg;
-                                }
-                            });
-
-                            oData = melhor.dataLimpa;
-                            oDataCrua = melhor.dataCrua || "-";
-                            oQtde = melhor.qtde;
-                            oAuth = melhor.auth || "-";
-                            oStatus = melhor.status || "-";
-                            oTrans = melhor.trans || "-";
-                            oDesc = melhor.descOrizon || "-";
-
-                            let strTransM = String(melhor.trans).toUpperCase();
-                            let strStatusM = String(melhor.status).toUpperCase();
-                            let strDescM = String(melhor.descOrizon).toUpperCase();
-                            let strFullM = Object.values(melhor.rowOriginal).join(" ").toUpperCase();
-                            
-                            let ehCancelado = strTransM.includes('CANCEL') || strStatusM.includes('CANCEL') || strDescM.includes('CANCEL') || strFullM.includes('CANCELAMENTO');
-                            let ehNegado = strStatusM.includes('NEGAD') || strStatusM.includes('RECUSAD') || strStatusM.includes('GLOSA');
-                            let ehAutorizado = !ehCancelado && !ehNegado && (strStatusM.includes('AUTORIZAD') || strStatusM.includes('JUSTIFICAD') || strStatusM.includes('PAG') || strStatusM.includes('LIBERAD') || strStatusM.includes('APROV'));
-                            
-                            if (ehCancelado) {
-                                msgIncorreto.push("Cancelado na Operadora");
-                                tipoInc.push('STATUS_INVALIDO');
-                            } else if (ehNegado) {
-                                msgIncorreto.push("Recusado/Negada");
-                                tipoInc.push('STATUS_INVALIDO');
-                            } else if (!ehAutorizado) {
-                                msgIncorreto.push("Status Pendente");
-                                tipoInc.push('STATUS_INVALIDO');
-                            }
-                            
-                            if (melhor.qtde === 0) {
-                                msgIncorreto.push(`Qtde Operadora Zerada`);
-                                tipoInc.push('DIVERGENCIA_QTDE');
-                            } else if (exKorus.qtdeK !== melhor.qtde) {
-                                msgIncorreto.push(`Qtde K:${exKorus.qtdeK} vs O:${melhor.qtde}`);
-                                tipoInc.push('DIVERGENCIA_QTDE');
-                            }
-
-                            if (melhor.ts !== tsKorus) { 
-                                msgIncorreto.push(`Data K:${exKorus.dataK} vs O:${melhor.dataLimpa}`);
-                                tipoInc.push('DIVERGENCIA_DATA');
-                            }
-
-                            authO_limpa = triturarAlfa(melhor.auth);
-                            
-                            if (exKorus.reqAuth) {
-                                if (authO_limpa === "") {
-                                    msgIncorreto.push("Senha em branco na Orizon");
-                                    tipoInc.push('SENHA_INVENTADA');
-                                } else if (authK_limpa !== "" && authK_limpa !== authO_limpa) {
-                                    msgIncorreto.push(`Senha K:${exKorus.authK} vs O:${melhor.auth}`);
-                                    tipoInc.push('DIVERGENCIA_AUTH');
-                                }
+                        if(!m) { msg.push("Não Localizado na Operadora"); tipo.push("NAO_LOCALIZADO"); }
+                        else {
+                            if(ex.reqAuth) {
+                                if (authO_limpa === "") { msg.push("Senha em branco na Orizon"); tipo.push("SENHA_INVENTADA"); } 
+                                else if (authK_limpa !== "" && authK_limpa !== authO_limpa) { msg.push(`Senha K:${ex.auth} vs O:${m.auth}`); tipo.push("DIVERGENCIA_AUTH"); }
                             } else {
-                                if (!atendimento.precisaDeSenhaNoAtendimento) {
-                                    if (authK_limpa !== "") {
-                                        msgIncorreto.push("Sem necessidade de autorização");
-                                        tipoInc.push('SENHA_INVENTADA');
-                                    }
-                                }
+                                if (authK_limpa !== "" && authO_limpa !== "" && authK_limpa !== authO_limpa) { msg.push(`Senha K:${ex.auth} vs O:${m.auth}`); tipo.push("DIVERGENCIA_AUTH"); }
+                                else if (!guia.exigeSenhaNaGuia && authK_limpa !== "" && authO_limpa === "") { msg.push("Sem necessidade de autorização"); tipo.push("SENHA_INVENTADA"); }
                             }
-                        }
-
-                        if (atendimento.dataNasc !== "DATA_VAZIA" && atendimento.dataNasc !== "DATA_INVALIDA") {
-                            let tsNasc = dataParaTimestamp(atendimento.dataNasc);
-                            let tsExame = dataParaTimestamp(exKorus.dataK);
-                            let idadeAnos = (tsExame - tsNasc) / (1000 * 3600 * 24 * 365.25);
                             
-                            if (idadeAnos < 1) {
-                                msgIncorreto.push(`Aviso: Recém-Nascido`);
-                                tipoInc.push('IDADE_INVALIDA');
-                                alertasRecemNascidos.add(`Atend: ${atendimento.atend} | Paciente: ${atendimento.pac}`); 
-                            }
+                            if(m.status.includes("CANCEL") || m.status.includes("NEGAD")) { msg.push("Recusado na Operadora"); tipo.push("STATUS_INVALIDO"); }
+                            if (m.qtde === 0) { msg.push(`Qtde Operadora Zerada`); tipo.push('DIVERGENCIA_QTDE'); } 
+                            else if (ex.qtde !== m.qtde) { msg.push(`Qtde K:${ex.qtde} vs O:${m.qtde}`); tipo.push('DIVERGENCIA_QTDE'); }
+                            if (m.dataLimpa !== ex.data) { msg.push(`Data K:${ex.data} vs O:${m.dataLimpa}`); tipo.push('DIVERGENCIA_DATA'); }
                         }
-
-                        let temErroReal = msgIncorreto.length > 0;
-                        let statusGeral = temErroReal ? msgIncorreto.join(' | ') : "CONCILIADO - OK";
-                        let conciliado = temErroReal ? "NÃO" : "OK";
-
-                        let arrPlanos = Array.from(atendimento.planos).join(', ');
                         
-                        let varIsSenhaInventada = tipoInc.includes('SENHA_INVENTADA') ? "SIM" : "NAO";
-                        let varIsMultiplasSenhas = temMultiplasSenhas ? "SIM" : "NAO";
+                        if(temMultSenha) { msg.push("Múltiplas Senhas na Guia"); tipo.push("MULTIPLAS_SENHAS"); }
+                        if(String(ex.cod).startsWith("8")) { msg.push("Possível Cód. Sem Depara"); tipo.push("SEM_DEPARA"); }
 
-                        relatorioCompleto.push({
-                            idExport: idExportacao++,
-                            convenio: atendimento.convenio, planos: arrPlanos,
-                            unid: atendimento.unid, atend: atendimento.atend, pac: atendimento.pac, cart: atendimento.cart, dataNasc: atendimento.dataNasc,
-                            codK: exKorus.cod, exameK: exKorus.exame, dataK: exKorus.dataK, qtdeK: exKorus.qtdeK, valorK: exKorus.valorK, valorRawK: exKorus.valorRawK, authK: exKorus.authK,
-                            dataO: oDataCrua, qtdeO: oQtde, authO: oAuth, statusO: oStatus, transO: oTrans, descO: oDesc,
-                            conciliado: conciliado, motivo: statusGeral,
-                            isSenhaInventada: varIsSenhaInventada,
-                            isMultiplasSenhas: varIsMultiplasSenhas
-                        });
-
-                        if (temErroReal || isAltoCusto) {
-                            if (!atendimentosFinais.has(atendimento.atend)) {
-                                atendimentosFinais.set(atendimento.atend, { 
-                                    idControle: numControleInterface++, unid: atendimento.unid, atend: atendimento.atend, 
-                                    pac: atendimento.pac, cart: atendimento.cart, dataNasc: atendimento.dataNasc, 
-                                    convenio: atendimento.convenio, planos: arrPlanos, incorretos: [] 
-                                });
-                            }
-                            atendimentosFinais.get(atendimento.atend).incorretos.push({ 
-                                exame: exKorus.exame, cod: exKorus.cod, dataK: exKorus.dataK, qtde: exKorus.qtdeK, valor: exKorus.valorK, authK: exKorus.authK,
-                                desc: statusGeral, qtdeIncorreta: exKorus.qtdeK, tipo: tipoInc.join(','), isErro: temErroReal,
-                                statusOrizon: oStatus, transOrizon: oTrans, descOrizon: oDesc 
+                        let erro = msg.length > 0;
+                        let itemRel = { 
+                            idExport: idExportacao++, convenio: guia.convenio, planos: Array.from(guia.planos).join(', '),
+                            unid: guia.unid, atend: guia.atend, pac: guia.pac, cart: guia.cart, dataNasc: guia.dataNasc,
+                            codK: ex.cod, exameK: ex.nome, dataK: ex.data, qtdeK: ex.qtde, valorK: ex.valor, authK: ex.auth,
+                            dataO: m ? m.dataCrua : "-", qtdeO: m ? m.qtde : "-", authO: m ? m.auth : "-", statusO: m ? m.status : "-", transO: m ? m.trans : "-", descO: m ? m.descOrizon : "-",
+                            conciliado: erro ? "NÃO" : "OK", motivo: erro ? msg.join(" | ") : "CONCILIADO - OK",
+                            isMultiplasSenhas: temMultSenha ? "SIM" : "NAO", isSenhaInventada: tipo.includes("SENHA_INVENTADA") ? "SIM" : "NAO",
+                            tipo: tipo.join(",")
+                        };
+                        relatorioCompleto.push(itemRel);
+                        
+                        if(erro || ex.valor >= 500) {
+                            examesIncorretosGuia.push({ 
+                                cod: ex.cod, exame: ex.nome, dataK: ex.data, qtdeIncorreta: ex.qtde, valor: ex.valor, authK: ex.auth,
+                                desc: itemRel.motivo, tipo: itemRel.tipo, isErro: erro, statusOrizon: m ? m.status : "-", transOrizon: m ? m.trans : "-", descOrizon: m ? m.descOrizon : "-" 
                             });
                         }
                     });
-                });
 
-                divergenciasEncontradas = Array.from(atendimentosFinais.values());
-                
-                await atualizarProgresso(95, 'Renderizando Painel...');
-                renderizarResultados(); 
-                
-                await atualizarProgresso(100, 'Varredura Concluída!');
-                setTimeout(() => { document.getElementById('barra-progresso-container').style.display = 'none'; }, 1000);
-
-                let mostrarModal = false;
-                let htmlAlertas = "";
-
-                if(alertasRecemNascidos.size > 0) {
-                    htmlAlertas += `<div style="padding: 12px; background: #fef2f2; border-left: 4px solid #ef4444; margin-bottom: 12px; border-radius: 4px;">
-                                        <h4 style="margin:0 0 8px 0; color:#b91c1c;">👶 Recém-Nascidos (< 1 ano)</h4>`;
-                    alertasRecemNascidos.forEach(a => {
-                        let textoLimpo = a.replace(/%/g, ' ').replace(/\s+/g, ' ');
-                        htmlAlertas += `<div style="font-size:0.85em; color:#7f1d1d; margin-bottom:4px; font-weight:600;">• ${textoLimpo}</div>`;
-                    });
-                    htmlAlertas += `</div>`;
-                    mostrarModal = true;
+                    if(examesIncorretosGuia.length > 0) {
+                        divergenciasEncontradas.push({ ...guia, incorretos: examesIncorretosGuia });
+                    }
                 }
 
-                if(alertasSemDepara.size > 0) {
-                    htmlAlertas += `<div style="padding: 12px; background: #fffbeb; border-left: 4px solid #f59e0b; margin-bottom: 10px; border-radius: 4px;">
-                                        <h4 style="margin:0 0 8px 0; color:#b45309;">⚠️ Códigos Sem Depara (Inicia com 8)</h4>`;
-                    alertasSemDepara.forEach(a => {
-                        let textoLimpo = a.replace(/%/g, ' ').replace(/\s+/g, ' ');
-                        htmlAlertas += `<div style="font-size:0.85em; color:#92400e; margin-bottom:4px; font-weight:600;">• ${textoLimpo}</div>`;
-                    });
-                    htmlAlertas += `</div>`;
-                    mostrarModal = true;
-                }
+                renderizarResultados();
+                await atualizarProgresso(100, "Concluído!");
+                setTimeout(() => document.getElementById('barra-progresso-container').style.display='none', 1000);
 
-                if(mostrarModal) {
-                    document.getElementById('listaAlertasUI').innerHTML = htmlAlertas;
-                    setTimeout(() => { document.getElementById('modalAlerta').style.display = 'flex'; }, 500);
-                }
-
-            } catch (err) {
-                document.getElementById('resultados-container').innerHTML = `<div style="padding: 20px; background: #fee2e2; color: #b91c1c; border-radius: 8px; border: 1px solid #f87171;"><strong>ERRO CRÍTICO:</strong> ${err.message}</div>`;
-                document.getElementById('barra-progresso-container').style.display = 'none';
-            }
+            } catch(e) { alert("Erro: " + e.message); }
         }
 
         function renderizarResultados() {
             let container = document.getElementById('resultados-container');
             
+            let filtroStatus = document.getElementById('filtroStatus').value;
             let filtroCombo = document.getElementById('filtroTipo').value;
             let filtroUnid = document.getElementById('filtroUnid').value;
             let filtroData = document.getElementById('filtroData').value;
@@ -1242,35 +982,31 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             let dbStatus = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
 
             let filtrados = [];
-            let valorTotalGeral = 0;
-            let examesTotalGeral = 0;
-            let atendTotalGeral = 0;
+            let dynStats = { incNaoLoc: 0, incData: 0, incQtde: 0, incStatus: 0, incAuth: 0, incSenhaInv: 0, incMultSenha: 0, incIdade: 0, incPlano: 0, incSemDepara: 0, atendInc: 0, examesInc: 0, valorEmRisco: 0 };
+            let valorTotalGeral = 0; let examesTotalGeral = 0; let atendTotalGeral = 0;
 
-            if (filtroCombo === 'ALL') {
+            if (filtroCombo === 'ALL' && filtroStatus === 'ALL') {
                 todosAtendimentosGlobais.forEach(atend => {
                     let passaUnid = filtroUnid === 'ALL' || String(atend.unid).trim() === String(filtroUnid).trim();
                     let passaConv = filtroConv === 'ALL' || String(atend.convenio).trim() === String(filtroConv).trim();
                     let passaBusca = termoBusca === '' || atend.atend.includes(termoBusca);
-                    
                     if (passaUnid && passaBusca && passaConv) {
-                        let examesValidosNaData = Array.from(atend.exames.values()).filter(ex => filtroData === 'ALL' || ex.dataK === filtroData);
+                        let examesValidosNaData = Array.from(atend.exames).filter(ex => filtroData === 'ALL' || ex.data === filtroData);
                         if (examesValidosNaData.length > 0) {
                             atendTotalGeral++;
-                            examesValidosNaData.forEach(ex => {
-                                examesTotalGeral += ex.qtdeK;
-                                valorTotalGeral += ex.valorK;
-                            });
+                            examesValidosNaData.forEach(ex => { examesTotalGeral += ex.qtde; valorTotalGeral += ex.valor; });
                         }
                     }
                 });
             }
 
             divergenciasEncontradas.forEach(atend => {
+                let chaveUnicaStatusSegura = triturarAlfa(atend.unid) + "_" + triturarAlfa(atend.atend);
+                let statusSalvo = dbStatus[chaveUnicaStatusSegura] || 'DEFAULT';
+                let passaStatus = filtroStatus === 'ALL' || statusSalvo === filtroStatus;
+
                 let incorretosFiltrados = atend.incorretos.filter(e => {
-                    let passaCombo = false;
-                    if(filtroCombo === 'ALL') passaCombo = e.isErro;
-                    else passaCombo = e.tipo.includes(filtroCombo);
-                    
+                    let passaCombo = filtroCombo === 'ALL' ? e.isErro : e.tipo.includes(filtroCombo);
                     let passaData = filtroData === 'ALL' || e.dataK === filtroData;
                     return passaCombo && passaData;
                 });
@@ -1279,23 +1015,18 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                 let passaConv = filtroConv === 'ALL' || String(atend.convenio).trim() === String(filtroConv).trim();
                 let passaBusca = termoBusca === '' || atend.atend.includes(termoBusca);
 
-                if (incorretosFiltrados.length > 0 && passaUnid && passaBusca && passaConv) {
-                    filtrados.push({ ...atend, incorretos: incorretosFiltrados });
+                if (incorretosFiltrados.length > 0 && passaUnid && passaBusca && passaConv && passaStatus) {
+                    filtrados.push({ ...atend, incorretos: incorretosFiltrados, statusSalvo: statusSalvo, chaveStatus: chaveUnicaStatusSegura });
                 }
             });
 
-            let dynStats = { incNaoLoc: 0, incData: 0, incQtde: 0, incStatus: 0, incAuth: 0, incCancel: 0, incIdade: 0, incPlano: 0, incSemDepara: 0, incSenhaInv: 0, incMultSenha: 0, atendInc: 0, examesInc: 0, valorEmRisco: 0 };
-            
             filtrados.forEach(atend => {
                 let temErroNesteAtend = false;
                 atend.incorretos.forEach(e => {
-                    let passaCombo = filtroCombo === 'ALL' ? e.isErro : e.tipo.includes(filtroCombo);
-                    
-                    if (passaCombo) {
+                    if (filtroCombo === 'ALL' ? e.isErro : e.tipo.includes(filtroCombo)) {
                         dynStats.examesInc += e.qtdeIncorreta;
                         dynStats.valorEmRisco += e.valor;
                         temErroNesteAtend = true;
-                        
                         if(e.tipo.includes('NAO_LOCALIZADO')) dynStats.incNaoLoc += e.qtdeIncorreta;
                         if(e.tipo.includes('DIVERGENCIA_DATA')) dynStats.incData += e.qtdeIncorreta;
                         if(e.tipo.includes('DIVERGENCIA_QTDE')) dynStats.incQtde += e.qtdeIncorreta;
@@ -1311,7 +1042,7 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                 if(temErroNesteAtend) dynStats.atendInc++;
             });
 
-            if (filtroCombo !== 'ALL') {
+            if (filtroCombo !== 'ALL' || filtroStatus !== 'ALL') {
                 atendTotalGeral = dynStats.atendInc;
                 examesTotalGeral = dynStats.examesInc;
                 valorTotalGeral = dynStats.valorEmRisco;
@@ -1320,31 +1051,24 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
             document.getElementById('kpi-atend-total').innerText = atendTotalGeral;
             document.getElementById('kpi-exame-total').innerText = examesTotalGeral;
             document.getElementById('kpi-valor-total').innerText = formatarMoeda(valorTotalGeral);
-            
             document.getElementById('kpi-atend-inc').innerText = dynStats.atendInc;
             document.getElementById('kpi-exame-inc').innerText = dynStats.examesInc;
             document.getElementById('kpi-valor-inc').innerText = formatarMoeda(dynStats.valorEmRisco);
             
             desenharGrafico(dynStats);
 
-            container.innerHTML = '';
+            let htmlSaida = "";
             if(filtrados.length === 0) { 
-                container.innerHTML = '<div style="text-align:center; padding: 40px; color:#64748b; font-weight:600;">Nenhuma inconsistência encontrada com os filtros selecionados.</div>'; 
-                return; 
+                htmlSaida = '<div style="text-align:center; padding: 40px; color:#64748b; font-weight:600;">Nenhuma inconsistência encontrada com os filtros selecionados.</div>'; 
             }
 
-            let htmlSaida = "";
-
             filtrados.forEach(d => {
-                let chaveUnicaStatusSegura = triturarAlfa(d.unid) + "_" + triturarAlfa(d.atend);
-                let statusSalvo = dbStatus[chaveUnicaStatusSegura] || 'DEFAULT';
-
                 let htmlSeletorStatus = `
-                    <select class="status-badge status-${statusSalvo}" onclick="event.stopPropagation()" onchange="alterarStatusAuditoria('${chaveUnicaStatusSegura}', this)">
-                        <option value="DEFAULT" ${statusSalvo === 'DEFAULT' ? 'selected' : ''}>STATUS</option>
-                        <option value="AUSENTE" ${statusSalvo === 'AUSENTE' ? 'selected' : ''}>Ausente</option>
-                        <option value="PENDENTE" ${statusSalvo === 'PENDENTE' ? 'selected' : ''}>Pendente</option>
-                        <option value="CORRIGIDA" ${statusSalvo === 'CORRIGIDA' ? 'selected' : ''}>Corrigida</option>
+                    <select class="status-badge status-${d.statusSalvo}" onclick="event.stopPropagation()" onchange="alterarStatusAuditoria('${d.chaveStatus}', this)">
+                        <option value="DEFAULT" ${d.statusSalvo === 'DEFAULT' ? 'selected' : ''}>STATUS</option>
+                        <option value="AUSENTE" ${d.statusSalvo === 'AUSENTE' ? 'selected' : ''}>Ausente</option>
+                        <option value="PENDENTE" ${d.statusSalvo === 'PENDENTE' ? 'selected' : ''}>Pendente</option>
+                        <option value="CORRIGIDA" ${d.statusSalvo === 'CORRIGIDA' ? 'selected' : ''}>Corrigida</option>
                     </select>
                 `;
 
@@ -1367,15 +1091,15 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                         <summary>
                             <div class="summary-title">
                                 ${htmlSeletorStatus}
-                                ${d.unid} [Atend: ${d.atend}] | Paciente: ${d.pac.replace(/%/g, ' ')}
+                                ${d.unid} [Atend: ${d.atend} <span class="copy-btn" onclick="copiarTexto('${d.atend}'); event.stopPropagation();" title="Copiar Atendimento">📋</span>] | Paciente: ${d.pac.replace(/%/g, ' ')}
                             </div>
                             <div style="color: #94a3b8; font-weight:bold;">[+] Expandir</div>
                         </summary>
                         <div class="details-content">
                             <div class="info-row">
-                                <span><strong>Carteirinha:</strong> ${d.cart} | <strong>Nasc:</strong> ${d.dataNasc || '-'}</span>
+                                <span><strong>Carteirinha:</strong> ${d.cart} <span class="copy-btn" onclick="copiarTexto('${d.cart}')" title="Copiar Carteirinha">📋</span> | <strong>Nasc:</strong> ${d.dataNasc || '-'}</span>
                                 <span><strong>Convênio:</strong> ${d.convenio}</span>
-                                <span><strong>Plano(s):</strong> ${d.planos}</span>
+                                <span><strong>Plano(s):</strong> ${Array.from(d.planos).join(', ')}</span>
                             </div>
                             <table>
                                 <thead><tr><th>Cód. Exame</th><th>Descrição Korus</th><th>Data Korus</th><th>Qtde</th><th>Valor (R$)</th><th>Status Operadora</th><th>Desc. Operadora</th><th>Status Auditoria</th></tr></thead>
@@ -1391,9 +1115,7 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
 
         function desenharGrafico(dynStats) {
             let ctx = document.getElementById('errorChart').getContext('2d');
-            
             if(chartInstance) {
-                chartInstance.data.labels = ['Não Localizado', 'Data Inc.', 'Qtde Inc.', 'Divergência Senha', 'Senha Branco / Desnecessária', 'Múltiplas Senhas', 'Recus./Cancel.', 'Idade Inc.', 'Múltiplos Planos', 'Sem Depara'];
                 chartInstance.data.datasets[0].data = [dynStats.incNaoLoc, dynStats.incData, dynStats.incQtde, dynStats.incAuth, dynStats.incSenhaInv, dynStats.incMultSenha, dynStats.incStatus, dynStats.incIdade, dynStats.incPlano, dynStats.incSemDepara];
                 chartInstance.update();
             } else {
@@ -1408,37 +1130,14 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
                             borderRadius: { topLeft: 4, topRight: 4 }
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        layout: { padding: { top: 30 } }, 
-                        plugins: {
-                            legend: { display: false },
-                            datalabels: {
-                                anchor: 'end',
-                                align: 'top',
-                                color: '#475569',
-                                font: { weight: 'bold', size: 14, family: 'Inter' }
-                            }
-                        },
-                        scales: {
-                            y: { beginAtZero: true, display: false }, 
-                            x: { grid: { display: false }, ticks: { font: { family: 'Inter', weight: 600 } } }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, layout: { padding: { top: 30 } }, plugins: { legend: { display: false }, datalabels: { anchor: 'end', align: 'top', color: '#475569', font: { weight: 'bold', size: 14, family: 'Inter' } } }, scales: { y: { beginAtZero: true, display: false }, x: { grid: { display: false }, ticks: { font: { family: 'Inter', weight: 600 } } } } }
                 });
             }
         }
 
-        function forcarTexto(val) {
-            if(val === undefined || val === null || val === "" || val === "-") return "";
-            return `="${val}"`;
-        }
+        function forcarTexto(val) { return (val === undefined || val === null || val === "" || val === "-") ? "" : \`="\${val}"\`; }
 
-        function exportarCSVCompleto() {
-            gerarCSV(relatorioCompleto, "Relatorio_Forense_Completo.csv");
-        }
-
+        function exportarCSVCompleto() { gerarCSV(relatorioCompleto, "Relatorio_Forense_Completo.csv"); }
         function exportarCSVIncorretos() {
             let apenasErros = relatorioCompleto.filter(r => r.conciliado === "NÃO");
             if(apenasErros.length === 0) return alert("Nenhuma inconsistência para exportar.");
@@ -1447,18 +1146,13 @@ USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
 
         function gerarCSV(dados, nomeArquivo) {
             if(dados.length === 0) return alert("Nenhum dado processado para exportar.");
-            
             let dbStatus = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
-            
             let csv = "ID Controle;Convênio;Plano(s);Unidade;Atendimento;Nome Paciente;Data Nasc.;Carteirinha;Cod Exame;Exame Korus;Data Korus;Qtde Korus;Valor Bruto Korus (Debug);Valor Final (R$);Auth Korus;Data Operadora;Qtde Operadora;Auth Operadora;Status Operadora;Transacao Operadora;Descricao Operadora;Conciliado;Motivo Inconsistencia;Status Correcao (Kanban);Senha Branco ou Desnecessaria;Multiplas Senhas no Atendimento\n";
-            
             dados.forEach(r => {
                 let chaveUnicaStatusSegura = triturarAlfa(r.unid) + "_" + triturarAlfa(r.atend);
                 let statusMemoria = dbStatus[chaveUnicaStatusSegura] || "SEM STATUS";
-                
                 csv += `${r.idExport};${r.convenio};${r.planos};${r.unid};${r.atend};${r.pac.replace(/%/g, ' ')};${r.dataNasc};${forcarTexto(r.cart)};${r.codK};${r.exameK};${r.dataK};${r.qtdeK};${forcarTexto(r.valorRawK)};${r.valorK.toFixed(2).replace('.',',')};${forcarTexto(r.authK)};${r.dataO};${r.qtdeO};${forcarTexto(r.authO)};${r.statusO};${forcarTexto(r.transO)};${forcarTexto(r.descO)};${r.conciliado};${r.motivo};${statusMemoria};${r.isSenhaInventada};${r.isMultiplasSenhas}\n`;
             });
-            
             let link = document.createElement("a");
             link.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], { type: 'text/csv;charset=utf-8;' })); 
             link.download = nomeArquivo;
