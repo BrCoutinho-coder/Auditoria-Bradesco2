@@ -22,8 +22,6 @@
         /* ASSINATURA COM ESCUDO MAIOR E TEXTO ABAIXO */
         .signature-top-left { position: absolute; top: 15px; left: 25px; display: flex; flex-direction: column; align-items: center; gap: 5px; opacity: 0.95;}
         .signature-top-left p { margin: 0; color: #f8dbdf; font-weight: 600; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px;}
-        
-        /* AUMENTO DA LOGO EM 30% (De 60px para 78px) */
         .img-escudo { height: 120px; width: auto; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3)); }
 
         /* ÍCONE DE CONFIGURAÇÃO DISCRETO NO CANTO SUPERIOR DIREITO */
@@ -193,7 +191,7 @@
             </div>
             <div class="header-buttons">
                 <button class="btn" onclick="location.reload()">Limpar Painel</button>
-                <button class="btn btn-primary" onclick="iniciarVarredura()">▶ Iniciar Varredura (Lotes)</button>
+                <button class="btn btn-primary" onclick="iniciarVarredura()">▶ Iniciar Varredura</button>
                 <button class="btn btn-warning" onclick="exportarCSVIncorretos()">Exportar Apenas Incorretos</button>
                 <button class="btn" onclick="exportarCSVCompleto()">Exportar Tudo</button>
             </div>
@@ -201,22 +199,23 @@
     </header>
 
     <div id="modalUpdate" class="modal-overlay">
-        <div class="modal-content" style="border-top: 4px solid var(--accent);">
+        <div class="modal-content" style="border-top: 5px solid var(--accent);">
             
             <div class="modal-header">
-                <h2 style="color: var(--primary);">🚀 Sistema Atualizado (v2.5)</h2>
-                <button class="close-btn" onclick="fecharModalUpdate()">×</button>
+                <h2>🚀 Novidades da Versão 2.1</h2>
+                <button class="close-btn" onclick="fecharUpdate()">×</button>
             </div>
-            <div style="font-size: 0.95em; color: #475569; line-height: 1.6;">
-                <p style="margin-top:0;"><strong>O que há de novo nesta versão:</strong></p>
-                <ul style="padding-left: 20px; margin-bottom: 20px;">
-                    <li><strong>Base de Fábrica Embutida:</strong> O sistema já carrega os códigos e as regras de autorização automaticamente no 1º acesso.</li>
-                    <li><strong>Baixar DEPARA:</strong> Acesse as configurações (⚙️) para baixar sua base atual em CSV, edite no Excel e suba novamente.</li>
-                    <li><strong>Inteligência de Senhas:</strong> O robô acusa "Senha em branco" se o exame exigir e "Sem necessidade" se a recepção colocar senha em exames simples da guia.</li>
-                
-                </ul>
+            <div class="release-list">
+                <div class="release-item">
+                    <h4>Baixar e Atualizar o DEPARA</h4>
+                    <p>Adicionado o botão "Baixar Base Atual" nas configurações. Agora você pode extrair o que o robô sabe no formato exato (Exame;Codigo;SIM/NAO), editar no Excel e subir de volta.</p>
+                </div>
+                <div class="release-item">
+                    <h4>Regras Inteligentes de Senha</h4>
+                    <p>O motor usa a 3ª coluna do DEPARA (SIM/NAO). Se um exame exige senha e a Orizon vem vazia, ele acusa "Senha em branco na Orizon". Se nenhum exame da guia exige senha, mas foi enviado preenchido, ele acusa "Sem necessidade de autorização".</p>
+                </div>
             </div>
-            <button class="btn" style="align-self: flex-end; background: var(--accent); color: white; padding: 10px 30px; border:none;" onclick="fecharModalUpdate()">Ciente das Novidades</button>
+            <button class="btn" style="background: var(--accent); color: white; border: none; padding: 12px; margin-top: 10px;" onclick="fecharUpdate()">Ciente das Novidades</button>
         </div>
     </div>
 
@@ -227,7 +226,7 @@
                 <button class="close-btn" onclick="fecharConfig()">×</button>
             </div>
             <div style="font-size: 0.9em; color: #475569;">
-                O robô aprende os códigos e os guarda na memória do navegador. Importe seu CSV para alimentar ou atualizar os códigos. Se quiser exigir senha, coloque "SIM" na terceira coluna.
+                O robô aprende os códigos e os guarda na memória do navegador. Importe seu CSV para alimentar ou atualizar os códigos. Se quiser exigir senha para o código, coloque "SIM" na terceira coluna.
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <input type="file" id="fDeparaUpdate" class="custom-file-input" accept=".csv" onchange="processarUploadDepara(this)">
@@ -314,7 +313,7 @@
     </div>
 
     <div class="legenda-status">
-        <span style="text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Correção (Kanban):</span>
+        <span style="text-transform: uppercase; letter-spacing: 0.5px;">Gestão de Correção:</span>
         <div class="legenda-item"><div class="legenda-cor" style="background:#e2e8f0; border: 1px solid #cbd5e1;"></div> Sem Status</div>
         <div class="legenda-item"><div class="legenda-cor" style="background:#3b82f6;"></div> Ausente</div>
         <div class="legenda-item"><div class="legenda-cor" style="background:#f59e0b;"></div> Pendente</div>
@@ -341,7 +340,7 @@
             <option value="DIVERGENCIA_DATA">Data Incorreta</option>
             <option value="DIVERGENCIA_QTDE">Qtde Inc./Zerada</option>
             <option value="DIVERGENCIA_AUTH">Senha Incorreta</option>
-            <option value="SENHA_INVENTADA">Senha em Branco / Desnecessária</option>
+            <option value="SENHA_INVENTADA">Senha Branco / Desnecessária</option>
             <option value="MULTIPLAS_SENHAS">Múltiplas Senhas na Guia</option>
             <option value="IDADE_INVALIDA">Recém-Nascido</option>
             <option value="DIVERGENCIA_PLANO">Múltiplos Planos</option>
@@ -369,10 +368,8 @@
 
     <script>
         // ==========================================
-        // 🔒 TRAVA DE DOMÍNIO E CONTROLE DE VERSÃO
+        // 🔒 TRAVA DE DOMÍNIO (LICENÇA DE USO)
         // ==========================================
-        const VERSAO_SISTEMA = "2.5"; // PARA FORÇAR O POP-UP DE NOVO, SÓ MUDAR ESTE NÚMERO NO FUTURO
-
         (function() {
             const dominiosPermitidos = ["brcoutinho-coder.github.io", "localhost", "127.0.0.1", ""];
             let hostAtual = window.location.hostname;
@@ -388,180 +385,181 @@
             }
         })();
 
+        const VERSAO_SISTEMA = "2.1";
+        
         // ==========================================
-        // BASE DEPARA EMBUTIDA (111 Códigos)
+        // BASE DEPARA EMBUTIDA DE FÁBRICA
         // ==========================================
-        const DEPARA_EMBUTIDO = "exame;str_codigo_amb_autorizacao;autorizacao\n" +
-"USG DE TIREOIDE;40901203;NÃO\n" +
-"USG DE ABDOMEN TOTAL;40901122;NÃO\n" +
-"USG DE MAMAS;40901114;NÃO\n" +
-"USG DE TIREOIDE C/ DOPPLER;40901386;SIM\n" +
-"USG TRANSVAGINAL;40901300;NÃO\n" +
-"USG - ESTRUTURAS SUPERFICIAIS (CERVICAL OU MUSCULO OU TENDAO);40901211;NÃO\n" +
-"DENSITOMETRIA OSSEA 2 SEG;40808130;SIM\n" +
-"RM COLUNA CERVICAL;41101227;SIM\n" +
-"RM DE PELVE;41101189;SIM\n" +
-"USG PELVICA;40901181;NÃO\n" +
-"RM DE MAMAS SEM PRÓTESE;41101480;SIM\n" +
-"CORE BIOPSY POR USG;40808262;SIM\n" +
-"USG DE ABDOMEN TOTAL DOPPLER;40901386;SIM\n" +
-"USG TRANSVAGINAL COM PREPARO INTESTINAL;40901300;NÃO\n" +
-"MAMOTOMIA POR RM;40808300;SIM\n" +
-"USG DE MAMA C/ DOPPLER;40901386;SIM\n" +
-"USG - ESTRUTURAS SUPERFICIAIS (CERVICAL OU AXILAS OU MUSCULO OU TENDAO);40901211;NÃO\n" +
-"MAMOGRAFIA DIGITAL;40808041;SIM\n" +
-"USG DE PARTES MOLES;40901211;NÃO\n" +
-"DENSITOMETRIA OSSEA;40808130;SIM\n" +
-"USG DE RINS E VIA URINARIA;40901769;NÃO\n" +
-"RM DE JOELHO DIREITO;41101316;SIM\n" +
-"RM DE JOELHO ESQUERDO;41101316;SIM\n" +
-"USG OBST. COM DOPPLER;40901246;SIM\n" +
-"RM COLUNA LOMBAR;41101227;SIM\n" +
-"USG TRANSVAGINAL OBSTETRICO;40901297;NÃO\n" +
-"DOPPLER DE CAROTIDAS E VERTEBRAS;40901360;SIM\n" +
-"PAAF-PUNCAO AGUL. FINA TIRE;40809161;SIM\n" +
-"USG TRANSV. COM DOPPLER;40901386;SIM\n" +
-"RM COXO-FEMURAL DIREITA;41101316;SIM\n" +
-"MAMOTOMIA POR ESTEREOTAXIA;40808289;SIM\n" +
-"PAAF-PUNCAO AGUL. FINA MAMA;40808238;SIM\n" +
-"RM DE TORNOZELO DIREITO;41101316;SIM\n" +
-"RM ABDOMEN SUPERIOR;41101170;SIM\n" +
-"RM DE MAMAS COM PRÓTESE;41101480;SIM\n" +
-"USG MORFOLOGICO 2 TRIMESTRE;40901262;NÃO\n" +
-"USG TRANSVAGINAL PARA MEDIDA DO COLO;40901297;NÃO\n" +
-"RM PE DIREITO;41101308;SIM\n" +
-"RM DE MAMAS (BILATERAL);41101480;SIM\n" +
-"USG OBSTETRICA;40901238;NÃO\n" +
-"DOPPLER COL VENO MMB INFERI;40901483;SIM\n" +
-"USG DE ABDOMEN SUPERIOR;40901130;NÃO\n" +
-"RM BRACO DIREITO;41101316;SIM\n" +
-"RM OMBRO DIREITO;41101316;SIM\n" +
-"USG OBST. TRANSLU. NUCAL;40901254;SIM\n" +
-"RM COLUNA TORACICA;41101227;SIM\n" +
-"DOPPLER COL AORTA E ILIACAS;40901408;SIM\n" +
-"RM DE PAREDE ABDOMINAL;41101316;SIM\n" +
-"RM DE CRANIO;41101014;SIM\n" +
-"USG PAREDE ABDOMINAL;40901211;NÃO\n" +
-"USG PELVICA COM DOPPLER;40901386;SIM\n" +
-"DOPPLER COL ARTE MMB INFERI;40901475;SIM\n" +
-"USG DE ARTIC. PUNHO ESQ.;40901220;NÃO\n" +
-"USG INGUINAL;40901211;NÃO\n" +
-"USG DE ARTIC. PUNHO DIR.;40901220;NÃO\n" +
-"USG MORFOLOGICO;40901262;NÃO\n" +
-"DENSITOMETRIA CORPO INTEIRO;40808149;SIM\n" +
-"USG CERVICAL COM DOPPLER;40901386;SIM\n" +
-"RM PUNHO ESQUERDO;41101316;SIM\n" +
-"RM PE ESQUERDO;41101308;SIM\n" +
-"RM QUADRIL DIREITO;41101316;SIM\n" +
-"SECOND LOOK (USG MAMAS);40901114;NÃO\n" +
-"DOPPLER COLORIDO ORG EST ISOLADA;40901386;SIM\n" +
-"USG DE ARTIC. TORNOZELO ESQ. DOPPLER;40901386;SIM\n" +
-"USG DE ARTIC. TORNOZELO DIR. DOPPLER;40901386;SIM\n" +
-"USG DE ARTIC. TORNOZEL DIR.;40901220;NÃO\n" +
-"USG DE ARTIC. TORNOZEL ESQ.;40901220;NÃO\n" +
-"USG DE ARTIC. COTOVELO ESQ.;40901220;NÃO\n" +
-"RM COXA DIREITA;41101286;SIM\n" +
-"USG DE ARTICUL. MAO DIR.;40901220;NÃO\n" +
-"DOPPLER COL ARTE MMB SUPER;40901459;SIM\n" +
-"USG MORFOLOGICO DOPPLER;40901262;SIM\n" +
-"USG - ESTRUTURAS SUPERFICIAIS COM DOPPLER (CERVICAL OU AXILAS OU MUSCULO OU TENDAO);40901386;SIM\n" +
-"RM DE MAO DIREITA;41101260;SIM\n" +
-"RM DE MAO ESQUERDA;41101260;SIM\n" +
-"RM PUNHO DIREITO;41101316;SIM\n" +
-"USG DERMATOLOGICO - PELE E SUBCUTANEO;40901190;NÃO\n" +
-"USG DE ARTICUL. OMBRO ESQ.;40901220;NÃO\n" +
-"DOPPLER COL VEIA CAVA SUPERIOR;40901432;SIM\n" +
-"RM DE TORNOZELO ESQUERDO;41101316;SIM\n" +
-"USG DE ARTIC. COTOVELO DIR.;40901220;NÃO\n" +
-"USG DE ARTICUL. MAO ESQ.;40901220;NÃO\n" +
-"USG DE ARTIC. COTOVELO DIR. DOPPLER;40901386;SIM\n" +
-"USG DE ARTIC. COTOVELO ESQ. DOPPLER;40901386;SIM\n" +
-"USG DE ARTIC. MAO DIR. DOPPLER;40901386;SIM\n" +
-"USG DE ARTIC. MAO ESQ. DOPPLER;40901386;SIM\n" +
-"USG DE ARTICUL. OMBRO DIR.;40901220;NÃO\n" +
-"USG DE ARTIC. PUNHO DIR. DOPPLER;40901386;SIM\n" +
-"USG DE ARTIC. PUNHO ESQ. DOPPLER;40901386;SIM\n" +
-"RM DE OSSOS TEMPORAIS BILATERAL;41101081;SIM\n" +
-"RM DE OUVIDO;41101081;SIM\n" +
-"MAMOGRAFIA COM TOMOSSINTESE;40808041;SIM\n" +
-"RM QUADRIL ESQUERDO;41101316;SIM\n" +
-"RM DE COXA ESQUERDA;41101286;SIM\n" +
-"RM BACIA;41101278;SIM\n" +
-"USG DE RINS E VIAS C/DOPPLER;40901386;SIM\n" +
-"RM COXO-FEMURAL ESQUERDA;41101316;SIM\n" +
-"RM DE MASTOIDES;41101081;SIM\n" +
-"ANGIO RM VENOSA DO CRANIO;41101545;SIM\n" +
-"ANGIO RM VENOSA PESCOCO;41101626;SIM\n" +
-"RM DE PERNA DIREITA;41101294;SIM\n" +
-"RM DE FACE;41101090;SIM\n" +
-"RM PESCOCO;41101111;SIM\n" +
-"RM OMBRO ESQUERDO;41101316;SIM\n" +
-"HISTEROSCOPIA DIAGNOSTICA;40201155;SIM\n" +
-"RM COLUNA DORSAL;41101227;SIM\n" +
-"COLANGIO RESSONANCIA;41101359;SIM\n" +
-"USG DE ARTIC. QUADRIL DIR.;40901220;NÃO\n" +
-"USG DE ARTIC. QUADRIL ESQ.;40901220;NÃO\n" +
-"USG DE PARTES MOLES DOPPLER;40901386;SIM\n" +
-"MAMOTOMIA POR USG;40808297;SIM\n" +
-"USG DE ABDOMEN SUPERIOR DOPPLER;40901386;SIM\n" +
-"RM FLUXO LIQUORICO;41101235;SIM\n" +
-"REPOSICIONAMENTO DE DIU;31303307;SIM\n" +
-"RETIRADA DE DIU;31303307;SIM\n" +
-"RM SACRO ILIACAS;41101278;SIM\n" +
-"ANGIO RM ARTERIAL DO CRANIO;41101537;SIM\n" +
-"RM COTOVELO ESQUERDO;41101316;SIM\n" +
-"DOPPLER COL VEIA CAVA INFERIOR;40901432;SIM\n" +
-"USG DE ARTICUL. PE DIR.;40901220;NÃO\n" +
-"USG DE ARTICUL. PE ESQ.;40901220;NÃO\n" +
-"PERFIL BIOFISICO FETAL;40901505;SIM\n" +
-"USG DE ARTIC. JOELHO DIR.;40901220;NÃO\n" +
-"RM ATM-BILATERAL;41101103;SIM\n" +
-"DOPPLER COL VENO MMB SUPER;40901467;SIM\n" +
-"RM DE PERNA ESQUERDA;41101294;SIM\n" +
-"RM SELA TURCICA (HIPOFISE) COM CONTRASTE;41101022;SIM\n" +
-"RM COCCIX;41101316;SIM\n" +
-"RM COTOVELO DIREITO;41101316;SIM\n" +
-"ANGIO RM VEN ABDOME SUPERI;41101529;SIM\n" +
-"ANGIO RM VENOSA DE PELVE;41101600;SIM\n" +
-"RM TORNOZELO ESQUERDO C/ CONTR;41101316;SIM\n" +
-"RM ATM (BILATERAL) COM CONTRASTE;41101103;SIM\n" +
-"USG DE AXILA;40901211;NÃO\n" +
-"RM SELA TURCICA;41101022;SIM\n" +
-"DOPPLER DE ARTERIAS RENAIS;40901394;SIM\n" +
-"CORE BIOPSY POR EXTEREOTAXIA;40808254;SIM\n" +
-"RM BRACO ESQUERDO;41101316;SIM\n" +
-"RM DE PELVE CONTRASTE;41101189;SIM\n" +
-"USG DE ARTICULACOES;40901220;NÃO\n" +
-"RM DE MAMAS COM PRÓTESE ;41101480;SIM\n" +
-"USG DE MAMAS C/ DOPPLER;40901386;SIM\n" +
-"FATOR V DE LEIDEN (SANGUE);40314057;SIM\n" +
-"ENTEROGRAFIA RM;41101189;SIM\n" +
-"FATOR V LEIDEN PCR;40314057;SIM\n" +
-"CALPROTECTINA FECAL;40303330;SIM\n" +
-"USG TRANSVAGINAL COM PREPARO INTESTINAL - ENDOMETRIOSE;40901300;NÃO\n" +
-"DOPPLER COL VENO MMB INFERI UNILATERAL;40901483;SIM\n" +
-"DOPPLER COL ARTE MMB INFERI UNILATERAL;40901475;SIM\n" +
-"USG PAREDE ABDOMINAL DOPPLER;40901386;SIM\n" +
-"CORE BIOPSY POR ESTEREOTAXIA;40808254;SIM\n" +
-"DOPPLER COL VENO MMB SUPER UNILATERAL;40901467;SIM\n" +
-"USG - ESTRUTURAS SUPERFICIAIS COM DOPPLER (CERVICAL OU MUSCULO OU TENDAO);40901386;SIM\n" +
-"RM AXILAS;41101480;SIM\n" +
-"USG DE ARTIC. PE ESQ. DOPPLER;40901386;SIM\n" +
-"USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM\n";
+        const DEPARA_EMBUTIDO = `exame;str_codigo;autorizacao
+USG DE TIREOIDE;40901203;NÃO
+USG DE ABDOMEN TOTAL;40901122;NÃO
+USG DE MAMAS;40901114;NÃO
+USG DE TIREOIDE C/ DOPPLER;40901386;SIM
+USG TRANSVAGINAL;40901300;NÃO
+USG - ESTRUTURAS SUPERFICIAIS (CERVICAL OU MUSCULO OU TENDAO);40901211;NÃO
+DENSITOMETRIA OSSEA 2 SEG;40808130;SIM
+RM COLUNA CERVICAL;41101227;SIM
+RM DE PELVE;41101189;SIM
+USG PELVICA;40901181;NÃO
+RM DE MAMAS SEM PRÓTESE;41101480;SIM
+CORE BIOPSY POR USG;40808262;SIM
+USG DE ABDOMEN TOTAL DOPPLER;40901386;SIM
+USG TRANSVAGINAL COM PREPARO INTESTINAL;40901300;NÃO
+MAMOTOMIA POR RM;40808300;SIM
+USG DE MAMA C/ DOPPLER;40901386;SIM
+USG - ESTRUTURAS SUPERFICIAIS (CERVICAL OU AXILAS OU MUSCULO OU TENDAO);40901211;NÃO
+MAMOGRAFIA DIGITAL;40808041;SIM
+USG DE PARTES MOLES;40901211;NÃO
+DENSITOMETRIA OSSEA;40808130;SIM
+USG DE RINS E VIA URINARIA;40901769;NÃO
+RM DE JOELHO DIREITO;41101316;SIM
+RM DE JOELHO ESQUERDO;41101316;SIM
+USG OBST. COM DOPPLER;40901246;SIM
+RM COLUNA LOMBAR;41101227;SIM
+USG TRANSVAGINAL OBSTETRICO;40901297;NÃO
+DOPPLER DE CAROTIDAS E VERTEBRAS;40901360;SIM
+PAAF-PUNCAO AGUL. FINA TIRE;40809161;SIM
+USG TRANSV. COM DOPPLER;40901386;SIM
+RM COXO-FEMURAL DIREITA;41101316;SIM
+MAMOTOMIA POR ESTEREOTAXIA;40808289;SIM
+PAAF-PUNCAO AGUL. FINA MAMA;40808238;SIM
+RM DE TORNOZELO DIREITO;41101316;SIM
+RM ABDOMEN SUPERIOR;41101170;SIM
+RM DE MAMAS COM PRÓTESE;41101480;SIM
+USG MORFOLOGICO 2 TRIMESTRE;40901262;NÃO
+USG TRANSVAGINAL PARA MEDIDA DO COLO;40901297;NÃO
+RM PE DIREITO;41101308;SIM
+RM DE MAMAS (BILATERAL);41101480;SIM
+USG OBSTETRICA;40901238;NÃO
+DOPPLER COL VENO MMB INFERI;40901483;SIM
+USG DE ABDOMEN SUPERIOR;40901130;NÃO
+RM BRACO DIREITO;41101316;SIM
+RM OMBRO DIREITO;41101316;SIM
+USG OBST. TRANSLU. NUCAL;40901254;SIM
+RM COLUNA TORACICA;41101227;SIM
+DOPPLER COL AORTA E ILIACAS;40901408;SIM
+RM DE PAREDE ABDOMINAL;41101316;SIM
+RM DE CRANIO;41101014;SIM
+USG PAREDE ABDOMINAL;40901211;NÃO
+USG PELVICA COM DOPPLER;40901386;SIM
+DOPPLER COL ARTE MMB INFERI;40901475;SIM
+USG DE ARTIC. PUNHO ESQ.;40901220;NÃO
+USG INGUINAL;40901211;NÃO
+USG DE ARTIC. PUNHO DIR.;40901220;NÃO
+USG MORFOLOGICO;40901262;NÃO
+DENSITOMETRIA CORPO INTEIRO;40808149;SIM
+USG CERVICAL COM DOPPLER;40901386;SIM
+RM PUNHO ESQUERDO;41101316;SIM
+RM PE ESQUERDO;41101308;SIM
+RM QUADRIL DIREITO;41101316;SIM
+SECOND LOOK (USG MAMAS);40901114;NÃO
+DOPPLER COLORIDO ORG EST ISOLADA;40901386;SIM
+USG DE ARTIC. TORNOZELO ESQ. DOPPLER;40901386;SIM
+USG DE ARTIC. TORNOZELO DIR. DOPPLER;40901386;SIM
+USG DE ARTIC. TORNOZEL DIR.;40901220;NÃO
+USG DE ARTIC. TORNOZEL ESQ.;40901220;NÃO
+USG DE ARTIC. COTOVELO ESQ.;40901220;NÃO
+RM COXA DIREITA;41101286;SIM
+USG DE ARTICUL. MAO DIR.;40901220;NÃO
+DOPPLER COL ARTE MMB SUPER;40901459;SIM
+USG MORFOLOGICO DOPPLER;40901262;SIM
+USG - ESTRUTURAS SUPERFICIAIS COM DOPPLER (CERVICAL OU AXILAS OU MUSCULO OU TENDAO);40901386;SIM
+RM DE MAO DIREITA;41101260;SIM
+RM DE MAO ESQUERDA;41101260;SIM
+RM PUNHO DIREITO;41101316;SIM
+USG DERMATOLOGICO - PELE E SUBCUTANEO;40901190;NÃO
+USG DE ARTICUL. OMBRO ESQ.;40901220;NÃO
+DOPPLER COL VEIA CAVA SUPERIOR;40901432;SIM
+RM DE TORNOZELO ESQUERDO;41101316;SIM
+USG DE ARTIC. COTOVELO DIR.;40901220;NÃO
+USG DE ARTICUL. MAO ESQ.;40901220;NÃO
+USG DE ARTIC. COTOVELO DIR. DOPPLER;40901386;SIM
+USG DE ARTIC. COTOVELO ESQ. DOPPLER;40901386;SIM
+USG DE ARTIC. MAO DIR. DOPPLER;40901386;SIM
+USG DE ARTIC. MAO ESQ. DOPPLER;40901386;SIM
+USG DE ARTICUL. OMBRO DIR.;40901220;NÃO
+USG DE ARTIC. PUNHO DIR. DOPPLER;40901386;SIM
+USG DE ARTIC. PUNHO ESQ. DOPPLER;40901386;SIM
+RM DE OSSOS TEMPORAIS BILATERAL;41101081;SIM
+RM DE OUVIDO;41101081;SIM
+MAMOGRAFIA COM TOMOSSINTESE;40808041;SIM
+RM QUADRIL ESQUERDO;41101316;SIM
+RM DE COXA ESQUERDA;41101286;SIM
+RM BACIA;41101278;SIM
+USG DE RINS E VIAS C/DOPPLER;40901386;SIM
+RM COXO-FEMURAL ESQUERDA;41101316;SIM
+RM DE MASTOIDES;41101081;SIM
+ANGIO RM VENOSA DO CRANIO;41101545;SIM
+ANGIO RM VENOSA PESCOCO;41101626;SIM
+RM DE PERNA DIREITA;41101294;SIM
+RM DE FACE;41101090;SIM
+RM PESCOCO;41101111;SIM
+RM OMBRO ESQUERDO;41101316;SIM
+HISTEROSCOPIA DIAGNOSTICA;40201155;SIM
+RM COLUNA DORSAL;41101227;SIM
+COLANGIO RESSONANCIA;41101359;SIM
+USG DE ARTIC. QUADRIL DIR.;40901220;NÃO
+USG DE ARTIC. QUADRIL ESQ.;40901220;NÃO
+USG DE PARTES MOLES DOPPLER;40901386;SIM
+MAMOTOMIA POR USG;40808297;SIM
+USG DE ABDOMEN SUPERIOR DOPPLER;40901386;SIM
+RM FLUXO LIQUORICO;41101235;SIM
+REPOSICIONAMENTO DE DIU;31303307;SIM
+RETIRADA DE DIU;31303307;SIM
+RM SACRO ILIACAS;41101278;SIM
+ANGIO RM ARTERIAL DO CRANIO;41101537;SIM
+RM COTOVELO ESQUERDO;41101316;SIM
+DOPPLER COL VEIA CAVA INFERIOR;40901432;SIM
+USG DE ARTICUL. PE DIR.;40901220;NÃO
+USG DE ARTICUL. PE ESQ.;40901220;NÃO
+PERFIL BIOFISICO FETAL;40901505;SIM
+USG DE ARTIC. JOELHO DIR.;40901220;NÃO
+RM ATM-BILATERAL;41101103;SIM
+DOPPLER COL VENO MMB SUPER;40901467;SIM
+RM DE PERNA ESQUERDA;41101294;SIM
+RM SELA TURCICA (HIPOFISE) COM CONTRASTE;41101022;SIM
+RM COCCIX;41101316;SIM
+RM COTOVELO DIREITO;41101316;SIM
+ANGIO RM VEN ABDOME SUPERI;41101529;SIM
+ANGIO RM VENOSA DE PELVE;41101600;SIM
+RM TORNOZELO ESQUERDO C/ CONTR;41101316;SIM
+RM ATM (BILATERAL) COM CONTRASTE;41101103;SIM
+USG DE AXILA;40901211;NÃO
+RM SELA TURCICA;41101022;SIM
+DOPPLER DE ARTERIAS RENAIS;40901394;SIM
+CORE BIOPSY POR EXTEREOTAXIA;40808254;SIM
+RM BRACO ESQUERDO;41101316;SIM
+RM DE PELVE CONTRASTE;41101189;SIM
+USG DE ARTICULACOES;40901220;NÃO
+RM DE MAMAS COM PRÓTESE ;41101480;SIM
+USG DE MAMAS C/ DOPPLER;40901386;SIM
+FATOR V DE LEIDEN (SANGUE);40314057;SIM
+ENTEROGRAFIA RM;41101189;SIM
+FATOR V LEIDEN PCR;40314057;SIM
+CALPROTECTINA FECAL;40303330;SIM
+USG TRANSVAGINAL COM PREPARO INTESTINAL - ENDOMETRIOSE;40901300;NÃO
+DOPPLER COL VENO MMB INFERI UNILATERAL;40901483;SIM
+DOPPLER COL ARTE MMB INFERI UNILATERAL;40901475;SIM
+USG PAREDE ABDOMINAL DOPPLER;40901386;SIM
+CORE BIOPSY POR ESTEREOTAXIA;40808254;SIM
+DOPPLER COL VENO MMB SUPER UNILATERAL;40901467;SIM
+USG - ESTRUTURAS SUPERFICIAIS COM DOPPLER (CERVICAL OU MUSCULO OU TENDAO);40901386;SIM
+RM AXILAS;41101480;SIM
+USG DE ARTIC. PE ESQ. DOPPLER;40901386;SIM
+USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
 
-        // LÓGICA DO POP-UP DE ATUALIZAÇÃO (RELEASE NOTES) E STARTUP
         window.onload = () => {
-            let savedVersion = localStorage.getItem('coutinhoAppVersion');
-            if (savedVersion !== VERSAO_SISTEMA) {
+            // Lógica de Notas de Atualização
+            if(localStorage.getItem('versaoAuditoria') !== VERSAO_SISTEMA) {
                 document.getElementById('modalUpdate').style.display = 'flex';
             }
-
+            
             let salvo = localStorage.getItem('deparaFinalCoutinhoMemoria');
             if(salvo) { 
                 deparaMap = new Map(JSON.parse(salvo)); 
                 atualizarUIConfig();
             } else {
-                // CARREGA A BASE DE FÁBRICA SE TIVER VAZIO
+                // CARREGA A BASE PADRÃO EMBUTIDA NO CÓDIGO
                 Papa.parse(DEPARA_EMBUTIDO, {
                     skipEmptyLines: true,
                     complete: res => {
@@ -569,7 +567,8 @@
                             let partes = row.join(";").split(/[;,]/);
                             if(partes.length >= 2) {
                                 let chave = triturarAlfa(partes[0]);
-                                if(chave === "EXAME") return; // ignora a palavra cabeçalho
+                                if(chave === "EXAME") return; // Ignora o cabeçalho
+                                
                                 let valor = String(partes[1]).replace(/\D/g, "").trim();
                                 let exigeSenha = partes[2] ? padronizarTexto(partes[2]).includes("SIM") : false;
                                 if(chave) deparaMap.set(chave, { cod: valor, reqAuth: exigeSenha });
@@ -582,9 +581,16 @@
             }
         };
 
-        function fecharModalUpdate() {
-            localStorage.setItem('coutinhoAppVersion', VERSAO_SISTEMA);
+        function fecharUpdate() {
+            localStorage.setItem('versaoAuditoria', VERSAO_SISTEMA);
             document.getElementById('modalUpdate').style.display = 'none';
+        }
+
+        async function atualizarProgresso(percentual, texto) {
+            document.getElementById('barra-progresso-container').style.display = 'flex';
+            document.getElementById('progresso-fill').style.width = percentual + '%';
+            document.getElementById('progresso-texto').innerText = texto;
+            await new Promise(r => setTimeout(r, 15));
         }
 
         let arquivosKorus = [];
@@ -634,9 +640,6 @@
         let idExportacao = 250; 
         let chartInstance = null;
 
-        // ==========================================
-        // 💾 MOTOR DE GRAVAÇÃO BLINDADA DO STATUS KANBAN
-        // ==========================================
         function alterarStatusAuditoria(chaveAtendimentoSegura, elementoSelect) {
             let dbFresco = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
             dbFresco[chaveAtendimentoSegura] = elementoSelect.value;
@@ -652,11 +655,11 @@
             document.getElementById('deparaCount').innerText = deparaMap.size;
             let listHTML = '';
             let count = 0;
-            for (let [chave, obj] of deparaMap.entries()) {
+            for (let [chave, deparaEntry] of deparaMap.entries()) {
                 if(count > 100) { listHTML += `<div class="depara-item">... e mais ${deparaMap.size - 100} itens ocultos para performance.</div>`; break; }
                 
-                let codExibicao = typeof obj === 'object' ? obj.cod : obj;
-                let authTag = (typeof obj === 'object' && obj.reqAuth) ? ' <span style="color:#059669; font-size:0.8em;">[🔑 SIM]</span>' : '';
+                let codExibicao = typeof deparaEntry === 'object' ? deparaEntry.cod : deparaEntry;
+                let authTag = (typeof deparaEntry === 'object' && deparaEntry.reqAuth) ? ' <span style="color:#059669; font-size:0.8em;">[🔑 SIM]</span>' : '';
 
                 listHTML += `<div class="depara-item"><span class="depara-key">${chave}</span><span class="depara-val">➜ ${codExibicao}${authTag}</span></div>`;
                 count++;
@@ -665,12 +668,10 @@
             document.getElementById('deparaListUI').innerHTML = listHTML;
         }
 
-        // ==========================================
-        // BOTÃO BAIXAR BASE
-        // ==========================================
+        // DOWNLOAD DA BASE ATUAL CORRIGIDO
         function baixarDeparaAtual() {
             if(deparaMap.size === 0) return alert("A base DEPARA está vazia.");
-            let csv = "exame;str_codigo_amb_autorizacao;autorizacao\n";
+            let csv = "exame;str_codigo;autorizacao\n";
             for (let [chave, obj] of deparaMap.entries()) {
                 let cod = typeof obj === 'object' ? obj.cod : obj;
                 let req = (typeof obj === 'object' && obj.reqAuth) ? "SIM" : "NAO";
@@ -702,8 +703,8 @@
                         let partes = row.join(";").split(/[;,]/);
                         if(partes.length >= 2) {
                             let chave = triturarAlfa(partes[0]);
-                            if(chave === "EXAME") return; // Ignora o cabeçalho "Exame"
-
+                            if(chave === "EXAME") return; // Ignora cabeçalho ao importar
+                            
                             let valor = String(partes[1]).replace(/\D/g, "").trim();
                             let exigeSenha = false;
                             if(partes.length > 2) {
@@ -821,9 +822,6 @@
             return 0;
         }
 
-        // ==========================================
-        // 🪓 GUILHOTINA DE CABEÇALHO PARA KORUS/ORIZON
-        // ==========================================
         async function lerMultiplasBases(filesArray, nome) {
             if (!filesArray || filesArray.length === 0) throw new Error(`Nenhum arquivo válido de ${nome} foi selecionado.`);
             let todosDados = [];
@@ -831,45 +829,12 @@
                 let file = filesArray[i];
                 let dadosArquivo = await new Promise((resolve, reject) => {
                     if (file.name.toLowerCase().endsWith('.csv')) {
-                        Papa.parse(file, { 
-                            header: true, 
-                            skipEmptyLines: true, 
-                            encoding: "ISO-8859-1",
-                            beforeFirstChunk: function(chunk) {
-                                let lines = chunk.split(/\r\n|\n|\r/);
-                                let headerIndex = 0;
-                                for(let j = 0; j < lines.length && j < 20; j++) {
-                                    let upper = lines[j].toUpperCase();
-                                    if(upper.includes('NUMATENDIMENTO') || upper.includes('NOMEPACIENTE') || upper.includes('BENEFICIARIO') || upper.includes('SITUACAO') || upper.includes('TIPODETRANSACAO')) {
-                                        headerIndex = j;
-                                        break;
-                                    }
-                                }
-                                return lines.slice(headerIndex).join("\n");
-                            },
-                            complete: r => resolve(r.data),
-                            error: e => reject(e)
-                        });
+                        Papa.parse(file, { header: true, skipEmptyLines: true, encoding: "ISO-8859-1", complete: r => resolve(r.data) });
                     } else {
                         let reader = new FileReader();
                         reader.onload = e => {
-                            try {
-                                let wb = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
-                                let sheet = wb.Sheets[wb.SheetNames[0]];
-                                let rawData = XLSX.utils.sheet_to_json(sheet, {header: 1});
-                                
-                                let headerIndex = 0;
-                                for(let j = 0; j < rawData.length && j < 20; j++) {
-                                    let rowStr = (rawData[j] || []).join(" ").toUpperCase();
-                                    if(rowStr.includes('NUMATENDIMENTO') || rowStr.includes('NOMEPACIENTE') || rowStr.includes('BENEFICIARIO') || rowStr.includes('SITUACAO') || rowStr.includes('TIPODETRANSACAO')) {
-                                        headerIndex = j;
-                                        break;
-                                    }
-                                }
-                                
-                                let finalData = XLSX.utils.sheet_to_json(sheet, {range: headerIndex, raw: false});
-                                resolve(finalData);
-                            } catch(err) { reject(err); }
+                            let wb = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
+                            resolve(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {raw:false}));
                         };
                         reader.readAsArrayBuffer(file);
                     }
@@ -887,14 +852,15 @@
             idExportacao = 250;
             
             let alertasRecemNascidos = new Set();
-            let alertasSemDepara = new Set(); 
+            let alertasSemDepara = new Set();
 
-            document.getElementById('resultados-container').innerHTML = '<div style="text-align:center; padding:40px; font-weight:600; color:#64748b;">Lendo Arquivos e Cruzando Lotes Financeiros...</div>';
+            document.getElementById('resultados-container').innerHTML = '';
             
             try {
-                let korus = await lerMultiplasBases(arquivosKorus, 'KORUS');
+                await atualizarProgresso(10, 'Lendo arquivos Operadora...');
                 let orizon = await lerMultiplasBases(arquivosOrizon, 'OPERADORA');
 
+                await atualizarProgresso(30, 'Mapeando Dados Orizon...');
                 let orizonMap = new Map();
                 orizon.forEach(row => {
                     let nome = buscarColuna(row, ['BENEFICIARIO', 'NOME']);
@@ -916,12 +882,16 @@
                     orizonMap.get(id).push({ dataLimpa, dataCrua: dataCrua, ts: dataParaTimestamp(dataLimpa), status, trans, descOrizon, qtde, auth, rowOriginal: row });
                 });
 
+                await atualizarProgresso(50, 'Lendo arquivos Korus...');
+                let korus = await lerMultiplasBases(arquivosKorus, 'KORUS');
+
                 let korusAgrupado = new Map();
                 let unidadesUnicas = new Set(); 
                 let datasUnicas = new Set();
                 let conveniosUnicos = new Set(); 
                 let listaAtendimentosPuros = new Set();
 
+                await atualizarProgresso(60, 'Cruzando Dados dos Hospitais...');
                 korus.forEach(row => {
                     let matriculaRaw = buscarColuna(row, ['MATRICULA', 'CARTEIRINHA']);
                     if (String(matriculaRaw).toUpperCase().includes('E+')) throw new Error("Korus corrompido (E+). Importe o CSV bruto.");
@@ -958,7 +928,6 @@
                     
                     let deparaEntry = deparaMap.get(chaveDepara);
                     let deparaCod = deparaEntry ? (typeof deparaEntry === 'object' ? deparaEntry.cod : deparaEntry) : undefined;
-                    // CHECA SE EXIGE SENHA NO NOVO FORMATO
                     let deparaRequerSenha = deparaEntry ? (typeof deparaEntry === 'object' ? deparaEntry.reqAuth : false) : false;
 
                     let codExameLimpo = String(codAmb).replace(/\D/g, "");
@@ -981,7 +950,6 @@
                     let objAtend = korusAgrupado.get(atend);
                     objAtend.planos.add(planoRaw); 
                     
-                    // SE ALGUM EXAME EXIGIR, A GUIA TODA EXIGE
                     if (deparaRequerSenha) {
                         objAtend.precisaDeSenhaNoAtendimento = true;
                     }
@@ -996,7 +964,7 @@
                     if (!objAtend.exames.has(chaveExameUnico)) {
                         objAtend.exames.set(chaveExameUnico, { 
                             exame: nomeExame, cod: codExibicao, dataK: dataKorusLimpa, authK: authKorus, 
-                            reqAuth: deparaRequerSenha, // SALVA NO EXAME
+                            reqAuth: deparaRequerSenha,
                             qtdeK: 0, valorK: 0, valorRawK: valorRaw, idBuscado: idGerado 
                         });
                     }
@@ -1031,6 +999,8 @@
                 });
 
                 let atendimentosFinais = new Map();
+
+                await atualizarProgresso(80, 'Calculando Inconsistências Financeiras...');
 
                 todosAtendimentosGlobais.forEach(atendimento => {
                     let temMultiplosPlanos = atendimento.planos.size > 1;
@@ -1145,9 +1115,6 @@
 
                             authO_limpa = triturarAlfa(melhor.auth);
                             
-                            // ==========================================
-                            // 🚨 REGRAS INTELIGENTES DE SENHA ATUALIZADAS
-                            // ==========================================
                             if (exKorus.reqAuth) {
                                 if (authO_limpa === "") {
                                     msgIncorreto.push("Senha em branco na Orizon");
@@ -1157,12 +1124,11 @@
                                     tipoInc.push('DIVERGENCIA_AUTH');
                                 }
                             } else {
-                                if (authK_limpa !== "" && authO_limpa !== "" && authK_limpa !== authO_limpa) {
-                                    msgIncorreto.push(`Senha K:${exKorus.authK} vs O:${melhor.auth}`);
-                                    tipoInc.push('DIVERGENCIA_AUTH');
-                                } else if (!atendimento.precisaDeSenhaNoAtendimento && authK_limpa !== "" && authO_limpa === "") {
-                                    msgIncorreto.push("Sem necessidade de autorização");
-                                    tipoInc.push('SENHA_INVENTADA');
+                                if (!atendimento.precisaDeSenhaNoAtendimento) {
+                                    if (authK_limpa !== "") {
+                                        msgIncorreto.push("Sem necessidade de autorização");
+                                        tipoInc.push('SENHA_INVENTADA');
+                                    }
                                 }
                             }
                         }
@@ -1217,8 +1183,13 @@
                 });
 
                 divergenciasEncontradas = Array.from(atendimentosFinais.values());
+                
+                await atualizarProgresso(95, 'Renderizando Painel...');
                 renderizarResultados(); 
                 
+                await atualizarProgresso(100, 'Varredura Concluída!');
+                setTimeout(() => { document.getElementById('barra-progresso-container').style.display = 'none'; }, 1000);
+
                 let mostrarModal = false;
                 let htmlAlertas = "";
 
@@ -1251,6 +1222,7 @@
 
             } catch (err) {
                 document.getElementById('resultados-container').innerHTML = `<div style="padding: 20px; background: #fee2e2; color: #b91c1c; border-radius: 8px; border: 1px solid #f87171;"><strong>ERRO CRÍTICO:</strong> ${err.message}</div>`;
+                document.getElementById('barra-progresso-container').style.display = 'none';
             }
         }
 
@@ -1357,6 +1329,8 @@
                 return; 
             }
 
+            let htmlSaida = "";
+
             filtrados.forEach(d => {
                 let chaveUnicaStatusSegura = triturarAlfa(d.unid) + "_" + triturarAlfa(d.atend);
                 let statusSalvo = dbStatus[chaveUnicaStatusSegura] || 'DEFAULT';
@@ -1384,7 +1358,7 @@
                     `;
                 }).join('');
 
-                container.innerHTML += `
+                htmlSaida += `
                     <details>
                         <summary>
                             <div class="summary-title">
@@ -1407,6 +1381,8 @@
                     </details>
                 `;
             });
+            
+            container.innerHTML = htmlSaida;
         }
 
         function desenharGrafico(dynStats) {
@@ -1470,7 +1446,7 @@
             
             let dbStatus = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
             
-            let csv = "ID Controle;Convênio;Plano(s);Unidade;Atendimento;Nome Paciente;Data Nasc.;Carteirinha;Cod Exame;Exame Korus;Data Korus;Qtde Korus;Valor Bruto Korus (Debug);Valor Final (R$);Auth Korus;Data Operadora;Qtde Operadora;Auth Operadora;Status Operadora;Transacao Operadora;Descricao Operadora;Conciliado;Motivo Inconsistencia;Status Correcao (Kanban);Senha Inventada (Korus Sim / Orizon Nao);Multiplas Senhas no Atendimento\n";
+            let csv = "ID Controle;Convênio;Plano(s);Unidade;Atendimento;Nome Paciente;Data Nasc.;Carteirinha;Cod Exame;Exame Korus;Data Korus;Qtde Korus;Valor Bruto Korus (Debug);Valor Final (R$);Auth Korus;Data Operadora;Qtde Operadora;Auth Operadora;Status Operadora;Transacao Operadora;Descricao Operadora;Conciliado;Motivo Inconsistencia;Status Correcao (Kanban);Senha Branco ou Desnecessaria;Multiplas Senhas no Atendimento\n";
             
             dados.forEach(r => {
                 let chaveUnicaStatusSegura = triturarAlfa(r.unid) + "_" + triturarAlfa(r.atend);
