@@ -22,7 +22,7 @@
         /* ASSINATURA COM ESCUDO MAIOR E TEXTO ABAIXO */
         .signature-top-left { position: absolute; top: 15px; left: 25px; display: flex; flex-direction: column; align-items: center; gap: 5px; opacity: 0.95;}
         .signature-top-left p { margin: 0; color: #f8dbdf; font-weight: 600; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1.5px;}
-        .img-escudo { height: 78px; width: auto; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3)); }
+        .img-escudo { height: 150px; width: auto; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3)); }
 
         /* ÍCONE DE CONFIGURAÇÃO DISCRETO NO CANTO SUPERIOR DIREITO */
         .btn-icon { position: absolute; top: 18px; right: 25px; background: transparent; border: none; color: white; font-size: 1.5em; cursor: pointer; opacity: 0.6; transition: 0.3s; padding: 0; }
@@ -200,26 +200,23 @@
 
     <div id="modalUpdate" class="modal-overlay">
         <div class="modal-content" style="border-top: 5px solid var(--accent);">
+            
             <div class="modal-header">
                 <h2>🚀 Novidades da Versão 2.1</h2>
                 <button class="close-btn" onclick="fecharUpdate()">×</button>
             </div>
             <div class="release-list">
                 <div class="release-item">
-                    <h4>Auto-Load da Base GitHub</h4>
-                    <p>O sistema agora tenta carregar a base de dados padrão ("depara_padrao.csv") automaticamente no primeiro acesso se estiver na mesma pasta.</p>
+                    <h4>Primeiro acesso já vem com depara</h4>
+                    <p> O sistema agora carrega uma base DEPARA de fábrica no primeiro acesso.</p>
                 </div>
                 <div class="release-item">
-                    <h4>Botão Baixar Base</h4>
-                    <p>Adicionado botão nas configurações para baixar em CSV tudo que o robô já aprendeu e tem salvo na memória no momento.</p>
+                    <h4>Baixar e Atualizar o DEPARA</h4>
+                    <p>Adicionado o botão "Baixar Base Atual" nas configurações. Agora você pode extrair o que o robô sabe no formato exato (Exame;Codigo;SIM/NAO), editar no Excel e subir de volta.</p>
                 </div>
                 <div class="release-item">
-                    <h4>Barra de Progresso e Performance</h4>
-                    <p>Processamento otimizado em lote. O navegador não trava mais ao ler arquivos gigantes.</p>
-                </div>
-                <div class="release-item">
-                    <h4>Regra de Senha Inteligente</h4>
-                    <p>O motor agora cruza o seu DEPARA (3ª Coluna). Se o exame exige senha (SIM) e na Orizon veio em branco, ele acusa o erro.</p>
+                    <h4>Regras Inteligentes de Senha</h4>
+                    <p>O motor usa a 3ª coluna do DEPARA (SIM/NAO). Se um exame exige senha e a Orizon vem vazia, ele acusa "Senha em branco na Orizon". Se nenhum exame da guia exige senha, mas foi enviado preenchido, ele acusa "Sem necessidade de autorização".</p>
                 </div>
             </div>
             <button class="btn" style="background: var(--accent); color: white; border: none; padding: 12px; margin-top: 10px;" onclick="fecharUpdate()">Ciente das Novidades</button>
@@ -238,7 +235,7 @@
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <input type="file" id="fDeparaUpdate" class="custom-file-input" accept=".csv" onchange="processarUploadDepara(this)">
                 <label for="fDeparaUpdate" class="custom-file-label" style="flex:1; margin:0; background: var(--primary); color:white; border:none; border-radius: 4px;">➕ Atualizar Base (CSV)</label>
-                <button class="btn" style="background: var(--secondary); color: var(--primary); border: 1px solid #cbd5e1;" onclick="baixarDeparaAtual()">📥 Baixar Base</button>
+                <button class="btn" style="background: var(--secondary); color: var(--primary); border: 1px solid #cbd5e1;" onclick="baixarDeparaAtual()">📥 Baixar Base Atual</button>
                 <button class="btn" style="background: white; color: var(--danger); border: 1px solid var(--danger);" onclick="limparDeparaMemoria()">🗑️ Apagar Tudo</button>
             </div>
             <div style="font-weight: 800; color: var(--primary); font-size: 0.9em;">
@@ -347,7 +344,7 @@
             <option value="DIVERGENCIA_DATA">Data Incorreta</option>
             <option value="DIVERGENCIA_QTDE">Qtde Inc./Zerada</option>
             <option value="DIVERGENCIA_AUTH">Senha Incorreta</option>
-            <option value="SENHA_INVENTADA">Senha em branco na Orizon</option>
+            <option value="SENHA_INVENTADA">Senha Branco / Desnecessária</option>
             <option value="MULTIPLAS_SENHAS">Múltiplas Senhas na Guia</option>
             <option value="IDADE_INVALIDA">Recém-Nascido</option>
             <option value="DIVERGENCIA_PLANO">Múltiplos Planos</option>
@@ -392,46 +389,199 @@
             }
         })();
 
-        const VERSAO_SISTEMA = "2.1";
+        const VERSAO_SISTEMA = "2.2";
+        
+        // ==========================================
+        // BASE DEPARA EMBUTIDA DE FÁBRICA
+        // ==========================================
+        const DEPARA_EMBUTIDO = `exame;str_codigo;autorizacao
+USG DE TIREOIDE;40901203;NÃO
+USG DE ABDOMEN TOTAL;40901122;NÃO
+USG DE MAMAS;40901114;NÃO
+USG DE TIREOIDE C/ DOPPLER;40901386;SIM
+USG TRANSVAGINAL;40901300;NÃO
+USG - ESTRUTURAS SUPERFICIAIS (CERVICAL OU MUSCULO OU TENDAO);40901211;NÃO
+DENSITOMETRIA OSSEA 2 SEG;40808130;SIM
+RM COLUNA CERVICAL;41101227;SIM
+RM DE PELVE;41101189;SIM
+USG PELVICA;40901181;NÃO
+RM DE MAMAS SEM PRÓTESE;41101480;SIM
+CORE BIOPSY POR USG;40808262;SIM
+USG DE ABDOMEN TOTAL DOPPLER;40901386;SIM
+USG TRANSVAGINAL COM PREPARO INTESTINAL;40901300;NÃO
+MAMOTOMIA POR RM;40808300;SIM
+USG DE MAMA C/ DOPPLER;40901386;SIM
+USG - ESTRUTURAS SUPERFICIAIS (CERVICAL OU AXILAS OU MUSCULO OU TENDAO);40901211;NÃO
+MAMOGRAFIA DIGITAL;40808041;SIM
+USG DE PARTES MOLES;40901211;NÃO
+DENSITOMETRIA OSSEA;40808130;SIM
+USG DE RINS E VIA URINARIA;40901769;NÃO
+RM DE JOELHO DIREITO;41101316;SIM
+RM DE JOELHO ESQUERDO;41101316;SIM
+USG OBST. COM DOPPLER;40901246;SIM
+RM COLUNA LOMBAR;41101227;SIM
+USG TRANSVAGINAL OBSTETRICO;40901297;NÃO
+DOPPLER DE CAROTIDAS E VERTEBRAS;40901360;SIM
+PAAF-PUNCAO AGUL. FINA TIRE;40809161;SIM
+USG TRANSV. COM DOPPLER;40901386;SIM
+RM COXO-FEMURAL DIREITA;41101316;SIM
+MAMOTOMIA POR ESTEREOTAXIA;40808289;SIM
+PAAF-PUNCAO AGUL. FINA MAMA;40808238;SIM
+RM DE TORNOZELO DIREITO;41101316;SIM
+RM ABDOMEN SUPERIOR;41101170;SIM
+RM DE MAMAS COM PRÓTESE;41101480;SIM
+USG MORFOLOGICO 2 TRIMESTRE;40901262;NÃO
+USG TRANSVAGINAL PARA MEDIDA DO COLO;40901297;NÃO
+RM PE DIREITO;41101308;SIM
+RM DE MAMAS (BILATERAL);41101480;SIM
+USG OBSTETRICA;40901238;NÃO
+DOPPLER COL VENO MMB INFERI;40901483;SIM
+USG DE ABDOMEN SUPERIOR;40901130;NÃO
+RM BRACO DIREITO;41101316;SIM
+RM OMBRO DIREITO;41101316;SIM
+USG OBST. TRANSLU. NUCAL;40901254;SIM
+RM COLUNA TORACICA;41101227;SIM
+DOPPLER COL AORTA E ILIACAS;40901408;SIM
+RM DE PAREDE ABDOMINAL;41101316;SIM
+RM DE CRANIO;41101014;SIM
+USG PAREDE ABDOMINAL;40901211;NÃO
+USG PELVICA COM DOPPLER;40901386;SIM
+DOPPLER COL ARTE MMB INFERI;40901475;SIM
+USG DE ARTIC. PUNHO ESQ.;40901220;NÃO
+USG INGUINAL;40901211;NÃO
+USG DE ARTIC. PUNHO DIR.;40901220;NÃO
+USG MORFOLOGICO;40901262;NÃO
+DENSITOMETRIA CORPO INTEIRO;40808149;SIM
+USG CERVICAL COM DOPPLER;40901386;SIM
+RM PUNHO ESQUERDO;41101316;SIM
+RM PE ESQUERDO;41101308;SIM
+RM QUADRIL DIREITO;41101316;SIM
+SECOND LOOK (USG MAMAS);40901114;NÃO
+DOPPLER COLORIDO ORG EST ISOLADA;40901386;SIM
+USG DE ARTIC. TORNOZELO ESQ. DOPPLER;40901386;SIM
+USG DE ARTIC. TORNOZELO DIR. DOPPLER;40901386;SIM
+USG DE ARTIC. TORNOZEL DIR.;40901220;NÃO
+USG DE ARTIC. TORNOZEL ESQ.;40901220;NÃO
+USG DE ARTIC. COTOVELO ESQ.;40901220;NÃO
+RM COXA DIREITA;41101286;SIM
+USG DE ARTICUL. MAO DIR.;40901220;NÃO
+DOPPLER COL ARTE MMB SUPER;40901459;SIM
+USG MORFOLOGICO DOPPLER;40901262;SIM
+USG - ESTRUTURAS SUPERFICIAIS COM DOPPLER (CERVICAL OU AXILAS OU MUSCULO OU TENDAO);40901386;SIM
+RM DE MAO DIREITA;41101260;SIM
+RM DE MAO ESQUERDA;41101260;SIM
+RM PUNHO DIREITO;41101316;SIM
+USG DERMATOLOGICO - PELE E SUBCUTANEO;40901190;NÃO
+USG DE ARTICUL. OMBRO ESQ.;40901220;NÃO
+DOPPLER COL VEIA CAVA SUPERIOR;40901432;SIM
+RM DE TORNOZELO ESQUERDO;41101316;SIM
+USG DE ARTIC. COTOVELO DIR.;40901220;NÃO
+USG DE ARTICUL. MAO ESQ.;40901220;NÃO
+USG DE ARTIC. COTOVELO DIR. DOPPLER;40901386;SIM
+USG DE ARTIC. COTOVELO ESQ. DOPPLER;40901386;SIM
+USG DE ARTIC. MAO DIR. DOPPLER;40901386;SIM
+USG DE ARTIC. MAO ESQ. DOPPLER;40901386;SIM
+USG DE ARTICUL. OMBRO DIR.;40901220;NÃO
+USG DE ARTIC. PUNHO DIR. DOPPLER;40901386;SIM
+USG DE ARTIC. PUNHO ESQ. DOPPLER;40901386;SIM
+RM DE OSSOS TEMPORAIS BILATERAL;41101081;SIM
+RM DE OUVIDO;41101081;SIM
+MAMOGRAFIA COM TOMOSSINTESE;40808041;SIM
+RM QUADRIL ESQUERDO;41101316;SIM
+RM DE COXA ESQUERDA;41101286;SIM
+RM BACIA;41101278;SIM
+USG DE RINS E VIAS C/DOPPLER;40901386;SIM
+RM COXO-FEMURAL ESQUERDA;41101316;SIM
+RM DE MASTOIDES;41101081;SIM
+ANGIO RM VENOSA DO CRANIO;41101545;SIM
+ANGIO RM VENOSA PESCOCO;41101626;SIM
+RM DE PERNA DIREITA;41101294;SIM
+RM DE FACE;41101090;SIM
+RM PESCOCO;41101111;SIM
+RM OMBRO ESQUERDO;41101316;SIM
+HISTEROSCOPIA DIAGNOSTICA;40201155;SIM
+RM COLUNA DORSAL;41101227;SIM
+COLANGIO RESSONANCIA;41101359;SIM
+USG DE ARTIC. QUADRIL DIR.;40901220;NÃO
+USG DE ARTIC. QUADRIL ESQ.;40901220;NÃO
+USG DE PARTES MOLES DOPPLER;40901386;SIM
+MAMOTOMIA POR USG;40808297;SIM
+USG DE ABDOMEN SUPERIOR DOPPLER;40901386;SIM
+RM FLUXO LIQUORICO;41101235;SIM
+REPOSICIONAMENTO DE DIU;31303307;SIM
+RETIRADA DE DIU;31303307;SIM
+RM SACRO ILIACAS;41101278;SIM
+ANGIO RM ARTERIAL DO CRANIO;41101537;SIM
+RM COTOVELO ESQUERDO;41101316;SIM
+DOPPLER COL VEIA CAVA INFERIOR;40901432;SIM
+USG DE ARTICUL. PE DIR.;40901220;NÃO
+USG DE ARTICUL. PE ESQ.;40901220;NÃO
+PERFIL BIOFISICO FETAL;40901505;SIM
+USG DE ARTIC. JOELHO DIR.;40901220;NÃO
+RM ATM-BILATERAL;41101103;SIM
+DOPPLER COL VENO MMB SUPER;40901467;SIM
+RM DE PERNA ESQUERDA;41101294;SIM
+RM SELA TURCICA (HIPOFISE) COM CONTRASTE;41101022;SIM
+RM COCCIX;41101316;SIM
+RM COTOVELO DIREITO;41101316;SIM
+ANGIO RM VEN ABDOME SUPERI;41101529;SIM
+ANGIO RM VENOSA DE PELVE;41101600;SIM
+RM TORNOZELO ESQUERDO C/ CONTR;41101316;SIM
+RM ATM (BILATERAL) COM CONTRASTE;41101103;SIM
+USG DE AXILA;40901211;NÃO
+RM SELA TURCICA;41101022;SIM
+DOPPLER DE ARTERIAS RENAIS;40901394;SIM
+CORE BIOPSY POR EXTEREOTAXIA;40808254;SIM
+RM BRACO ESQUERDO;41101316;SIM
+RM DE PELVE CONTRASTE;41101189;SIM
+USG DE ARTICULACOES;40901220;NÃO
+RM DE MAMAS COM PRÓTESE ;41101480;SIM
+USG DE MAMAS C/ DOPPLER;40901386;SIM
+FATOR V DE LEIDEN (SANGUE);40314057;SIM
+ENTEROGRAFIA RM;41101189;SIM
+FATOR V LEIDEN PCR;40314057;SIM
+CALPROTECTINA FECAL;40303330;SIM
+USG TRANSVAGINAL COM PREPARO INTESTINAL - ENDOMETRIOSE;40901300;NÃO
+DOPPLER COL VENO MMB INFERI UNILATERAL;40901483;SIM
+DOPPLER COL ARTE MMB INFERI UNILATERAL;40901475;SIM
+USG PAREDE ABDOMINAL DOPPLER;40901386;SIM
+CORE BIOPSY POR ESTEREOTAXIA;40808254;SIM
+DOPPLER COL VENO MMB SUPER UNILATERAL;40901467;SIM
+USG - ESTRUTURAS SUPERFICIAIS COM DOPPLER (CERVICAL OU MUSCULO OU TENDAO);40901386;SIM
+RM AXILAS;41101480;SIM
+USG DE ARTIC. PE ESQ. DOPPLER;40901386;SIM
+USG DE ARTIC. PE DIR. DOPPLER;40901386;SIM`;
 
-        window.onload = async () => {
+        window.onload = () => {
             // Lógica de Notas de Atualização
             if(localStorage.getItem('versaoAuditoria') !== VERSAO_SISTEMA) {
                 document.getElementById('modalUpdate').style.display = 'flex';
             }
             
-            // Lógica de Carregamento do DEPARA
             let salvo = localStorage.getItem('deparaFinalCoutinhoMemoria');
             if(salvo) { 
                 deparaMap = new Map(JSON.parse(salvo)); 
                 atualizarUIConfig();
             } else {
-                // Tenta puxar a base padrão do GitHub se a memória estiver vazia
-                try {
-                    let response = await fetch('depara_padrao.csv');
-                    if(response.ok) {
-                        let text = await response.text();
-                        Papa.parse(text, {
-                            skipEmptyLines: true,
-                            complete: res => {
-                                res.data.forEach(row => {
-                                    let partes = row.join(";").split(/[;,]/);
-                                    if(partes.length >= 2) {
-                                        let chave = triturarAlfa(partes[0]);
-                                        let valor = String(partes[1]).replace(/\D/g, "").trim();
-                                        let exigeSenha = partes[2] ? padronizarTexto(partes[2]).includes("SIM") : false;
-                                        if(chave) deparaMap.set(chave, { cod: valor, reqAuth: exigeSenha });
-                                    }
-                                });
-                                localStorage.setItem('deparaFinalCoutinhoMemoria', JSON.stringify(Array.from(deparaMap.entries())));
-                                atualizarUIConfig();
+                // CARREGA A BASE PADRÃO EMBUTIDA NO CÓDIGO
+                Papa.parse(DEPARA_EMBUTIDO, {
+                    skipEmptyLines: true,
+                    complete: res => {
+                        res.data.forEach(row => {
+                            let partes = row.join(";").split(/[;,]/);
+                            if(partes.length >= 2) {
+                                let chave = triturarAlfa(partes[0]);
+                                if(chave === "EXAME") return; // Ignora o cabeçalho
+                                
+                                let valor = String(partes[1]).replace(/\D/g, "").trim();
+                                let exigeSenha = partes[2] ? padronizarTexto(partes[2]).includes("SIM") : false;
+                                if(chave) deparaMap.set(chave, { cod: valor, reqAuth: exigeSenha });
                             }
                         });
+                        localStorage.setItem('deparaFinalCoutinhoMemoria', JSON.stringify(Array.from(deparaMap.entries())));
+                        atualizarUIConfig();
                     }
-                } catch(e) { 
-                    console.log("Base padrão não encontrada, iniciando vazia."); 
-                    atualizarUIConfig();
-                }
+                });
             }
         };
 
@@ -440,13 +590,11 @@
             document.getElementById('modalUpdate').style.display = 'none';
         }
 
-        // PROGRESSO ASSINCRONO PARA NÃO TRAVAR A TELA
         async function atualizarProgresso(percentual, texto) {
             document.getElementById('barra-progresso-container').style.display = 'flex';
             document.getElementById('progresso-fill').style.width = percentual + '%';
             document.getElementById('progresso-texto').innerText = texto;
-            await new Promise(resolve => requestAnimationFrame(resolve));
-            await new Promise(resolve => setTimeout(resolve, 10));
+            await new Promise(r => setTimeout(r, 15));
         }
 
         let arquivosKorus = [];
@@ -515,7 +663,7 @@
                 if(count > 100) { listHTML += `<div class="depara-item">... e mais ${deparaMap.size - 100} itens ocultos para performance.</div>`; break; }
                 
                 let codExibicao = typeof deparaEntry === 'object' ? deparaEntry.cod : deparaEntry;
-                let authTag = (typeof deparaEntry === 'object' && deparaEntry.reqAuth) ? ' <span style="color:#059669; font-size:0.8em;">[🔑 SENHA: SIM]</span>' : '';
+                let authTag = (typeof deparaEntry === 'object' && deparaEntry.reqAuth) ? ' <span style="color:#059669; font-size:0.8em;">[🔑 SIM]</span>' : '';
 
                 listHTML += `<div class="depara-item"><span class="depara-key">${chave}</span><span class="depara-val">➜ ${codExibicao}${authTag}</span></div>`;
                 count++;
@@ -524,10 +672,10 @@
             document.getElementById('deparaListUI').innerHTML = listHTML;
         }
 
-        // DOWNLOAD DA BASE ATUAL
+        // DOWNLOAD DA BASE ATUAL CORRIGIDO
         function baixarDeparaAtual() {
             if(deparaMap.size === 0) return alert("A base DEPARA está vazia.");
-            let csv = "Exame;Codigo_Operadora;Exige_Senha\n";
+            let csv = "exame;str_codigo;autorizacao\n";
             for (let [chave, obj] of deparaMap.entries()) {
                 let cod = typeof obj === 'object' ? obj.cod : obj;
                 let req = (typeof obj === 'object' && obj.reqAuth) ? "SIM" : "NAO";
@@ -559,8 +707,9 @@
                         let partes = row.join(";").split(/[;,]/);
                         if(partes.length >= 2) {
                             let chave = triturarAlfa(partes[0]);
-                            let valor = String(partes[1]).replace(/\D/g, "").trim();
+                            if(chave === "EXAME") return; // Ignora cabeçalho ao importar
                             
+                            let valor = String(partes[1]).replace(/\D/g, "").trim();
                             let exigeSenha = false;
                             if(partes.length > 2) {
                                 let textoAuth = padronizarTexto(partes[2]);
@@ -1301,7 +1450,7 @@
             
             let dbStatus = JSON.parse(localStorage.getItem('statusAuditoriaCoutinho') || "{}");
             
-            let csv = "ID Controle;Convênio;Plano(s);Unidade;Atendimento;Nome Paciente;Data Nasc.;Carteirinha;Cod Exame;Exame Korus;Data Korus;Qtde Korus;Valor Bruto Korus (Debug);Valor Final (R$);Auth Korus;Data Operadora;Qtde Operadora;Auth Operadora;Status Operadora;Transacao Operadora;Descricao Operadora;Conciliado;Motivo Inconsistencia;Status Correcao (Kanban);Senha em branco na Orizon;Multiplas Senhas no Atendimento\n";
+            let csv = "ID Controle;Convênio;Plano(s);Unidade;Atendimento;Nome Paciente;Data Nasc.;Carteirinha;Cod Exame;Exame Korus;Data Korus;Qtde Korus;Valor Bruto Korus (Debug);Valor Final (R$);Auth Korus;Data Operadora;Qtde Operadora;Auth Operadora;Status Operadora;Transacao Operadora;Descricao Operadora;Conciliado;Motivo Inconsistencia;Status Correcao (Kanban);Senha Branco ou Desnecessaria;Multiplas Senhas no Atendimento\n";
             
             dados.forEach(r => {
                 let chaveUnicaStatusSegura = triturarAlfa(r.unid) + "_" + triturarAlfa(r.atend);
